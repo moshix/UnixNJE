@@ -37,6 +37,9 @@
  |           LOGGER - The logging routines.
  |           INIT - Initialyze some commonly used variables.
  */
+
+/*   Several updates made to this program are copyright 2019 by vChain Inc  */
+
 #include <stdio.h>
 FILE	*AddressFd;	/* Temporary - for DMF routine address */
 
