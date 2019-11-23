@@ -1,13 +1,7 @@
 #
-#	Makefile for FUNET-NJE package.
+#	Makefile for LinuxNJE
 #
-#	This file is made by  mea@nic.funet.fi  while compiling
-#	HUJI-NJE/FUNET-NJE on Sun4/330 SunOS4.0.3 (and later versions
-#	of FINFILES machine)
-#	This also contains a few other target systems accumulated over
-#	the years..
 #
-
 #       -DHAS_PUTENV    The system has putenv() instead of setenv().
 #                       This should be valid for most of the SysV based
 #                       systems while the BSD based systems usually have
