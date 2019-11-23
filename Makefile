@@ -73,21 +73,7 @@
 #			can fit your system, and your system does not have
 #			ANSI headers of its own, then use this...
 
-# Convex OS V10.2 -- very POSIX.1 beast indeed..
-#CC     = gcc -fno-builtin -fpcc-struct-return
-#CPP    = gcc -E
-#CDEFS  = -O -D_POSIX_SOURCE  -DHAS_LSTAT
-#CFLAGS = -g $(CDEFS)
-# Have MAILIFY compiled by uncommenting following ones:
-#MAILIFY=mailify
-##MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/usr/local/include
-##LIBMAILIFY= -lzmailer
-##MAILIFYCFLAGS= $(CFLAGS)
-##LIBMAILIFY=
-#NETW   = -L/usr/local/lib -lresolv # -lulsock
-#LIBS=$(NETW)
-#RANLIB = ranlib
-#INSTALL=install
+
 
 # DEC AxpOSF/1 3.2 -- GCC-2.6.3
 #CC=gcc -Wall -O6 #-fno-builtin
@@ -126,39 +112,9 @@ INSTALL=installbsd
 #INSTALL=/usr/ucb/install
 
 
-# SunOS --  GNU-CC 2.4.5 on SPARC SunOS 4.1.3
-#CC=gcc -Wall #-fno-builtin
-#CPP=gcc -E
-#CDEFS=  -O -DBSD_SIGCHLDS -DHAS_LSTAT -DHAS_PUTENV
-#CFLAGS= -g $(CDEFS)
-# Have MAILIFY compiled by uncommenting following ones:
-#MAILIFY=mailify
-#MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/usr/local/include
-#LIBMAILIFY= -lzmailer
-###MAILIFYCFLAGS= $(CFLAGS)
-###LIBMAILIFY=
-#NETW=
-#LIBS=$(NETW)
-#RANLIB=ranlib
-#INSTALL=install
 
-# SunOS -- SunOS 4.1.3 bundled cc
-#CC=cc
-#CPP=/lib/cpp
-#CDEFS=  -O -DBSD_SIGCHLDS -DHAS_LSTAT -DHAS_PUTENV
-#CFLAGS=  $(CDEFS)
-# Have MAILIFY compiled by uncommenting following ones:
-#MAILIFY=mailify
-##MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/usr/local/include
-##LIBMAILIFY= -lzmailer
-##MAILIFYCFLAGS= $(CFLAGS)
-##LIBMAILIFY=
-#NETW=
-#LIBS=$(NETW)
-#RANLIB=ranlib
-#INSTALL=install
 
-# Linux 1.2.x  (w/o using -D_POSIX_SOURCE)
+# Linux with any modern distro (as of Nov 2019)
 CDEFS= -O6 -DHAS_LSTAT -DHAS_PUTENV
 CC=gcc
 CPP=gcc -E
@@ -173,8 +129,6 @@ NETW=
 LIBS=$(NETW)
 RANLIB=ranlib
 INSTALL=install
-
-# IBM AIX ?
 
 
 
