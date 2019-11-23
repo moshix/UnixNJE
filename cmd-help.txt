@@ -1,0 +1,19 @@
+Commands available for FUNET-NJE emulator:
+   Help / HILfe / SOS - Three commands to ask for this info 
+   Query SYStem       - Show line status summary report, and activity
+   Query SYStem S     - Same as "Q SYS", but with extra activity data
+   Query STATs        - Show line statictics
+   Query Nodename     - Show the route entry to that node
+   Query linkname A/F - Available via Query SYStem
+   Query linkname Q   - Show 30 first files in queue on the link
+   CPQuery Names      - List all users logged on
+   CPQuery User       - Tell how many users are logged on
+   CPQuery User username - Look for a specific username
+   CPQuery LOG        - Send the WELCOME message
+   CPQuery CPU, CPLEVEL, IND, T - Machine type and time
+   MSG node user text.. - A way to send a NMR to some node via msg relay.
+   CMD node text..      - A way to send a NMR to some node via cmd relay.
+This system has also NMR responding servers at addresses:
+   ECHO@FINFILES       -- throws the NMRs back to you.
+   MAILSERV@FINFILES   -- ask for HELP
+   FINGER@FINFILES     -- Usage: tell finger@finfiles address@internet

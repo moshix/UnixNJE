@@ -1,0 +1,6 @@
+domains=edvz.uni-linz.ac.at:bitnet
+postmaster=test@alijku65.edvz.uni-linz.ac.at
+#visible_domain=edvz.uni-linz.ac.at:bitnet
+#visible_name=alijku65.edvz.uni-linz.ac.at
+smart_path=alijku04.edvz.uni-linz.ac.at
+smart_transport=smtp

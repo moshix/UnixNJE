@@ -1,0 +1,110 @@
+	Guide to install FUNET-NJE software into UNIX systems.
+
+		by Matti Aarnio <mea@nic.funet.fi>
+
+
+		READ THE   README.FUNET   FILE!
+		READ THE  funetnje.info / funetnje.ps  DOCUMENT!
+
+	The configuration and installation is covered on the
+	funetnje.info/funetnje.ps -document, this file is from
+	the older era...
+
+
+
+	This version of software does not support any kind of
+	BISYNC-adapters available for various systems.   Mainly
+	because I didn't have such interface available for testing...
+
+	However:  TCP-IP interface works well (one of rare features
+	that are ALMOAST identical among various UNIXes).
+
+
+	When starting to do installation, you must determine few
+	system dependent features:
+
+
+In  Makefile:
+
+	Well, dependencies should be all right, some external defines
+	and route + install phases propably need an update.
+
+	Usage of  `ranlib'  depends upon your system, same with  `install'
+
+	Choise of group-name used on client-program installation.
+
+In  detach.c:
+
+	See & try which setup works best.  Quite well documented in there.
+
+
+
+		CONFIGURING SYSTEM:
+
+
+	Create a new group for FUNET-NJE internal use, say `bitnet'.
+	Decide and create your BITNET spool directory:
+		/usr/spool/bitnet
+	set its protection to be 2775 (or 2770), group-write is
+	needed.  Set its group to be abovementioned `bitnet'.
+	(Mode 2xxx attempts to do BSD directory semantics on group
+	 inheritance)
+
+	Decide where you put your user spool directories, exaple:
+		/usr/spool/bitspool
+	However HAVE THEM ON SAME PHYSICAL DEVICE so that rename(2)
+	(or rename(3)) can be used successfully to place files into
+	there.  Directory can have protection 111, or 555.  Nobody
+	(but root) need to have write-permission there.
+
+
+	Programs used for sending BITNET files are configured to
+	do a set-gid operation, and then write file to be spooled
+	into the `QUEUE' directory, and finally sending a submission
+	signal to the transporter.
+
+
+	More information from   funetnje(8)
+
+	Sample version of /etc/funetnje.cf :
+
+		     #
+		     #	Configuration file for FUNET-NJE program
+		     #
+		     
+		     NAME		HAMSTER
+		     IPADDRESS		128.214.6.100
+		     QUEUE		/usr/spool/bitnet
+		     CMDMAILBOX		/usr/spool/bitnet/.cmdpipe
+		     LOG		/usr/adm/bitnet.log
+		     # this table is DBM/NDBM/GDBM binary file.
+		     TABLE		/usr/lib/funetnje.route
+		     INFORM		MEA@HAMSTER
+		     USEREXITS	/usr/local/lib/funetnje/file-exit.cf
+		     MSGEXITS	/usr/local/lib/funetnje/msg-exit.cf
+		     LLEVEL		2
+		     DEFAULT-ROUTE	FIGBOX
+
+		     LINE 0  SEARN
+		      TYPE		UNIX_TCP
+		      BUFSIZE	1024
+		      TIMEOUT	10
+		      IPPORT		175
+		      TCPNAME	searn.sunet.se
+		      TCP-SIZE	8192
+		      MAX-STREAMS 7
+		     
+		     LINE 1 FINTEST1
+		      TYPE		UNIX_TCP
+		      BUFSIZE	1024
+		      TIMEOUT	10
+		      IPPORT		175
+		      TCPNAME	mea.utu.fi
+		      TCP-SIZE	8192
+		      MAX-STERAMS 7
+		     
+		     
+	Comments start with '#' or '*' on first column.
+	Otherwise white space (blanks and/or tabs) are freely usable.
+	Completely WHITE lines are suggested not to include anything but
+	newline.

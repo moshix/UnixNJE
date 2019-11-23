@@ -1,0 +1,324 @@
+%!PS-Adobe-2.1
+%%Creator: groff version 1.00
+%%DocumentFonts: Times-Italic Courier Times-BoldItalic Times-Bold Times-Roman
+%%DocumentSuppliedFonts:
+%%DocumentNeededFonts: Times-Italic Courier Times-BoldItalic Times-Bold
+%%+ Times-Roman
+%%Pages: 2
+%%EndComments
+/grops 100 dict def grops begin
+% If you add definitions here, be sure to check that MAX_PROLOGUE_DEFS
+% in ps.c is large enough.
+
+% The ASCII code of the space character.
+/SC 32 def
+
+/A /show load def
+/B { 0 SC 3 -1 roll widthshow } bind def
+/C { 0 exch ashow } bind def
+/D { 0 exch 0 SC 5 2 roll awidthshow } bind def
+/E { 0 rmoveto show } bind def
+/F { 0 rmoveto 0 SC 3 -1 roll widthshow } bind def
+/G { 0 rmoveto 0 exch ashow } bind def
+/H { 0 rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/I { 0 exch rmoveto show } bind def
+/J { 0 exch rmoveto 0 SC 3 -1 roll widthshow } bind def
+/K { 0 exch rmoveto 0 exch ashow } bind def
+/L { 0 exch rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/M { rmoveto show } bind def
+/N { rmoveto 0 SC 3 -1 roll widthshow } bind def
+/O { rmoveto 0 exch ashow } bind def
+/P { rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/Q { moveto show } bind def 
+/R { moveto 0 SC 3 -1 roll widthshow } bind def
+/S { moveto 0 exch ashow } bind def
+/T { moveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+
+% name size font SF -
+
+/SF {
+	findfont exch
+	[ exch dup 0 exch 0 exch neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+% name a c d font MF
+
+/MF {
+	findfont
+	[ 5 2 roll
+	0 3 1 roll % b
+	neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+	
+% BP -
+
+/BP {
+	/level0 save def
+	1 setlinecap
+	1 setlinejoin
+	72 RES div dup scale
+	LS {
+		90 rotate
+	} {
+		0 PL translate
+	} ifelse
+	1 -1 scale
+} bind def
+
+/EP {
+	level0 restore
+	showpage
+} bind def
+
+
+% centerx centery radius startangle endangle DA -
+
+/DA {
+	newpath arcn stroke
+} bind def
+
+% x y SN - x' y'
+% round a position to nearest (pixel + (.25,.25))
+
+/SN {
+	transform 
+	.25 sub exch .25 sub exch
+	round .25 add exch round .25 add exch
+	itransform
+} bind def
+	
+% endx endy startx starty DL -
+% we round the endpoints of the line, so that parallel horizontal
+% and vertical lines will appear even
+
+/DL {
+	SN
+	moveto
+	SN
+	lineto stroke
+} bind def
+
+% centerx centery radius DC -
+
+/DC {
+	newpath 0 360 arc closepath
+} bind def
+
+
+/TM matrix def
+
+%  width height centerx centery DE -
+
+/DE {
+	TM currentmatrix pop
+	translate scale newpath 0 0 .5 0 360 arc closepath
+	TM setmatrix
+} bind def
+
+% these are for splines
+
+/RC /rcurveto load def
+/RL /rlineto load def
+/ST /stroke load def
+/MT /moveto load def
+/CL /closepath load def
+
+% fill the last path
+
+% amount FL -
+
+/FL {
+	currentgray exch setgray fill setgray
+} bind def
+
+% fill with the ``current color''
+
+/BL /fill load def
+
+/LW /setlinewidth load def
+% new_font_name encoding_vector old_font_name RE -
+
+/RE {
+	findfont
+	dup maxlength dict begin
+	{
+		1 index /FID ne { def } { pop pop } ifelse
+	} forall
+	/Encoding exch def
+	dup /FontName exch def
+	currentdict end definefont pop
+} bind def
+
+% hpos vpos EBEGIN -
+
+/EBEGIN {
+	moveto
+	DEFS begin
+} bind def
+
+/EEND /end load def
+
+% llx lly newwid wid newht ht newllx newlly -
+
+/PICTURE {
+	translate
+	div 3 1 roll div exch scale
+	neg exch neg exch translate
+	% set the graphics state to default values
+	0 setgray
+	0 setlinecap
+	1 setlinewidth
+	0 setlinejoin
+	10 setmiterlimit
+	[] 0 setdash
+	newpath
+} bind def
+/DEFS 1 dict def DEFS begin/u{.001 mul}bind def end end
+%%IncludeFont: Times-Italic
+%%IncludeFont: Courier
+%%IncludeFont: Times-BoldItalic
+%%IncludeFont: Times-Bold
+%%IncludeFont: Times-Roman
+grops begin/#copies 1 def/RES 72 def/PL 841.89 def/LS false def/ENC0[
+/asciicircum/asciitilde/Scaron/Zcaron/scaron/zcaron/Ydieresis/trademark/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/space/exclam/quotedbl/numbersign
+/dollar/percent/ampersand/quoteright/parenleft/parenright/asterisk/plus/comma
+/hyphen/period/slash/zero/one/two/three/four/five/six/seven/eight/nine/colon
+/semicolon/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J/K/L/M/N/O/P/Q/R/S
+/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright/circumflex/underscore
+/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z/braceleft/bar
+/braceright/tilde/.notdef/quotesinglbase/guillemotleft/guillemotright/bullet
+/florin/fraction/perthousand/dagger/daggerdbl/endash/emdash/ff/fi/fl/ffi/ffl
+/dotlessi/dotlessj/grave/hungarumlaut/dotaccent/breve/caron/ring/ogonek
+/quotedblleft/quotedblright/oe/lslash/quotedblbase/OE/Lslash/.notdef/exclamdown
+/cent/sterling/currency/yen/brokenbar/section/dieresis/copyright/ordfeminine
+/guilsinglleft/logicalnot/minus/registered/macron/degree/plusminus/twosuperior
+/threesuperior/acute/mu/paragraph/periodcentered/cedilla/onesuperior
+/ordmasculine/guilsinglright/onequarter/onehalf/threequarters/questiondown
+/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla/Egrave/Eacute
+/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex/Idieresis/Eth/Ntilde/Ograve
+/Oacute/Ocircumflex/Otilde/Odieresis/multiply/Oslash/Ugrave/Uacute/Ucircumflex
+/Udieresis/Yacute/Thorn/germandbls/agrave/aacute/acircumflex/atilde/adieresis
+/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave/iacute
+/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex/otilde/odieresis
+/divide/oslash/ugrave/uacute/ucircumflex/udieresis/yacute/thorn/ydieresis]def
+/Times-Italic@0 ENC0/Times-Italic RE/Courier@0 ENC0/Courier RE
+/Times-BoldItalic@0 ENC0/Times-BoldItalic RE/Times-Bold@0 ENC0/Times-Bold RE
+/Times-Roman@0 ENC0/Times-Roman RE
+%%EndProlog
+%%Page: 1 1
+BP/F0 10/Times-Roman@0 SF 331.06(EBCDICTBL\(5\) EBCDICTBL\(5\))72 48 R/F1 9
+/Times-Bold@0 SF(NAME)72 84 Q F0
+(ebcdictbl \255 environment variable, and format of ASCII<\255>EBCDIC tables)
+108 96 Q F1(SYNOPSIS)72 112.8 Q F0(Environment variable:)108 124.8 Q/F2 10
+/Times-Bold@0 SF(EBCDICTBL=/path/of/table/\214le)118 136.8 Q F0
+(File content format:)108 160.8 Q F2("ASC<=>EBC\\n")118 172.8 Q
+(<256 bytes of ASCII -> EBCDIC mapping>)118 184.8 Q
+(<256 bytes of EBCDIC -> ASCII mapping>)118 196.8 Q F1 -1.161(AVA)72 213.6 S
+(ILABILITY)1.161 E F0(Systems running)108 225.6 Q F2(funetnje)2.5 E F0
+(\(8\) sofware.)A F1(DESCRIPTION)72 242.4 Q F0
+(The magic 10 byte header is an ASCII string:)108 254.4 Q/F3 10
+/Times-BoldItalic@0 SF(ASC<=>EBC\\n)113 271.2 Q F0
+(and is used for checking the input to be valid.)108 288 Q
+(Another check is \214le size, which must be 522 bytes.)5 E -.7(Ta)108 304.8 S
+2.546(ble usage is simple: Unsigned character \(say).7 F 5.046(,i)-.65 G 5.046
+(nA)320.542 304.8 S 2.545(SCII\) is used to index a translation table \(say)
+337.808 304.8 R(,)-.65 E(ASCII_EBCDIC\) to obtain the translated character)108
+316.8 Q(.)-.55 E F1(SAMPLE T)72 338.4 Q(ABLES)-.666 E F0(Sample)108 350.4 Q/F4
+9/Times-Roman@0 SF(ASCII\255>EBCDIC)2.5 E F0(table:)2.25 E/F5 10/Courier@0 SF 6
+(HEX |0x*0|0x*1|0x*2|0x*3|0x*4|0x*5|0x*6|0x*7| ASCII)150 367.2 R(chars)6 E 6
+(HEX |0x*8|0x*9|0x*A|0x*B|0x*C|0x*D|0x*E|0x*F|)150 379.2 R
+(0x00 |0x00|0x01|0x02|0x03|0x37|0x2D|0x2E|0x2F|)150 403.2 Q
+(0x08 |0x16|0x05|0x25|0x0B|0x0C|0x0D|0x0E|0x0F|)150 415.2 Q
+(0x10 |0x10|0x11|0x12|0x13|0x3C|0x3D|0x32|0x26|)150 427.2 Q
+(0x18 |0x18|0x19|0x3F|0x27|0x22|0x1D|0x35|0x1F|)150 439.2 Q
+(0x20 |0x40|0x5A|0x7F|0x7B|0x5B|0x6C|0x50|0x7D| SP ! " @ $ % & ')150 451.2 Q
+(0x28 |0x4D|0x5D|0x5C|0x4E|0x6B|0x60|0x4B|0x61|)150 463.2 Q 6(\(\)*+,-./)438
+463.2 S(0x30 |0xF0|0xF1|0xF2|0xF3|0xF4|0xF5|0xF6|0xF7|)150 475.2 Q 6(01234567)
+438 475.2 S(0x38 |0xF8|0xF9|0x7A|0x5E|0x4C|0x7E|0x6E|0x6F|)150 487.2 Q 6
+(89:;<=>?)438 487.2 S(0x40 |0x7C|0xC1|0xC2|0xC3|0xC4|0xC5|0xC6|0xC7|)150 499.2
+Q 6(@ABCDEFG)438 499.2 S(0x48 |0xC8|0xC9|0xD1|0xD2|0xD3|0xD4|0xD5|0xD6|)150
+511.2 Q 6(HIJKLMNO)438 511.2 S(0x50 |0xD7|0xD8|0xD9|0xE2|0xE3|0xE4|0xE5|0xE6|)
+150 523.2 Q 6(PQRSTUVW)438 523.2 S
+(0x58 |0xE7|0xE8|0xE9|0xAD|0xE0|0xBD|0x5F|0x6D|)150 535.2 Q 6(XYZ[\\]^_)438
+535.2 S(0x60 |0x79|0x81|0x82|0x83|0x84|0x85|0x86|0x87|)150 547.2 Q 6(`abcdefg)
+438 547.2 S(0x68 |0x88|0x89|0x91|0x92|0x93|0x94|0x95|0x96|)150 559.2 Q 6
+(hijklmno)438 559.2 S(0x70 |0x97|0x98|0x99|0xA2|0xA3|0xA4|0xA5|0xA6|)150 571.2
+Q 6(pqrstuvw)438 571.2 S(0x78 |0xA7|0xA8|0xA9|0xC0|0x6A|0xD0|0xA1|0x07|)150
+583.2 Q 6(xyz{|}~D)438 583.2 S(EL)528 583.2 Q
+(0x80 |0x41|0x42|0x43|0x44|0x45|0x46|0x47|0x48|)150 595.2 Q
+(0x88 |0x49|0x51|0x52|0x53|0x54|0x55|0x56|0x57|)150 607.2 Q
+(0x90 |0x58|0x59|0x62|0x63|0x64|0x65|0x66|0x67|)150 619.2 Q
+(0x98 |0x68|0x69|0x71|0x00|0x00|0x00|0x00|0x00|)150 631.2 Q
+(0xA0 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 643.2 Q
+(0xA8 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 655.2 Q
+(0xB0 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 667.2 Q
+(0xB8 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 679.2 Q
+(0xC0 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 691.2 Q
+(0xC8 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 703.2 Q
+(0xD0 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 715.2 Q
+(0xD8 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 727.2 Q F0(1)535 768 Q EP
+%%Page: 2 2
+BP/F0 10/Times-Roman@0 SF 331.06(EBCDICTBL\(5\) EBCDICTBL\(5\))72 48 R/F1 10
+/Courier@0 SF(0xE0 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 84 Q
+(0xE8 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 96 Q
+(0xF0 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 108 Q
+(0xF8 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 120 Q F0(Sample)108 136.8 Q
+/F2 9/Times-Roman@0 SF(EBCDIC\255>ASCII)2.5 E F0(table:)2.25 E F1 6
+(HEX |0x*0|0x*1|0x*2|0x*3|0x*4|0x*5|0x*6|0x*7| ASCII)150 153.6 R(chars)6 E 6
+(HEX |0x*8|0x*9|0x*A|0x*B|0x*C|0x*D|0x*E|0x*F|)150 165.6 R
+(0x00 |0x00|0x01|0x02|0x03|0x00|0x09|0x00|0x7F|)150 189.6 Q
+(0x08 |0x00|0x00|0x00|0x0B|0x0C|0x0D|0x0E|0x0F|)150 201.6 Q
+(0x10 |0x10|0x11|0x12|0x13|0x00|0x00|0x08|0x00|)150 213.6 Q
+(0x18 |0x18|0x19|0x00|0x00|0x00|0x1D|0x00|0x1F|)150 225.6 Q
+(0x20 |0x00|0x00|0x1C|0x00|0x00|0x0A|0x17|0x1B|)150 237.6 Q
+(0x28 |0x00|0x00|0x00|0x00|0x00|0x05|0x06|0x07|)150 249.6 Q
+(0x30 |0x00|0x00|0x16|0x00|0x00|0x1E|0x00|0x04|)150 261.6 Q
+(0x38 |0x00|0x00|0x00|0x00|0x14|0x15|0x00|0x1A|)150 273.6 Q
+(0x40 |0x20|0x80|0x81|0x82|0x83|0x84|0x85|0x86| SP)150 285.6 Q
+(0x48 |0x87|0x88|0x5B|0x2E|0x3C|0x28|0x2B|0x7C|)150 297.6 Q 6([.<\(+|)462 297.6
+S(0x50 |0x26|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|)150 309.6 Q(&)438 309.6 Q
+(0x58 |0x90|0x91|0x21|0x24|0x2A|0x29|0x3B|0x5E|)150 321.6 Q 6(!$*\);^)462 321.6
+S(0x60 |0x2D|0x2F|0x92|0x93|0x94|0x95|0x96|0x97|)150 333.6 Q 6(-/)438 333.6 S
+(0x68 |0x98|0x99|0x7C|0x2C|0x25|0x5F|0x3E|0x3F|)150 345.6 Q 6(|,%_>?)462 345.6
+S(0x70 |0x00|0x9A|0x00|0x00|0x00|0x00|0x00|0x00|)150 357.6 Q
+(0x78 |0x00|0x60|0x3A|0x23|0x40|0x27|0x3D|0x22|)150 369.6 Q 6(`:#@'=")450 369.6
+S(0x80 |0x00|0x61|0x62|0x63|0x64|0x65|0x66|0x67|)150 381.6 Q 6(abcdefg)450
+381.6 S(0x88 |0x68|0x69|0x00|0x00|0x00|0x00|0x00|0x00|)150 393.6 Q 6(hi)438
+393.6 S(0x90 |0x00|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|)150 405.6 Q 6(jklmnop)
+450 405.6 S(0x98 |0x71|0x72|0x00|0x00|0x00|0x00|0x00|0x00|)150 417.6 Q 6(qr)438
+417.6 S(0xA0 |0x00|0x7E|0x73|0x74|0x75|0x76|0x77|0x78|)150 429.6 Q 6(~stuvwx)
+450 429.6 S(0xA8 |0x79|0x7A|0x00|0x00|0x00|0x5B|0x00|0x00|)150 441.6 Q 24 6
+(yz [)438 441.6 T(0xB0 |0x00|0x00|0x00|0x00|0x00|0x00|0x00|0x00|)150 453.6 Q
+(0xB8 |0x00|0x00|0x00|0x00|0x00|0x5D|0x00|0x00|)150 465.6 Q(])498 465.6 Q
+(0xC0 |0x7B|0x41|0x42|0x43|0x44|0x45|0x46|0x47|)150 477.6 Q 6({ABCDEFG)438
+477.6 S(0xC8 |0x48|0x49|0x00|0x00|0x00|0x00|0x00|0x00|)150 489.6 Q 6(HI)438
+489.6 S(0xD0 |0x7D|0x4A|0x4B|0x4C|0x4D|0x4E|0x4F|0x50|)150 501.6 Q 6(}JKLMNOP)
+438 501.6 S(0xD8 |0x51|0x52|0x00|0x00|0x00|0x00|0x00|0x00|)150 513.6 Q 6(QR)438
+513.6 S(0xE0 |0x5C|0x00|0x53|0x54|0x55|0x56|0x57|0x58|)150 525.6 Q 18(\\S)438
+525.6 S 6(TUVWX)474 525.6 S(0xE8 |0x59|0x5A|0x00|0x00|0x00|0x00|0x00|0x00|)150
+537.6 Q 6(YZ)438 537.6 S(0xF0 |0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|)150
+549.6 Q 6(01234567)438 549.6 S(0xF8 |0x38|0x39|0x00|0x00|0x00|0x00|0x00|0x00|)
+150 561.6 Q 6(89)438 561.6 S/F3 9/Times-Bold@0 SF(SEE ALSO)72 583.2 Q/F4 10
+/Times-Bold@0 SF(bitsend)108 595.2 Q F0(\(1\),)A F4(bmail)2.5 E F0(\(8\),)A F4
+(funetnje)2.5 E F0(\(8\),)A F4(ndparse)2.5 E F0(\(1\),)A F4(qrdr)2.5 E F0
+(\(8\),)A F4 -.18(re)2.5 G(ceive).18 E F0(\(1\),)A F4(send\214le)2.5 E F0
+(\(1\))A F3(AUTHORS)72 612 Q F0 -1(Ye)108 624 S
+(havi Bourvine, Hebrew University of Y)1 E(erusalem, Israel)-1 E/F5 10
+/Times-Italic@0 SF(<yehavi@hujivms.bitnet>.)2.5 E F0 4.499
+(Matti Aarnio, Finnish University and Research Network \255 FUNET)108 640.8 R
+6.999(,F)-.74 G(inland)426.421 640.8 Q F5(<mea@nic.funet.\214>)6.999 E
+(<mea@\214n\214les.bitnet>.)108 652.8 Q F0 1.439
+(Original \(VMS oriented package\) software by Y)108 669.6 R 1.438
+(ehavi Bourvine, UNIX features including spool mecha-)-1 F
+(nism, plenty of other modi\214cations, man-pages by Matti Aarnio.)108 681.6 Q
+(2)535 768 Q EP
+%%Trailer
+end

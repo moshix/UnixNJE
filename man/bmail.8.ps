@@ -1,0 +1,310 @@
+%!PS-Adobe-2.1
+%%Creator: groff version 1.00
+%%DocumentFonts: Courier Times-Italic Times-Bold Times-Roman
+%%DocumentSuppliedFonts:
+%%DocumentNeededFonts: Courier Times-Italic Times-Bold Times-Roman
+%%Pages: 2
+%%EndComments
+/grops 100 dict def grops begin
+% If you add definitions here, be sure to check that MAX_PROLOGUE_DEFS
+% in ps.c is large enough.
+
+% The ASCII code of the space character.
+/SC 32 def
+
+/A /show load def
+/B { 0 SC 3 -1 roll widthshow } bind def
+/C { 0 exch ashow } bind def
+/D { 0 exch 0 SC 5 2 roll awidthshow } bind def
+/E { 0 rmoveto show } bind def
+/F { 0 rmoveto 0 SC 3 -1 roll widthshow } bind def
+/G { 0 rmoveto 0 exch ashow } bind def
+/H { 0 rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/I { 0 exch rmoveto show } bind def
+/J { 0 exch rmoveto 0 SC 3 -1 roll widthshow } bind def
+/K { 0 exch rmoveto 0 exch ashow } bind def
+/L { 0 exch rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/M { rmoveto show } bind def
+/N { rmoveto 0 SC 3 -1 roll widthshow } bind def
+/O { rmoveto 0 exch ashow } bind def
+/P { rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/Q { moveto show } bind def 
+/R { moveto 0 SC 3 -1 roll widthshow } bind def
+/S { moveto 0 exch ashow } bind def
+/T { moveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+
+% name size font SF -
+
+/SF {
+	findfont exch
+	[ exch dup 0 exch 0 exch neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+% name a c d font MF
+
+/MF {
+	findfont
+	[ 5 2 roll
+	0 3 1 roll % b
+	neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+	
+% BP -
+
+/BP {
+	/level0 save def
+	1 setlinecap
+	1 setlinejoin
+	72 RES div dup scale
+	LS {
+		90 rotate
+	} {
+		0 PL translate
+	} ifelse
+	1 -1 scale
+} bind def
+
+/EP {
+	level0 restore
+	showpage
+} bind def
+
+
+% centerx centery radius startangle endangle DA -
+
+/DA {
+	newpath arcn stroke
+} bind def
+
+% x y SN - x' y'
+% round a position to nearest (pixel + (.25,.25))
+
+/SN {
+	transform 
+	.25 sub exch .25 sub exch
+	round .25 add exch round .25 add exch
+	itransform
+} bind def
+	
+% endx endy startx starty DL -
+% we round the endpoints of the line, so that parallel horizontal
+% and vertical lines will appear even
+
+/DL {
+	SN
+	moveto
+	SN
+	lineto stroke
+} bind def
+
+% centerx centery radius DC -
+
+/DC {
+	newpath 0 360 arc closepath
+} bind def
+
+
+/TM matrix def
+
+%  width height centerx centery DE -
+
+/DE {
+	TM currentmatrix pop
+	translate scale newpath 0 0 .5 0 360 arc closepath
+	TM setmatrix
+} bind def
+
+% these are for splines
+
+/RC /rcurveto load def
+/RL /rlineto load def
+/ST /stroke load def
+/MT /moveto load def
+/CL /closepath load def
+
+% fill the last path
+
+% amount FL -
+
+/FL {
+	currentgray exch setgray fill setgray
+} bind def
+
+% fill with the ``current color''
+
+/BL /fill load def
+
+/LW /setlinewidth load def
+% new_font_name encoding_vector old_font_name RE -
+
+/RE {
+	findfont
+	dup maxlength dict begin
+	{
+		1 index /FID ne { def } { pop pop } ifelse
+	} forall
+	/Encoding exch def
+	dup /FontName exch def
+	currentdict end definefont pop
+} bind def
+
+% hpos vpos EBEGIN -
+
+/EBEGIN {
+	moveto
+	DEFS begin
+} bind def
+
+/EEND /end load def
+
+% llx lly newwid wid newht ht newllx newlly -
+
+/PICTURE {
+	translate
+	div 3 1 roll div exch scale
+	neg exch neg exch translate
+	% set the graphics state to default values
+	0 setgray
+	0 setlinecap
+	1 setlinewidth
+	0 setlinejoin
+	10 setmiterlimit
+	[] 0 setdash
+	newpath
+} bind def
+/DEFS 1 dict def DEFS begin/u{.001 mul}bind def end end
+%%IncludeFont: Courier
+%%IncludeFont: Times-Italic
+%%IncludeFont: Times-Bold
+%%IncludeFont: Times-Roman
+grops begin/#copies 1 def/RES 72 def/PL 841.89 def/LS false def/ENC0[
+/asciicircum/asciitilde/Scaron/Zcaron/scaron/zcaron/Ydieresis/trademark/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/space/exclam/quotedbl/numbersign
+/dollar/percent/ampersand/quoteright/parenleft/parenright/asterisk/plus/comma
+/hyphen/period/slash/zero/one/two/three/four/five/six/seven/eight/nine/colon
+/semicolon/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J/K/L/M/N/O/P/Q/R/S
+/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright/circumflex/underscore
+/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z/braceleft/bar
+/braceright/tilde/.notdef/quotesinglbase/guillemotleft/guillemotright/bullet
+/florin/fraction/perthousand/dagger/daggerdbl/endash/emdash/ff/fi/fl/ffi/ffl
+/dotlessi/dotlessj/grave/hungarumlaut/dotaccent/breve/caron/ring/ogonek
+/quotedblleft/quotedblright/oe/lslash/quotedblbase/OE/Lslash/.notdef/exclamdown
+/cent/sterling/currency/yen/brokenbar/section/dieresis/copyright/ordfeminine
+/guilsinglleft/logicalnot/minus/registered/macron/degree/plusminus/twosuperior
+/threesuperior/acute/mu/paragraph/periodcentered/cedilla/onesuperior
+/ordmasculine/guilsinglright/onequarter/onehalf/threequarters/questiondown
+/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla/Egrave/Eacute
+/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex/Idieresis/Eth/Ntilde/Ograve
+/Oacute/Ocircumflex/Otilde/Odieresis/multiply/Oslash/Ugrave/Uacute/Ucircumflex
+/Udieresis/Yacute/Thorn/germandbls/agrave/aacute/acircumflex/atilde/adieresis
+/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave/iacute
+/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex/otilde/odieresis
+/divide/oslash/ugrave/uacute/ucircumflex/udieresis/yacute/thorn/ydieresis]def
+/Courier@0 ENC0/Courier RE/Times-Italic@0 ENC0/Times-Italic RE/Times-Bold@0
+ENC0/Times-Bold RE/Times-Roman@0 ENC0/Times-Roman RE
+%%EndProlog
+%%Page: 1 1
+BP/F0 10/Times-Roman@0 SF 377.74(BMAIL\(8\) BMAIL\(8\))72 48 R/F1 9
+/Times-Bold@0 SF(NAME)72 84 Q F0(`NJELIB'/bmail \255 bitnet mail send tool)108
+96 Q F1(SYNOPSIS)72 112.8 Q F0 17.92(bmail [)108 124.8 R/F2 10/Times-Bold@0 SF
+.384(\255nd Gateway-addr)2.884 F(ess)-.18 E F0 2.884(][)2.884 G F2 .383
+(\255b\(smtp\) Gateway-addr)B(ess)-.18 E F0 2.883(][)2.883 G F2 .383
+(\255tag RSCS-T)B(AG)-.74 E F0 2.883(][)2.883 G F2 .383(\255u origuser)B F0(])
+2.883 E/F3 10/Times-Italic@0 SF(Fr)151.2 136.8 Q(omUser@Fr)-.37 E(omNode T)-.37
+E(oUser@T)-.92 E(oNode)-.92 E F0([)2.5 E F3 -.92(To)2.5 G(User@T).92 E
+(oNode...)-.92 E F0(])2.5 E F1(DESCRIPTION)72 153.6 Q F3(bmail)108 165.6 Q F0
+.858(command is actually a special purpose)3.358 F F3(send\214le)3.358 E F0
+.858(\(Historically: code of)3.358 F F3(send\214le)3.358 E F0 .858
+(reused a lot of)3.358 F F3(bmail)3.359 E F0 .52
+(code\) for mail transport, and thus is not a general user program.)108 177.6 R
+.52(Its input is a ready-made mail \214le, and it)5.52 F
+(generates a BSMTP envelope, when so requested.)108 189.6 Q(Options for)108
+206.4 Q F3(bmail)2.5 E F0(are:)2.5 E F2(\255b\(smtp\) gateway@host)108 223.2 Q
+F0 1.154(informing that the feed in mail shall be wrapped into a BSMTP/PUNCH)
+237.6 223.2 R 1.192(envelope with "MAIL FROM:<>" getting the \214rst ar)237.6
+235.2 R 1.192(gument, and "RCPT)-.18 F -.18(TO)237.6 247.2 S .311
+(:<>" getting the rest \(1 to many).18 F 2.811(..\) This)-.65 F .311
+(option has two alternate names:)2.811 F(")237.6 259.2 Q F2(-b)A F0 .084
+(", and ")B F2(-bsmtp)A F0(".)A F3 .083
+(Line length is limited to 80 chars on this mode! W)5.083 F(rap-)-.55 E
+(ping of longer lines is attempted, but it might not always be successfull.)
+237.6 271.2 Q F2(\255nd gateway@host)108 288 Q F0 .116
+(informing that the feed in mail shall be wrapped into a BSMTP/NETDA)237.6 288
+R -.8(TA)-1.11 G 1.192(envelope with "MAIL FROM:<>" getting the \214rst ar)
+237.6 300 R 1.192(gument, and "RCPT)-.18 F -.18(TO)237.6 312 S 1.247
+(:<>" getting the rest \(1 to many).18 F(..\))-.65 E F3 1.248
+(This accept inde\214nite length lines,)6.247 F 2.362
+(minimum being 80 chars, true value is calculated while pr)237.6 324 R 2.362
+(eparing the)-.37 F(BSMTP envelope into a temporary \214le.)237.6 336 Q F2
+(\255tag RSCS-T)108 352.8 Q(AG)-.74 E F0 1.406
+(de\214nes the 136 bytes \(padded/truncated to that length\) RSCS T)237.6 352.8
+R 1.406(AG data.)-.8 F(Usually not needed with)237.6 364.8 Q F3(bmail)2.5 E F0
+(.).48 E F2(\255u origuser)108 381.6 Q F0 .566
+(Can be used to de\214ne local mail-sender pseudo-id.)237.6 381.6 R(For)5.566 E
+/F4 9/Times-Roman@0 SF(BSMTP)3.066 E F0 .566(modes the)2.816 F
+(default value is)237.6 393.6 Q F2(MAILER)2.5 E F0 5(.F)C
+(or others it is local user)355.37 393.6 Q(.)-.55 E(When)108 410.4 Q F3(bmail')
+2.694 E(s)-1.29 E F0 .194(`From' ar)2.694 F .194(gument contains a `.' in it, \
+the \214le sender is changed to be "MAILER@localname",)-.18 F
+(however possible BSMTP will contain entered `From' information.)108 422.4 Q F1
+(INTERF)72 439.2 Q(ACING T)-.666 E 2.25(OS)-.162 G(YSTEM MAILER)157.68 439.2 Q
+F0(In case of)108 451.2 Q F2(zmailer)2.5 E F0
+(\(8z\) by Rayan Zachariassen, interface goes as follows:)A/F5 10/Courier@0 SF
+($MAILSHARE/db/routes.bitnet contains:)126 468 Q 48
+(academic bsmtp3!mailer!academic)144 480 R 66(acmvm bsmtp3!mailer!acmvm)144 492
+R 66(acusd defrt1!acusd)144 504 R 54(finhutc bsmtp3nd!mailer!finhutc)144 516 R
+6($MAILSHARE/sm.conf contains:)126 540 R(#)144 552 Q 6(#b)144 564 S
+(itnet stuff F=hu not set)162 564 Q(#)144 576 Q 12(bsmtp3 snmSX)144 588 R 6
+(/usr/local/lib/huji/bmail bmail)6 F(-b $h -u MAILER $g $u)6 E
+(bsmtp3nd snmSX /usr/local/lib/huji/bmail)144 600 Q
+(bmail -nd $h -u MAILER $g $u)396 600 Q 12
+(defrt1 snS /usr/local/lib/huji/bmail)144 612 R(bmail $g $u)396 612 Q 6
+(bitnet2 snS)144 624 R 6(/usr/local/lib/huji/bmail bmail)234 624 R($g $u)6 E 6
+($MAILSHARE/scheduler.cf contains:)126 648 R(defrt1/*)144 660 Q
+(command="sm -c $channel defrt1")204 672 Q(bsmtp3/*)144 684 Q
+(command="sm -c $channel bsmtp3")204 696 Q(bsmtp3nd/*)144 708 Q
+(command="sm -c $channel bsmtp3nd")204 720 Q F0(1)535 768 Q EP
+%%Page: 2 2
+BP/F0 10/Times-Roman@0 SF 377.74(BMAIL\(8\) BMAIL\(8\))72 48 R 2.768
+(Getting this installed into a BSD)108 84 R/F1 10/Times-Bold@0 SF(sendmail)
+5.268 E F0 2.768(\(8\) should not be very dif)B 2.767
+(\214cult, but de\214nitely dif)-.18 F(ferent..)-.18 E(Propably `mailer)108 96
+Q 2.5('d).37 G(e\214nitions resemble)186.69 96 Q -1.95(`sm.conf ')5 F(above.)5
+E/F2 9/Times-Bold@0 SF(ENVIRONMENT)72 117.6 Q F0 -.4(Wi)108 129.6 S .437
+(th environment variable).4 F F1(EBCDICTBL)2.937 E F0 .438
+(user can select alternate EBCDIC <\255> ASCII translation tables.)2.937 F
+(For more info, see)108 141.6 Q F1(ebcdictbl)2.5 E F0(\(5\).)A F2(FILES)72
+163.2 Q/F3 10/Times-Italic@0 SF(/etc/funetnje.cf)108 175.2 Q(/etc/name.bitnet)
+108 187.2 Q F0(\(For system mailer\))2.5 E F2(SEE ALSO)72 204 Q F1(bitspool)108
+216 Q F0(\(5\),)A F1(ebcdictbl)2.5 E F0(\(5\),)A F1(funetnje)2.5 E F0(\(8\),)A
+F1(mailify)2.5 E F0(\(1\),)A F1(qrdr)2.5 E F0(\(8\),)A F1 -.18(re)2.5 G(ceive)
+.18 E F0(\(1\),)A F1(send\214le)2.5 E F0(\(1\),)A F1(transfer)2.5 E F0(\(1\))A
+F2(BUGS)72 232.8 Q F0(None that we know)108 244.8 Q(.)-.65 E F2(DIAGNOSTICS)72
+266.4 Q F0 .412(These programs show their usage summary)108 278.4 R 2.912(,w)
+-.65 G .411(hen there is something wrong with input parameters.)295.622 278.4 R
+(Subtle)5.411 E(usage bugs might not be detected!)108 290.4 Q F2 -.999(WA)72
+307.2 S(RNINGS).999 E F0 .563(When BSMTP envelope address over\215ows to longe\
+r than 80-characters, and NETDA)108 319.2 R 2.163 -.8(TA i)-1.11 H 3.063(sn).8
+G .563(ot used, there)485.274 319.2 R 1.222(is no check at it, nor folding...)
+108 331.2 R 1.222(\(There is a deliberate TRUNCA)6.222 F 1.221
+(TE at 80 cols, though..\))-1.11 F -.4(Wi)6.221 G 1.221(th the NET).4 F(-)-.92
+E(DA)108 343.2 Q 1.6 -.8(TA t)-1.11 H
+(he input can be of arbitary long lines \(up to 64000 characters each\).).8 E
+F2(AUTHORS)72 364.8 Q F0 -1(Ye)108 376.8 S
+(havi Bourvine, Hebrew University of Y)1 E(erusalem, Israel)-1 E F3
+(<yehavi@hujivms.bitnet>.)2.5 E F0 4.499
+(Matti Aarnio, Finnish University and Research Network \255 FUNET)108 393.6 R
+6.999(,F)-.74 G(inland)426.421 393.6 Q F3(<mea@nic.funet.\214>)6.999 E
+(<mea@\214n\214les.bitnet>.)108 405.6 Q F0 1.114
+(Original \(VMS oriented package\) software by Y)108 422.4 R 1.113
+(ehavi Bourvine, UNIX features, plenty of modi\214cations,)-1 F
+(man-pages by Matti Aarnio.)108 434.4 Q(2)535 768 Q EP
+%%Trailer
+end

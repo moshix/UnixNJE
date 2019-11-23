@@ -1,0 +1,125 @@
+.\" $Header$
+.\"
+.\"  Man page for FUNET-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 18-Sep-1993
+.\"
+.fp 4 CW
+.ds ]W Funet-Nje 8 UNIX 3.0
+.TH QRDR 8
+.SH NAME
+qrdr \- incoming bitnet queue peeking tool
+.SH SYNOPSIS
+.IP qrdr 0.5i 0
+.RB [ " \-u \fIuser\fR " ]
+.RB [ " \-n " ]
+.RB [ " \-l " ]
+.RI [ " dirpaths\fR,\fI filepaths " ]
+.SH DESCRIPTION
+.IX "qrdr"
+.IX "bitnet"
+.IX "funetnje"
+.IX "mailify"
+.IX "receive"
+.LP
+.I Qrdr
+gives users a tool to see what they have in their incoming BITNET spool
+queues.
+Depending on protection it also lets others to see what user XYZ has in
+his/her queue, or ANY directory possibly containing BITNET spool files,
+or just any specified files...
+.LP
+When
+.RB ` "\-u \fIuser" '
+has not been used, default behaviour of
+.I qrdr
+is to find out who user is making query  by asking `whoami',
+eg getting value of
+.B LOGNAME
+environment variable.
+(In SysV this is
+.B USER
+variable.)
+If environment doesn't give answer,
+.I /etc/passwd
+file is consulted with
+effective uid.
+.LP
+Spool directory is determined using same mechanism as in
+.I funetnje
+main program.  Sample configuration of file procesing exits gives directory
+.RI ` /usr/spool/bitspool '
+in which UPPERCASE userids (or pseudoids - MAILER is one such) are `user'
+specific subdirectories containing individual spooled files.
+.LP
+Option
+.BR ` \-l '
+gives file paths to spool files, and some heuristics of file contents
+for
+.IR rdrlist (1)
+program.
+For program-parsing the
+.BR ` \-l '
+option uses singular
+tabulator to separate output fields.
+.LP
+Example of
+.I qrdr
+output for user 
+.RB ` mea ':
+.LP
+.nf
+.fz 4 -2
+\f4QRDR: Spool dir: `/usr/spool/bitspool/MEA/'
+\f4From:             To:               FName:   FExt:    Type  Form:    SpoolID
+\f4NETSERV@FINHUT    MEA@FINFILES      NETSERV  NOTE     PUN A QUFINHUT 0002
+\f4NETSERV@FINHUT    MEA@FINFILES      NETSERV  NOTE     PUN A QUFINHUT 0004
+\f4MEA@FINFILES      MEA@FINFILES      STANDARD INPUT    PUN C STANDARD 0006
+\f4NETSERV@FINHUT    MEA@FINFILES      NETSERV  NOTE     PUN A QUFINHUT 0003
+\f4ZEHAVI@ISRAEARN   MEA@FIRIEN        ZEHAVI   NOTE     PUN A STANDARD 0005
+\f4...
+\f4LISTSERV@SEARN    MEA@FINFILES      INFO     FILELIST PUN N QULISTSV 0023
+\f4LISTSERV@FINHUTC  MEA@FINFILES      LISTOWNR REFCARD  PUN N QULISTSV 0024
+\f4CMS1@ALIJKU11     MEA@FINFILES      CMS1     NOTE     PUN A STD      0025
+\f4Found 23 files.
+.fi
+.LP
+For the
+.B \-l
+option, recognized data types are:
+NETDATA, VMSDUMP, CARD (Cornell CARD), and PUNCH when none of
+the previous ones match to input punch records.
+For three PRINT formats there are:
+PRINT (Machine Carriage Control), PASA (ANSI Carriage Control), and
+PCPDS for rare 3rd alternative.
+.SH FILES
+.nf
+.I /etc/funetnje.cf
+.I /etc/funetnje.pid
+.RI "File processing exit config file, which is defined in " funetnje.cf
+.fi
+.SH ENVIRONMENT
+.IP LOGNAME 1.0i 0
+Primary way to find who I am. (BSD)
+.IP USER 1.0i 0
+Secondary way to find who I am. (SysV)
+.SH SEE ALSO
+.BR funetnje (8),
+.BR rdrlist (1),
+.BR receive (1),
+.BR mailify (8),
+.BR send (1),
+.BR sendfile (1),
+.BR bmail (8),
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network \- FUNET, Finland
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, man-pages by Matti Aarnio.

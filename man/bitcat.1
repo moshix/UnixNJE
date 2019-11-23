@@ -1,0 +1,232 @@
+.\" $Header$
+.\"
+.\"  Man page for HUJI-NJE/FUNET-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 18-Sep-1993
+.\"
+.fp 4 CW
+.ds ]W Funet-Nje 1 UNIX 1.1
+.TH BITCAT 1
+.B "** TO BE DELETED ** TO BE DELETED ** TO BE DELETED ** TO BE DELETED **"
+.SH NAME
+bitcat, ndparse, transfer
+\- bitnet incoming file processing programs
+.SH SYNOPSIS
+.LP
+bitcat
+.RB [ " \-asa | \-b | \-d | \-rawpun " ]
+.I filepath
+.LP
+ndparse
+.RB [ " \-n " ]
+.RB [ " \-a | \-b " ]
+.RB [ " \-rawpun" "|" "\-bitraw " ]
+.RB [ " \-d " ]
+.RB [ " \-o "
+.I outpath
+.B ]
+.I filepath
+.LP
+/usr/lib/huji/transfer
+.I /absolute/file/path
+\f4DestUser@DestNode
+.B "**Under developement!**"
+.SH DESCRIPTION
+.IX "bitnet"
+.IX "funetnje"
+.IX "sendfile"
+.IX "netdata"
+.IX "receive"
+.LP
+.I Bitcat
+is a simple minded tool for receiving files.  Default usage is to translate
+.SM EBCDIC
+PUNCH or PRINT records to
+.SM ASCII
+and output them with appended newlines.
+Trailing spaces are removed at first, as they are (usually anyway)
+unnecessary.
+.LP
+.I Bitcat
+can enter
+.I \-d (debug)
+mode, and display raw contents of spool file.
+(Occasionally interesting.)
+.LP
+.I Bitcat
+can also enter
+.I \-b (binary)
+mode where it outputs every record of file in following (raw) format:
+.br
+.ti 0.5i
+\f4 <char of reclen>  <chars of record>
+.LP
+Alternatively
+.I bitcat
+can enter
+.I \-rawpun
+state, where it outputs punch file in 80 characters per record
+format, no intermediate newlines or other fuss.
+.LP
+Non-binary mode uses internally compiled
+.SM EBCDIC-ASCII
+translation table, and outputs are in
+.SM ASCII.
+.LP
+When feed a print file,
+.I bitcat
+can convert it to raw
+.SM ASCII
+with as accurate representation of carriage control, as possible.
+It is also possible to get
+.SM FORTRAN-style
+carriage control mapped from MCC (see
+.BR bitspool (5)),
+and that be outputed. (Option
+.IR -asa )
+.LP
+.I Bitcat
+outputs file to \fISTDOUT\fR, and if wanted, debug output
+to \fISTDERR\fR.
+.LP
+.I Ndparse
+outputs to a file whose location is current working directory,
+and name is formed from spool entry by lowercaseing
+.IR FileName.FileExt ,
+unless
+.RB ` \-o ',
+is used to override it.
+With
+.RB ` \-o '
+one can specify
+.RB ` \- '
+to denote
+.BR STDOUT .
+Debug output goes to \fISTDERR\fR as usual.
+.LP
+With \fIndparse\fR
+.SM ASCII
+(`\fB\-a\fR', default when file does not have class N)
+output is plain translated records of original data with added
+separating newlines.
+(Not even chopping of the trailing spaces -- XX: could it be usefull still ?)
+Binary (with `\fB\-b\fR', a default, if file has class N) mode is plain
+raw data from records.
+Nothing extra like
+\fIbitcat\fR's `\fB\-b\fR' produces..
+.LP
+.I Ndparse
+is able to take input in varying formats:
+.br
+.ti 0.8i
+\fB\-\fR Standard spool files
+.br
+.ti 0.8i
+\fB\-\fR
+.I Bitcat -b
+.B "\-bitraw"
+.br
+.ti 0.8i
+\fB\-\fR Raw 80 chars/rec punches
+.B "\-rawpun"
+.LP
+.I Transfer program is under developement!
+.LP
+.I Transfer
+modifies file headers changing its destination address so it is possible to
+send that file again to NJE network for new destination.
+However other security related aspects may not allow all tricks.
+(For now origination address in headers will not be changed to point local
+user, and thus it is possible to create a file which seems to be traversing
+the network in wrong direction.)
+.I Transfer
+does also requeueing for file transmission.  For this ABSOLUTE 
+path (one starting with `/') is necessary.
+.LP
+.SH OPTIONS
+.IP \fInone\fR 1.0i 0
+Punch files are output as is, and Print files get
+converted from whatever carriage-control format
+they use to ASCII-CR/LF/FF format.
+.IP "\fB\-asa\fR" 1.0i 0
+Print files are output with
+.SM FORTRAN-style
+carriage controls.  One line per input record.
+.IP "\fB\-b\fR" 1.0i 0
+Binary output.  See DESCRIPTION on each command.
+.IP "\fB\-bitraw\fR" 1.0i 0
+Special input format switch for
+.IR ndparse .
+Globs output from
+.I bitcat -b
+.IP "\fB\-d\fR" 1.0i 0
+Debug output.  To \fISTDERR\fR.
+.IP "\fB\-n\fR" 1.0i 0
+Original `spool' file should \fBnot\fR be removed after successfull
+file processing is done.  (Successfull == No errors, Netdata file
+translated to ASCII using
+.I bitcat
+might not be usefull.)
+.IP "\fB\-rawpun\fR" 1.0i 0
+Special input format switch for
+.IR ndparse .
+.LP
+.SH ENVIRONMENT
+With environment variable
+.B EBCDICTBL
+user can select alternate EBCDIC <-> ASCII translation
+tables.  For more info, see
+.BR ebcdictbl (5).
+.LP
+.SH FILES
+.nf
+.I /etc/funetnje.cf
+.I /etc/funetnje.pid
+.RI "File processing exit config file, which is defined in " funetnje.cf.
+.fi
+.SH SEE ALSO
+.BR funetnje (8),
+.BR bitspool (5),
+.BR send (1),
+.BR sendfile (1),
+.BR bmail (1),
+.BR ebcdictbl (5),
+.BR mailify (8),
+.BR sysin (8),
+.BR qrdr (8),
+.BR rdrlist (8)
+.SH BUGS
+.LP
+.I Ndparse
+should be able to dig original dates and names from ND file.
+.LP
+Sometimes
+.I ndparse
+fails to understand received netdata file.  Subject for further
+study.
+.LP
+.SH DIAGNOSTICS
+When any of these programs is fed a file containing errorneous
+data (not
+.BR funetnje "(8) spool file,)"
+these mostly recover with a burp, sometimes these
+might even drop a core on pathological input case.
+.SH WARNING
+With
+.I ndparse
+it is one time mistake to forget to use
+.B \-n
+when peeking a file.  That file goes to bit bucket at that
+moment if no errors are detected. (rc=0 -> no file...)
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network - FUNET
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, man-pages by Matti Aarnio.

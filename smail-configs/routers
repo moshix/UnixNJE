@@ -1,0 +1,125 @@
+# @(#)samples/generic/routers	1.3 8/8/92 16:40:26
+
+# This file defines the configuration of the router subsystem as
+# compiled into the smail binary.  By modifying the source files
+# conf/EDITME, src/config.h or src/default.c the actual internal
+# configuration can be changed.  Thus, this should be matched up
+# against thes files before assuming this is completely correct.
+
+# force_paths - override file for routing
+#
+# This entry is not in the compiled-in routers, for now.  However,
+# this entry can be very useful for adding temporary override routes,
+# if some paths are known to be useless for transient reasons, or for
+# organizing internal networks without the use of map files.  It can
+# also be used to define UUCP sites that you MX for, if you are using
+# DNS with the bind router.  In the MX case, add an entry to the file
+# /usr/lib/smail/forcepaths such as:
+#
+#	.foo.org	foo-uucp-gateway!%s
+#
+# to cause all E-mail to the foo.org domain to be sent to its uucp
+# gateway, rather than being matched by the MX router, which will
+# not correctly handle MX to UUCP gatewaying, if you use the bind
+# version of the inet_hosts router, below.
+#
+# The file is defined to be an unsorted ASCII file, so that direct
+# editing is possible and reasonable.  The "always" attribute forces
+# use of the router even if a later router (such as the bind version
+# of inet_hosts) gets a better match (note that DNS wildcard matches
+# count as complete hostname matches).  Thus, with the .foo.org
+# entry above, foo.foo.org would be matched here, even if foo.foo.org
+# were matched by inet_hosts or the regular paths router.
+#
+#force_paths:
+#	driver=pathalias,
+#	transport=uux,			# deliver using uux to rmail
+#	always;				# force use even if some other
+#					# router gets a more complete match
+#
+#	file=forcepaths,		# plain ASCII file (unsorted)
+#	proto=lsearch,			# use linear search
+#	optional,			# ignore if the file does not exist
+
+# inet_addrs and inet_hosts are only defined when BSD networking exists
+
+# inet_addrs - match domain literals containing literal IP addresses
+#
+# For example, [128.103.1.1] will match harvard.harvard.edu on the internet.
+# The library routine gethostbyaddr(3N) will be called to see if a reverse
+# mapping to the cononical hostname is available.
+inet_addrs:
+	driver=gethostbyaddr,		# router to match IP domain literals
+	transport=smtp;			# deliver using SMTP over TCP/IP
+
+	fail_if_error,			# fail malformed domain literal addrs
+	check_for_local,		# see if this is really the local host
+
+# inet_hosts - match hostnames with gethostbyname(3N)
+#
+# Comment this out if you wish to use the bind version below, instead.
+inet_hosts:
+	driver=gethostbyname,		# match hosts with the library function
+	transport=smtp;			# use default SMTP (may be UUCP-style)
+
+	-required,			# no required domains
+	-domain,			# no defined domain suffixes
+	-only_local_domain,		# don't restrict to defined domains
+
+# inet_hosts - alternate version using BIND to access the DNS
+#
+# This router is not compiled-in by default.  It can be used as a
+# replacement for the above inet_hosts router, if your system supports
+# a bind compatible DNS resolver library.  This should be used for
+# systems on the internet.
+#inet_hosts:
+#	driver=bind,
+#	transport=smtp;			# use TCP/IP SMTP for delivery
+#
+#	defnames,			# use standard domain searching
+#	defer_no_connect,		# try again if the nameserver is down
+#	-local_mx_okay,			# fail (don't pass through) an MX
+#					# to the local host
+
+# paths - route using a paths file, like that produced by the pathalias program
+paths:	driver=pathalias,		# general-use paths router
+	transport=uux;			# for matches, deliver over UUCP
+
+	file=paths,			# sorted file containing path info
+	proto=bsearch,			# use a binary search
+#	proto=dbm,			# use a dbm files
+	optional,			# ignore if the file does not exist
+	-required,			# no required domains
+	domain=uucp,			# strip ending ".uucp" before searching
+#
+
+bitnet:	driver=pathalias,
+	method=bitmethods;
+	file=bitearn,
+	proto=bsearch,
+	-optional,
+ 	-required,
+	domain=bitnet,
+
+# uucp_neighbors - match neighbors accessible over UUCP
+uucp_neighbors:
+	driver=uuname,			# use a program which returns neighbors
+	transport=uux;
+
+	cmd=/usr/bin/uuname,		# specifically, use the uuname program
+	domain=uucp,			# strip ending ".uucp" before searching
+
+# smart_host - a partically specified smarthost director
+#
+# If the config file attribute smart_path is defined as a path from the
+# local host to a remote host, then hostnames not matched otherwise will
+# be sent off to the stated remote host.  The config file attribute
+# smart_transport can be used to specify a different transport.
+#
+# If the smart_path attribute is not defined, this router is ignored.
+smart_host:
+	driver=smarthost,		# special-case driver
+	transport=uux;			# by default deliver over UUCP
+
+	-path,				# use smart_path config file variable
+#	path=uunet,			# alternate, set path in this file

@@ -1,0 +1,284 @@
+%!PS-Adobe-2.1
+%%Creator: groff version 1.00
+%%DocumentFonts: Courier Times-Italic Times-Bold Times-Roman
+%%DocumentSuppliedFonts:
+%%DocumentNeededFonts: Courier Times-Italic Times-Bold Times-Roman
+%%Pages: 1
+%%EndComments
+/grops 100 dict def grops begin
+% If you add definitions here, be sure to check that MAX_PROLOGUE_DEFS
+% in ps.c is large enough.
+
+% The ASCII code of the space character.
+/SC 32 def
+
+/A /show load def
+/B { 0 SC 3 -1 roll widthshow } bind def
+/C { 0 exch ashow } bind def
+/D { 0 exch 0 SC 5 2 roll awidthshow } bind def
+/E { 0 rmoveto show } bind def
+/F { 0 rmoveto 0 SC 3 -1 roll widthshow } bind def
+/G { 0 rmoveto 0 exch ashow } bind def
+/H { 0 rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/I { 0 exch rmoveto show } bind def
+/J { 0 exch rmoveto 0 SC 3 -1 roll widthshow } bind def
+/K { 0 exch rmoveto 0 exch ashow } bind def
+/L { 0 exch rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/M { rmoveto show } bind def
+/N { rmoveto 0 SC 3 -1 roll widthshow } bind def
+/O { rmoveto 0 exch ashow } bind def
+/P { rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/Q { moveto show } bind def 
+/R { moveto 0 SC 3 -1 roll widthshow } bind def
+/S { moveto 0 exch ashow } bind def
+/T { moveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+
+% name size font SF -
+
+/SF {
+	findfont exch
+	[ exch dup 0 exch 0 exch neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+% name a c d font MF
+
+/MF {
+	findfont
+	[ 5 2 roll
+	0 3 1 roll % b
+	neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+	
+% BP -
+
+/BP {
+	/level0 save def
+	1 setlinecap
+	1 setlinejoin
+	72 RES div dup scale
+	LS {
+		90 rotate
+	} {
+		0 PL translate
+	} ifelse
+	1 -1 scale
+} bind def
+
+/EP {
+	level0 restore
+	showpage
+} bind def
+
+
+% centerx centery radius startangle endangle DA -
+
+/DA {
+	newpath arcn stroke
+} bind def
+
+% x y SN - x' y'
+% round a position to nearest (pixel + (.25,.25))
+
+/SN {
+	transform 
+	.25 sub exch .25 sub exch
+	round .25 add exch round .25 add exch
+	itransform
+} bind def
+	
+% endx endy startx starty DL -
+% we round the endpoints of the line, so that parallel horizontal
+% and vertical lines will appear even
+
+/DL {
+	SN
+	moveto
+	SN
+	lineto stroke
+} bind def
+
+% centerx centery radius DC -
+
+/DC {
+	newpath 0 360 arc closepath
+} bind def
+
+
+/TM matrix def
+
+%  width height centerx centery DE -
+
+/DE {
+	TM currentmatrix pop
+	translate scale newpath 0 0 .5 0 360 arc closepath
+	TM setmatrix
+} bind def
+
+% these are for splines
+
+/RC /rcurveto load def
+/RL /rlineto load def
+/ST /stroke load def
+/MT /moveto load def
+/CL /closepath load def
+
+% fill the last path
+
+% amount FL -
+
+/FL {
+	currentgray exch setgray fill setgray
+} bind def
+
+% fill with the ``current color''
+
+/BL /fill load def
+
+/LW /setlinewidth load def
+% new_font_name encoding_vector old_font_name RE -
+
+/RE {
+	findfont
+	dup maxlength dict begin
+	{
+		1 index /FID ne { def } { pop pop } ifelse
+	} forall
+	/Encoding exch def
+	dup /FontName exch def
+	currentdict end definefont pop
+} bind def
+
+% hpos vpos EBEGIN -
+
+/EBEGIN {
+	moveto
+	DEFS begin
+} bind def
+
+/EEND /end load def
+
+% llx lly newwid wid newht ht newllx newlly -
+
+/PICTURE {
+	translate
+	div 3 1 roll div exch scale
+	neg exch neg exch translate
+	% set the graphics state to default values
+	0 setgray
+	0 setlinecap
+	1 setlinewidth
+	0 setlinejoin
+	10 setmiterlimit
+	[] 0 setdash
+	newpath
+} bind def
+/DEFS 1 dict def DEFS begin/u{.001 mul}bind def end end
+%%IncludeFont: Courier
+%%IncludeFont: Times-Italic
+%%IncludeFont: Times-Bold
+%%IncludeFont: Times-Roman
+grops begin/#copies 1 def/RES 72 def/PL 841.89 def/LS false def/ENC0[
+/asciicircum/asciitilde/Scaron/Zcaron/scaron/zcaron/Ydieresis/trademark/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/space/exclam/quotedbl/numbersign
+/dollar/percent/ampersand/quoteright/parenleft/parenright/asterisk/plus/comma
+/hyphen/period/slash/zero/one/two/three/four/five/six/seven/eight/nine/colon
+/semicolon/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J/K/L/M/N/O/P/Q/R/S
+/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright/circumflex/underscore
+/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z/braceleft/bar
+/braceright/tilde/.notdef/quotesinglbase/guillemotleft/guillemotright/bullet
+/florin/fraction/perthousand/dagger/daggerdbl/endash/emdash/ff/fi/fl/ffi/ffl
+/dotlessi/dotlessj/grave/hungarumlaut/dotaccent/breve/caron/ring/ogonek
+/quotedblleft/quotedblright/oe/lslash/quotedblbase/OE/Lslash/.notdef/exclamdown
+/cent/sterling/currency/yen/brokenbar/section/dieresis/copyright/ordfeminine
+/guilsinglleft/logicalnot/minus/registered/macron/degree/plusminus/twosuperior
+/threesuperior/acute/mu/paragraph/periodcentered/cedilla/onesuperior
+/ordmasculine/guilsinglright/onequarter/onehalf/threequarters/questiondown
+/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla/Egrave/Eacute
+/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex/Idieresis/Eth/Ntilde/Ograve
+/Oacute/Ocircumflex/Otilde/Odieresis/multiply/Oslash/Ugrave/Uacute/Ucircumflex
+/Udieresis/Yacute/Thorn/germandbls/agrave/aacute/acircumflex/atilde/adieresis
+/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave/iacute
+/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex/otilde/odieresis
+/divide/oslash/ugrave/uacute/ucircumflex/udieresis/yacute/thorn/ydieresis]def
+/Courier@0 ENC0/Courier RE/Times-Italic@0 ENC0/Times-Italic RE/Times-Bold@0
+ENC0/Times-Bold RE/Times-Roman@0 ENC0/Times-Roman RE
+%%EndProlog
+%%Page: 1 1
+BP/F0 10/Times-Roman@0 SF 386.62(QRDR\(8\) QRDR\(8\))72 48 R/F1 9/Times-Bold@0
+SF(NAME)72 84 Q F0(qrdr \255 incoming bitnet queue peeking tool)108 96 Q F1
+(SYNOPSIS)72 112.8 Q F0 16.84(qrdr [)108 124.8 R/F2 10/Times-Bold@0 SF<ad75>2.5
+E/F3 10/Times-Italic@0 SF(user)2.5 E F0 2.5(][)2.5 G F2<ad6e>A F0 2.5(][)2.5 G
+F2<ad6c>A F0 2.5(][)2.5 G F3(dirpaths)A F0(,)A F3(\214lepaths)2.5 E F0(])2.5 E
+F1(DESCRIPTION)72 141.6 Q F3(Qr)108 153.6 Q(dr)-.37 E F0 .289(gives users a to\
+ol to see what they have in their incoming BITNET spool queues.)2.789 F .288
+(Depending on pro-)5.289 F .346(tection it also lets others to see what user X\
+YZ has in his/her queue, or ANY directory possibly containing)108 165.6 R
+(BITNET spool \214les, or just any speci\214ed \214les...)108 177.6 Q .753
+(When `)108 194.4 R F2<ad75>A F3(user)3.253 E F0 3.253('h)C .753
+(as not been used, default behaviour of)181.779 194.4 R F3(qr)3.253 E(dr)-.37 E
+F0 .752(is to \214nd out who user is making query)3.252 F(by)5.752 E .185
+(asking `whoami', eg getting value of)108 206.4 R F2(LOGNAME)2.686 E F0 .186
+(environment variable.)2.686 F .186(\(In SysV this is)5.186 F F2(USER)2.686 E
+F0(variable.\))2.686 E(If environment doesn')108 218.4 Q 2.5(tg)-.18 G
+(ive answer)206.97 218.4 Q(,)-.4 E F3(/etc/passwd)2.5 E F0
+(\214le is consulted with ef)2.5 E(fective uid.)-.18 E .776
+(Spool directory is determined using same mechanism as in)108 235.2 R F3
+(funetnje)3.276 E F0 .776(main program.)3.276 F .776(Sample con\214guration)
+5.776 F .657(of \214le procesing exits gives directory `)108 247.2 R F3
+(/usr/spool/bitspool).48 E F0 3.158('i).48 G 3.158(nw)351.612 247.2 S .658
+(hich UPPERCASE userids \(or pseudoids -)366.99 247.2 R
+(MAILER is one such\) are `user)108 259.2 Q 2.5('s).37 G
+(peci\214c subdirectories containing individual spooled \214les.)243.89 259.2 Q
+(Option)108 276 Q F2(`)3.287 E F0<ad6c>A F2(')A F0 .787(gives \214le paths to \
+spool \214les, and some heuristics of \214le contents for)3.287 F F3 -.37(rd)
+3.286 G(rlist).37 E F0 .786(\(1\) program.).6 F(For)5.786 E
+(program-parsing the)108 288 Q F2(`)2.5 E F0<ad6c>A F2(')A F0
+(option uses singular tabulator to separate output \214elds.)2.5 E(Example of)
+108 304.8 Q F3(qr)2.5 E(dr)-.37 E F0(output for user `)2.5 E F2(mea)A F0(':)A
+/F4 10/Courier@0 SF(QRDR: Spool dir: `/usr/spool/bitspool/MEA/')108 321.6 Q 72
+(From: To:)108 333.6 R 12(FName: FExt:)324 333.6 R 6(Type Form:)432 333.6 R
+(SpoolID)522 333.6 Q 18(NETSERV@FINHUT MEA@FINFILES)108 345.6 R 6(NETSERV NOTE)
+324 345.6 R(PUN A QUFINHUT 0002)432 345.6 Q 18(NETSERV@FINHUT MEA@FINFILES)108
+357.6 R 6(NETSERV NOTE)324 357.6 R(PUN A QUFINHUT 0004)432 357.6 Q 30
+(MEA@FINFILES MEA@FINFILES STANDARD)108 369.6 R 18(INPUT PUN)6 F 6(CS)6 G
+(TANDARD 0006)474 369.6 Q 18(NETSERV@FINHUT MEA@FINFILES)108 381.6 R 6
+(NETSERV NOTE)324 381.6 R(PUN A QUFINHUT 0003)432 381.6 Q 12
+(ZEHAVI@ISRAEARN MEA@FIRIEN)108 393.6 R 12(ZEHAVI NOTE)324 393.6 R
+(PUN A STANDARD 0005)432 393.6 Q(...)108 405.6 Q 18
+(LISTSERV@SEARN MEA@FINFILES)108 417.6 R 24(INFO FILELIST)324 417.6 R
+(PUN N QULISTSV 0023)6 E 6(LISTSERV@FINHUTC MEA@FINFILES)108 429.6 R
+(LISTOWNR REFCARD)324 429.6 Q(PUN N QULISTSV 0024)432 429.6 Q 24
+(CMS1@ALIJKU11 MEA@FINFILES)108 441.6 R 24(CMS1 NOTE PUN)324 441.6 R 6(AS)6 G
+30(TD 0025)474 441.6 R(Found 23 files.)108 453.6 Q F0 2.408(For the)108 470.4 R
+F2<ad6c>4.908 E F0 2.408(option, recognized data types are: NETDA)4.908 F -.8
+(TA)-1.11 G 4.909(,V).8 G(MSDUMP)366.474 470.4 Q 4.909(,C)-1.11 G 2.409
+(ARD \(Cornell CARD\), and)422.783 470.4 R .073
+(PUNCH when none of the previous ones match to input punch records.)108 482.4 R
+.073(For three PRINT formats there are:)5.073 F
+(PRINT \(Machine Carriage Control\), P)108 494.4 Q
+(ASA \(ANSI Carriage Control\), and PCPDS for rare 3rd alternative.)-.92 E F1
+(FILES)72 511.2 Q F3(/etc/funetnje.cf)108 523.2 Q(/etc/funetnje.pid)108 535.2 Q
+F0(File processing exit con\214g \214le, which is de\214ned in)108 547.2 Q F3
+(funetnje.cf)4.48 E F1(ENVIRONMENT)72 564 Q F0 19.51(LOGNAME Primary)108 576 R
+(way to \214nd who I am. \(BSD\))2.5 E 43.94(USER Secondary)108 592.8 R
+(way to \214nd who I am. \(SysV\))2.5 E F1(SEE ALSO)72 609.6 Q F2(funetnje)108
+621.6 Q F0(\(8\),)A F2(rdrlist)2.5 E F0(\(1\),)A F2 -.18(re)2.5 G(ceive).18 E
+F0(\(1\),)A F2(mailify)2.5 E F0(\(8\),)A F2(send)2.5 E F0(\(1\),)A F2
+(send\214le)2.5 E F0(\(1\),)A F2(bmail)2.5 E F0(\(8\),)A F1(AUTHORS)72 638.4 Q
+F0 -1(Ye)108 650.4 S(havi Bourvine, Hebrew University of Y)1 E
+(erusalem, Israel)-1 E F3(<yehavi@hujivms.bitnet>.)2.5 E F0 4.499
+(Matti Aarnio, Finnish University and Research Network \255 FUNET)108 667.2 R
+6.999(,F)-.74 G(inland)426.421 667.2 Q F3(<mea@nic.funet.\214>)6.999 E
+(<mea@\214n\214les.bitnet>.)108 679.2 Q F0 1.114
+(Original \(VMS oriented package\) software by Y)108 696 R 1.113
+(ehavi Bourvine, UNIX features, plenty of modi\214cations,)-1 F
+(man-pages by Matti Aarnio.)108 708 Q(1)535 768 Q EP
+%%Trailer
+end

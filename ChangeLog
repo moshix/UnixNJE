@@ -1,0 +1,1799 @@
+Fri Mar 22 13:48:30 1996  Matti Aarnio  <mea@nic.funet.fi>
+
+	* libsendcmd.c, unix.c:
+	    Even more relaxed approach on parametrizing
+	    the CMDMAILBOX -- now allows SOCK/FIFO/UDP
+	    with fairly flexible (in regards of spaces)
+	    syntax..
+
+Mon Nov 13 17:48:52 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* libsendcmd.c, unix.c:
+	    A bit more relaxed approach on parametrizing
+	    CMDMAILBOX config parameter (FIFO/SOCKET case)
+
+	* file_queue.c:
+	    Do RSCS-accounting on locally sent files, that
+	    wind up to local recipients
+
+	* unix_brcst.c:
+	    Re-enter the SysVR4 UTMP weirdos..  Now fixed ?
+
+Fri Aug 25 09:02:55 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* mailify.c:
+	    Handling error-messages (where "MAIL FROM:" address
+	    is "<>", that is, empty) was done improperly.  Now
+	    it does flag input as from "channel error" in that
+	    case.
+
+Mon Jul 24 14:29:59 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* bmail.c, sendfile.c:
+	    Sometimes   mktemp()  fails when there are a LOT of
+	    files being sent at the same time.  Changed now to
+	    more classical  ".MaiL.%05d"-format with  getpid()
+	    result as integer data..
+
+Wed Jun 21 22:42:39 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* unix_brcst.c, nmr_unix.c:
+	    Ok, more than __linux__ is needed to know which
+	    machines have <utmp.h> containing extended flags.
+	    Now we test  "DEAD_PROCESS" pre-processor define,
+	    which existence (propably) will correlate with
+	    the existence of utmp's field  ut_type.
+	    (SysVr4 feature, I think.)
+
+Mon Jun 19 15:17:55 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* send.c, sendfile.c, bmail.c:
+	    Some additional tests to trap various forms of bad
+	    addresses -- accepts only  user@node format with
+	    no '.' in the address, nor either component longer
+	    than 8 chars.
+
+	* nmr.c:
+	    Made sure not to overwrite allocated string spaces on
+	    Msg-queue entry.  (Did cause a crash with it..)
+
+Tue Jun 13 09:13:18 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* qrdr.c:
+	    Collect directory browsing results to an array at first,
+	    then qsort() it with the time-stamp, and finally display
+	    them in order. (Latest last)
+	    (This is something what Gerald Hanush asked for.)
+
+Mon Jun 12 22:44:00 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* file_queue.c:
+	    Apparently OSF/1 pipe() return value is the first
+	    fd, not "0", when it succeeds.  Nice thing - and not..
+	    Altered the test to see if it returns a value under
+	    zero, or something positive.  When the return is
+	    positive (zero, or larger), fork() and run in
+	    child-mode.
+
+	    If a child_pipe exists already ( >= 0 ), close
+	    it and mark the new one for processing.
+
+	* libreadcfg.c, read_config, libsendcmd.c, unix.c:
+	    Rewrote things so that now the used CMDMAILBOX
+	    transport method is chosen at runtime:
+
+	    CMDMAILBOX  F  /path/to/.cmdfifo
+	    CMDMAILBOX  f  /path/to/.cmdfifo
+	    CMDMAILBOX  S  /path/to/.cmdsocket
+	    CMDMAILBOX  U  127.0.0.2 175	# UDP port
+
+	    The "f" is FIFO which is closed, and reopened
+	    every time one command is pulled in.
+
+Sun Jun 11 03:12:06 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* namesparser.c:
+	    Noticed that the data parsing stopped at first ":",
+	    which caused premature breaks; observe following entry
+	    from BITEARN.NODES -file:
+	    	:remark1.BASE(9501) 00/00/00 00:00:00
+
+	* libreadcfg.c, read_config.c, libsendcmd.c, unix.c:
+	   Amended "CMDMAILBOX"-data to contain port-number in
+	   case UDP-format is used. (That is, have two tokens.)
+	   Default value for the port-number is 175.
+
+	* unix_tcp.c read_passive_tcp_connection():
+	   Noticed that a case when a socket exists, and a new
+	   connection is attempted is handled improperly. The
+	   old socket-fd was FORGOTTEN!  Now it NAKs the connection
+	   attempt with a complaint that there already is a connection
+	   in there...
+
+	   Things will progress from such a situation usually by
+	   detecting a closure on the existing stream, but better
+	   not to rush ahead of things.
+
+	* bmail.c:
+	   Accept "-u" only when calling the program from uids 0 or 1
+	   (root and daemon in most common cases -- for BSD-sendmail
+	    which wants  bmail executable with protection 2111 (user X,
+	    group NJEGRP) )
+
+Sat Jun 10 05:18:27 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* Makefile, consts.h, prototypes.h, recv_file.c, io.c,
+	  send_file.c, unix.c, protocol.c, unix_tcp.c:
+
+	    - Found one uninitialized pointer, which apparently
+	      caused mystic data-structure corruptions (on timer
+	      subsystem)
+
+	    - Made mandatory (well, with disabling options) to
+	      use NBSTREAM, USE_XMIT_QUEUE, and USE_SOCKOPT.
+	      (in consts.h, see also  Makefile's  comments!)
+
+	    - Use  F_WAIT_V_A_BIT  to flag if there is any reason
+	      for NOT to send out data at the moment, and instead
+	      quit from within  handle_ack()..
+	      The F_WAIT_V_A_BIT is set when new data is sent to
+	      outbound buffer (primary one, or XMIT QUEUE).
+	      The bit is cleared when pending writer finishes
+	      with success status.  When the pending-writer is
+	      called from  poll_sockets(), immediately after it
+	      the  dequeue_xmit_queue() is called, and if there
+	      is something, it can cause F_WAIT_V_A_BIT to be
+	      set again..)
+
+	    - If the XMIT_QUEUE ever runs out of space, it abort()s!
+
+	    - Tested the beast by sending 80 or so smallish files both
+	      ways over the link.  Such setup caused previously link
+	      corruption..  Actually the critical phase is when there
+	      are flowing NJE headers/trailer, bare data sending works
+	      just fine, but when a file ends, EOF block needs an ack
+	      to be sent, and unless there the care is used, all
+	      queues will overflow..
+
+Thu Jun  8 15:48:14 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* namesfilter.c:
+	    New option: "-netsoft" to list node software fields.
+
+	* funetnje.texinfo:
+	    Some additional chapters
+
+	* unix_tcp.c:
+	    FINALLY realized why sometimes file sending from
+	    queue does not start on some lines.  Reason was
+	    that PASSIVE VMNET open didn't clear all multi-
+	    stream bookkeeping bits -> all lines were "in use",
+	    when line started often enough in passive mode :-(
+	    (That is, on PASSIVE start, if previous shutdown
+	     had happened with all streams sending something..)
+
+	* protocol.c, consts.h, unix.c, unix_tcp.c, io.c:
+	    Serious Hacking -- NBSTREAM does not work without
+	    USE_XMIT_QUEUE - had to implement it properly.
+
+	* unix_brdcst.c, nmr_unix.c:
+	    Linux feature(s) of UTMP usage caused some surprises,
+	    now created necessary "#ifdef __linux__" "fix".
+
+Tue Jun  6 12:28:31 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* unix_tcp.c, protocol.c:
+	    Couple more NBSTREAM tests so that we won't run over ourselves
+	    when transmiting on a stream.
+
+	* file_queue.c, io.c:
+	    Revised slightly the queue handling - when restarting a link,
+	    ALWAYS tear apart the current state.
+	    ("debug rescan" must not destroy the current queue state,
+	     however genuine link restart can do it - while requeueing.)
+
+	* nmr.c, io.c, consts.h:
+	    Requeue NMR-messages ("struct MESSAGE" changed a bit)
+	    when a link restarts.
+
+Wed May 24 13:19:13 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* unix.c, unix_tcp.c, protocol.c, prototypes.h:
+	    Still more revisions into NBSTREAM processing code,
+	    also tried to improve sending speed, which now clocks
+	    to 50kB/s or better.. ( Previously 30kB/s was tops
+	    with 0.25 sec timeout on select(), now select timeout
+	    is changed to 1.0 sec :-)  )
+
+Thu May 18 02:51:44 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* sendfile.c:
+	    Revised target-address processing..
+
+	* nmr.c, send.c:
+	    Consider only codes below ASCII ' ' (SPACE) to be bad on message
+	    transmission. -- Lets 8-bit ISO-Latin chars go thru as is...
+
+	* ebcdic.h, ebcdicinv.c:
+	    Made a 1:1 mapping in between ASCII and EBCDIC in true
+	    JNET fashion (likely exactly same table as they have..)
+
+Mon Apr 24 08:48:51 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* sendfile.c:
+	    A bit stricter processing of target address - to ensure that
+	    it follows the 8+8 limits of NJE..
+
+	* transfer.c:
+	    Check that the file-path given to us is absolute -- that is,
+	    it starts with "/".
+
+	* consts.h, io.c vmnet_monitor():
+	    "VMNET MONITOR" probe interval changed to 60 seconds,
+	    and full timeout to 4*60 seconds.
+	    Now ONE slow-responding case (like temporary connectivity
+	    breakdown) won't break the link.
+
+Fri Apr 21 11:23:23 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* unix.c, util.c:
+	    A bit more processing when the emulator gets SIGHUP:
+		- close (and open) route table
+		- close (and open) RSCS accounting file
+		- close (open is implicitic) Spoolid cache
+		- re-read File-Exits
+		- re-read Msg-Exits
+		- close (and open) logfile.
+
+	* consts.h, unix_tcp.c, unix.c:
+	    Under some unclear conditions the InBuffer and/or XmitBuffer
+	    appeared to be overfull -> data following it becomes over-
+	    written causing all kinds of havock...  Re-arranged buffers
+	    so that such overwrite corrupts (at first) dataset-headers,
+	    and only then goes out to next buffer in chain..
+	    There used to be important length counters following
+	    those buffers...
+
+	* unix_tcp.c, io.c, unix.c:
+	    Still more fixes to NBSTREAM -- under some conditions
+	    the  WritePending  was left set, and clearing it
+	    at link activation was not taken care off..
+	    ( NBSTREAM implies (fully) NBCONNECT, on one case the
+	      NBCONNECT wasn't happening -> active connect failed.. )
+
+	    Odd startup problems turned out to be non-resets of
+	    InBCB and OutBCB variables when the link starts.
+	    (Reset to zero at link init is a protocol requirement!)
+
+Thu Apr 20 12:47:07 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* zmailer-configs/, smail-configs/, sendmail-configs/:
+	    New subdirectories with SOME support files
+	    for each mailer.
+
+	* bintree.c:
+	    Changed ``bintree-db''-file header structure (radically)
+	    Now it contains couple signature-like objects, which
+	    are used to see if the file is correct for the machine
+	    where it is run.
+
+	* util.c:
+	    Decided that having spoolid-cache in machine-independent
+	    format is not 1) easy, 2) necessary.
+
+Wed Apr 19 22:11:35 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* file_queue.c, io.c:
+	    Looked over the  Line->QueuedFiles & Line->QueuedFilesWaiting
+	    variables usages.
+
+	* io.c vmnet_monitor(), unix.c, prototypes.h, consts.h:
+	    NBSTREAM requires active monitor.  Implemented by
+	    sending NMR-cmd "CPQ TIME" to each ACTIVE link-peer.
+	    If the link does not return anything (`Line->InAge'
+	    timestamp is updated at each socket read) within TWO
+	    T_VMNET_INTERVALs, link is determined dead, and
+	    ``restart_channel(i)'' is called.
+
+	    Query is sent from VMNET@HOSTNAME userid, and therefore
+	    msg-exit.cf MUST be configured to process it...  Well,
+	    reply is MSG from system, and thus undeliverability will
+	    not cause msg-ping-pong, but purity is a nice goal.
+
+	* unix_tcp.c, unix.c, protocol.c, Makefile:
+	    NBSTREAM -- FINALLY done right!
+
+Tue Apr 18 08:18:30 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* unix_tcp.c:
+	    Nth attempt to get the ENQUIRE correct - now finally, it
+	    is no SYN+NAK, nor SYN+ENQ; it is SOH+ENQ...
+
+	* util.c:
+	    `spoolid'-db routines needed machine-byte-order INDEPENDENT format
+	    (The RARE case of moving server from one host to another bite me..)
+
+	* protocol.c restart_channel():
+	    Removed  init_link_state() -call, which was VERY harmfull,
+	    though its effects were very indirect indeed...
+
+	    Added several tests of:  ``Line->state != ACTIVE''
+	    into the main NJE-protocol switch-statement.
+	    ( When the block-write fails, it is correct to quit, and not
+	      to try to send (again) to a closed socket.. -> SIGSEGV )
+
+	* __fopen.c:
+	    Changed the "__"-prefix of __fopen() et.al. to be "_nje_",
+	    because apparently the OSF/1 does have __fdopen() in its
+	    libraries..
+
+	* sendfile.c:
+	    Processing of "-asa" -printouts decremented "maxlen"
+	    at wrong place -- when the file was longer than 136
+	    lines, the system started to collapse..
+
+Thu Apr 13 11:40:59 1995  Matti Aarnio  <mea@nic.funet.fi>
+
+	* namesfilter.c, netinit.sh:
+	    With some reading of  NEWTAGS DESCRIPT (available from your
+	    nearest NETSERV), determined the CORRECT way to pick mailer
+	    entries, and rewrote the "netinit.sh" to automate (in smarter
+	    way) the BITNET related databases.  (Thanks to Eric Thomas.)
+
+Wed Apr 12 09:00:02 1995  Matti Aarnio  <mea@nic.funet.fi> ( & Paul E Bryant )
+
+	* send_file.c:
+	    When creating a NetworkJobHeader, the NDHGXEQ[UN] -fields
+	    get SENDERs value for SYSOUTs, but DESTINATION for SYSINs!
+
+	    With help of Eric Thomas discovered that  NDHVDIST was
+	    produced with garbage contents (his LMAIL mailer is picky,
+	    when it comes to NJE data...).  Reason:  upperstr() on
+	    a buffer containing (at that point) EBCDIC data :-(
+
+Fri Mar 24 15:02:45 1995  Matti Aarnio  <mea@hamsterix.funet.fi>
+
+	* unix_files.c, unix.c, io.c, file_queue.c, consts.h:
+	    Added "ToAddr" into the queue-entry information thus
+	    making it unnecessary to re-scan spool files when
+	    some event causes full queue re-scan.. -- like
+	    state-change of a link..
+
+Fri Mar 24 11:22:18 1995  Paul E Bryant <peb@mailbox.rl.ac.uk>
+
+	* njeroutes.c main():
+	    Copying arguments from argv[] to string buffers must
+	    use  strncpy(), NOT memcpy()!
+
+	* bmail.c:
+	    Define a #define MAILERNAME which can be set on Makefile
+	    to define some other "userid", which sends email.  Default
+	    is "MAILER".
+
+	    Header-folding code for narrow (normal) BSMTP-PUNCH mode.
+
+Thu Mar 23 15:20:12 1995  Matti Aarnio  <mea@hamsterix.funet.fi>
+
+	* logger.c, namesfilter.c, headers.h, consts.h, detach.c, util.c,
+	  prototypes.h, unix.c, unix_brdcst.c, unix_tcp.c, liblstr.c, Makefile:
+	    "Minor" porting job to get the thing to compile on OSF/1 v3.2.
+	    (Completed in 30 minutes -- that's why I say "minor" :) )
+
+	    The most important thing was to teach it not to assume that
+	    "long" or "unsigned long" mean anything -- rather they do not
+	    mean 32-bit integers on 64-bit alphas...  Also teached it to
+	    treat TIME specially -- time_t is for it.
+
+	    Used "SunOS-4.1.3+GCC" compile switches to compile it on DEC AXP..
+
+Tue Jan 10 16:32:15 1995  Matti Aarnio  (mea@nic.funet.fi)
+
+	* io.c:
+	    When doing  init_link_state(),  do remember also
+	    to close (possibly) open sockets so that a case of
+	    write-failure on a link will not cause accumulation
+	    of the connected sockets.
+
+Fri Nov 25 15:44:14 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* unix_files.c:
+	    More care on   chown(2)  calls.
+	    Now it should not  chown to root the user's spool
+	    directory, when SENDING a file.
+
+Wed Oct  5 15:58:00 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* mailify.c:
+	    Finally integrated it with Zmailer and TESTED.
+	    (Full functionality only for BSMTP, NETDATA, and
+	     plain PUNCH file..)
+
+	* libreceive.c, nmr.c, unix_tcp.c, libndfuncs.c, bintree.c:
+	    Various complaints from SunOS 4.x 'cc', the bundled
+	    compiler..
+
+Tue Sep 27 09:39:36 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* namesparser.c, namesfilter.c: NEW
+	    A filter utility for producing Zmailer's  routes.bitnet
+	    table -- and also  Smail's..
+
+	* funetnje.texinfo:
+	    Major editing, filled in about half of what was missing
+	    (chaptervice), added chapters about support, and history..
+	    Still some commands need documentation, and the internal
+	    stuff is not even started...
+
+	* unix_tcp.c: read_passive_tcp_connection()
+	    Report more info about WHO (host IP address) is trying
+	    to contact us.
+
+Wed Sep 21 17:53:59 1994  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* io.c, protocol.c, recv_file.c:
+	    "Be lenient on what you accept, strict on what you send"..
+	    Accept always 7 streams, but send only N (1..7) depending
+	    the system configuration.
+	    [mea: Edited them to change literal '7' to 'MAX_STREAMS']
+
+Mon Aug  8 10:02:29 1994  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* gone_server.c: del_gone_user()
+	    Fix the memory-freeup -- wrong memory block got freed..
+
+Thu Jul  7 16:08:01 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* nmr.c: handle_nmr()
+	    Rewrote parameter parsing for NMR forwarding.
+	    A locally linked (ROUTE NNNN TO `LOCALNAME`) host
+	    failed NMR delivery, and caused a SIGBUS error..
+	    (Weird, isn't it..)
+
+Tue Mar 15 01:25:38 1994  "Matti E. Aarnio"  (mea@oj287.astro.utu.fi)
+
+	* unix_tcp.c, unix.c:
+	    Added  setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on))
+	    into local socket creation.  Might help on getting faster
+	    restart..
+
+	* unix_tcp.c:
+	    Finished the Solarisation -- found a way to do "FIONBIO"
+	    in SysVr4 style..
+
+	* unix.c:
+	    Cleaned up the code a bit by introducing local macroes
+	    _FD_ZERO(), _FD_SET(), _FD_CLR(), _FD_ISSET()  which act
+	    depending upon actual variant used.
+
+Fri Mar 11 19:50:40 1994  "Matti E. Aarnio"  (mea@oj287.astro.utu.fi)
+
+	* qrdr.c, sendfile.c, send.c, bmail.c, unix_tcp.c, main.c, unix.c,
+	  libsendcmd.c, mailify.c, file_queue.c, detach.c, io.c, read_config.c,
+	  acctcat.c, transfer.c, libhdrtbx.c, nmr_unix.c, unix_msgs.c,
+	  unix_files.c, prototypes.h, recv_file.c, send_file.c, util.c,
+	  libexpnhome.c, libndparse.c, sysexits.h:
+
+	    Solarisation...  AARGH...
+
+	    BSD-compat -library readdir() returns boguous data, but
+	    plain socket()'s don't have FIONBIO :-(  Sample Makefile
+	    definitions for Solaris are a result of LONG battle..
+	    (Actually that was about wrong  #include -- must be <sys/dir.h>,
+	     not <dirent.h> ...)
+
+
+Thu Mar  3 12:56:21 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* sendfile.c:
+	    Gerald found an odd behaviour of the system when
+	    sendfile was invoked in an environment without
+	    stdin...  Fixed fixed by not closing implicitely
+	    defined "stdin" file (handle 0) AFTER an explicite
+	    fopen had gotten a REAL fd=0 file a moment before..
+
+Wed Feb 23 10:26:08 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* sendfile.c:
+	    A couple of additional aliases:  sf (sendfile),  bitprt (print)
+	    (By Gerald Hanusch)
+
+	* send.c:
+	    *Prompts* text from the user only when it is used
+	    from the keyboard.  Usage from a pipe will not
+	    put extra prompts on the stdout (in fact none.)
+
+Tue Feb 22 12:58:50 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* unix_files.c:
+	    More details on various phases of SYSIN handling.
+	    (And other directory assignment rules.)
+
+	    Also having full usage of SYSIN/PUNCH/PRINT/* -column,
+	    and providing capability to match it.
+
+Mon Feb 21 10:49:06 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* unix_files.c:
+	    File delivery to non-pseudouser, non-realuser goes
+	    to the POSTMAST for processing.
+
+	* bintree.c, bmail.c, unix_msgs.c, main.c, transfer.c:
+	    A set of changes from Gerald Hanusch to quiet down
+	    compiler warnings.
+
+	* send.c:
+	    On "prompt mode" changed the instructions of
+	    ending the session from "empty line" to "EOF".
+
+Fri Feb 18 15:08:37 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* bintree.c, bintree.h -- reincarnation of heaptree.[ch]:
+	    The HeapTree didn't work - not at all.
+	    (Well, it was a PRIORITY QUEUE, not an ordered search tree)
+
+	    Actually this is a kludge, which isn't even a balanced binary
+	    tree, but one can search it with binary search.
+	    (insert & delete are more expensive, though)
+
+	* bmail.c:
+	    Netdata "From:" became something mystic, and reception didn't
+	    work at all.  Changed things so that ND-from is same as
+	    NJE-From.
+
+
+Thu Feb 17 10:00:14 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* transfer.c:
+	    Option  -t  for transparent transfer, else the runner
+	    of the transfer will appear as file originator..
+
+	* consts.h, man-pages, funetnje.texinfo
+	    Changed config filename to be  /etc/funetnje.cf
+
+	* unix_route.c, njeroute.c, io.c, ucp.c, consts.h, clientutils.h:
+	    Altered route-database to use `heaptree'.
+	    Our knowledge says this database is fairly small.
+	    (3000 entries of 19 bytes each, total circa 56k on a SPARC..)
+
+	    Added command 'UCP RESCAN ROUTE', which actually will
+	    re-open the route database.
+
+
+Wed Feb 16 16:16:37 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* util.c parse_envelope():
+	    Assign FID per 'FromUser', if it has value 0.
+	    Assign OID per user '*NJE*', if it has value 0, AND there
+	    is active flag `assign_oid'..
+
+	    This will cause a more-VM/XA-like behaviour on spoolids.
+	    Sender user's spoolids increment, when he sends a file,
+	    and also when he receives a file.  Sender can have same
+	    spoolided file in the reception spool, as this facility
+	    assigns, but reception will always arrive on `not-previ-
+	    ously-existing' spoolid.
+
+	    It is a matter-of-taste, if `OID:'s should be assigned
+	    and written into the spool file at the time of delivery
+	    into local spool.  Now only the file-name indicates it.
+
+	* heaptree.c, heaptree.h:
+	    New in-core database with backing-store on disk.
+
+	* unix_files.c, send_file.c, util.c, prototypes.h:
+	    Use HeapTree-db to manage spoolids.
+
+Mon Feb 14 12:53:58 1994  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* sendfile.c, sendfile.1:
+	    Added "-dist" -option.
+
+Thu Feb 10 16:25:09 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* njeroutes.c (old name: unix_build.c), Makefile
+	    Renamed the program.
+
+	* prototypes.h:
+	    Added some Convex Things into it.
+
+Thu Feb 10 13:42:01 1994  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* sendfile.c, recv_file.c, libreadcfg.c, bitsend.c, read_config.c:
+	    Some small sanity-checks, and processing of configured
+	    "DEFFORM".
+
+Wed Feb  2 14:53:24 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* io.c init_link_state():
+	    After possible active streams have been requeued,
+	    all others are also requeued.
+
+	* file_queue.c requeue_file_queue():
+	   A version of  delete_file_queue()  which cleans the queue
+	   and while doing it, requeues all files in it.
+	   If it returns a value other than 0, it is used in wrong place!
+
+
+Wed Feb  2 012:27:34 1994  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* nmr.c send_nmr():
+	    Removed old spurious NMRFMNOD reset to local (EBCDIC)
+	    hostname.
+
+Wed Feb  2 08:33:44 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* nmr.c handle_local_command():
+	    Added local hard-coded commands 'MSG node user text..', and
+	    'CMD node text..' to allow sending MSGs/CMDs "behind the corner"
+
+	* unix_msgs.c, prototypes.h:
+	    Allow incoming NMR text content to be modified.
+	    Needed this for creating command aliases.
+
+	* unix_msgs.c cmd_match():
+	    Some more checks of scan termination, now it won't
+	    match pattern  HELP  with token HELPP, and will
+	    match  HELP  with  HELP ...
+
+Tue Feb  1 16:18:44 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* unix_msgs.c:
+	    More complex command pattern matching.
+	    Result attributes  BUILTIN HARDCODED, and BUILTIN ERROR.
+
+	* file_queue.c, unix_route.c, recv_file.c, prototypes.h:
+	    Pulled back the multi-link queueing.
+
+Mon Jan 31 08:53:51 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* nmr.c, unix_routes.c:
+	    Found out a mysterious inactivity problem with ALIJKU65,
+	    where Gerald Hanusch has thought that
+			UCP ROUTE ALIJKU29 to DEFAULT
+	    will send it via the default route..
+	    Took several precautions on finding bogons from the route
+	    batabase, if physical link exists, no problem.., and added
+	    a way to delete explicite entry by using special targets
+	    "OFF", and "DEFAULT".  Either one will do.
+
+
+	* unix_msgs.c:
+	    More thorough implementation of CMD-stuff. Especially allowing
+	    running of arbitary programs.
+
+	* ucp.c, io.c, consts.h, clientutils.h:
+	    UCP RESCAN EXITS, UCP RESCAN QUEUE -commands.
+
+	* file_queue.c add_to_file_queue():
+	    Disabled (effectively) the  `altline' queueing code that
+	    I tried to put in so that inplicite  debug_rescan_queue()
+	    would not be needed.  We shall see later.
+
+
+Fri Jan 28 15:31:00 1994  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* util.c parse_envelope():
+	    Default value for "To"-field was build with wrong
+	    contents.  It was missing an @..
+
+Fri Jan 28 16:51:00 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* unix_msgs.c:
+	    More of NMR features.
+
+	* protocol.c, io.c, main.c:
+	    Link activation does implicite   debug_rescan_queue()
+	    This *SHOULD* be done via some other mechanism, such
+	    as parallel queueing into N links, but we shall see..
+
+	* protocol.c, io.c, nmr.c, recv_file.c, file_queue.c, consts.h:
+	    An attempt to codify a parallel queueing mechanism,
+	    but stymied at the moment.  Decided to adopt Geralds
+	    approach of link activation  debug_rescan_queue() as
+	    an intermediate solution..
+
+Thu Jan 27 08:58:19 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* unix_msgs.c  msg_run(), and others..:
+	    Coded MSG RUN, added some logging and error reporting
+	    in case msg-exit.cf (hujinje.cf:MSGEXITS) can't be
+	    opened for analysis, etc.
+
+	* util.c  despace():
+	    Sometimes the despace() is called with a "string"
+	    which is 0 size.  That is, it starts with NULL, and
+	    in fact whole buffer is of NULLs..  (Especially
+	    the SYSIN processing can do this.)
+
+Tue Jan 25 09:06:18 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* unix_msgs.c:
+	    The first cut on   msg-exit.cf  handling.  RUNNING something
+	    is left for further job, but initial proof of concept for
+	    the tests is now in there.
+
+	* unix_msgs.c, unix_msgs.h:
+	    New routine:  msg_register()  to dynamically bind
+	    the NMR processors.
+
+	* consts.h, unix.c, io.c, prototypes.h:
+	    new "CMD":  CMD_MSG_REGISTER, which in turn
+	    just calls   unix_msgs.c:msg_register()  with
+	    the data.
+
+Fri Jan 21 09:49:54 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* unix_tcp.c unix_tcp_receive():
+	    Send ENQUIRE instead of SYN+NAK when in TCP_SYNC state.
+
+	* file_queue.c
+
+	* io.c, nmr.c:
+	    A new command "Q SYS S" to show more details about
+	    queue timings/buffer spaces.
+
+Mon Jan 17 10:43:23 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* prototypes.h, util.c  parse_envelope():
+	    A new parameter, and a new header entry to be processed:
+	        OID: nnnn
+	    If it is "0000", and caller (open_xmit_file()) has set
+	    the "assign_oid"-flag, then do the assignment..
+	  Related files:  send_file.c, unix.c, libhdrtbx.c, recv_file.c,
+			  sendfile.c, bmail.c, protocol.c
+	    Essentially the sender's spoolid is assigned just once
+	    for the file - when it is opened for xmit. If stream
+	    goes into a restart, same spoolid is used again.
+
+	* ucp.c, io.c:
+	    "DEBUG RESCAN -" which does not reinit the file queue
+	    at all; only cleans up the in-core queue by dropping off
+	    everything not actively being sent on the links.
+
+
+Fri Jan 14 10:26:49 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* io.c init_link_state(), file_queue.c many routines:
+	    Queue rip-up/duplicate check as prompted by
+	    mr. Hanusch.
+	    Aarnio's work contain hash_*() -routines to locate
+	    any file from any queue -- assuming we know the
+	    unique file hash value..
+
+	* nmr.c  find_line_index():
+	    Routes to  LOCAL  were not recognized.
+
+Thu Jan 13 16:10:03 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* file_queue.c dequeue_line_queue():
+	    Spurious brackets caused wrong action... None of the
+	    active files were left alone..
+
+Wed Jan 12 14:52:15 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* protocol.c, recv_file.c:
+	    FileParam->OurFileId, and FileParam->FileId  usage
+	    altered.  Now a new file gets its FID: when it is submitted,
+	    and not again later, when it is put on xmit stream.
+	    This uses spoolids also for locally delivered files,
+	    which may, or may not be what user asks for.
+
+	* unix_msgs.c:
+	    Still more things to get the initial system perfomance
+	    similar to state before massive rewrites.
+
+	* unix_tcp.c:
+	    Passive connection acceptance is difficult - eventually it
+	    seems to work after a fashion, but causes sometimes extra
+	    (and unnecessary) link restart.
+
+	* sendfile.c:
+	    Target address parsing is now more flexible.  First non '-'
+	    beginning option is the target address (excluding option
+	    parameters), and thus it need not be the first parameter.
+	    Also local users can be defined w/o local host name.
+
+	* send.c:
+	    Now can do  "send localuser 'messsage text'" -command,
+	    not always needing to write addresses in fully qualified
+	    form...
+
+Wed Jan 12 11:02:03 1993  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* unix_msgs.c, nmr.c:
+	    Missing things, and typographic mistakes rectified.
+
+Wed Jan 12 00:29:52 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* consts.h:
+	    Altered "VERSION" to be "3.1."
+
+	* unix_msgs.c, unix_brdcst.c, nmr.c:
+	    Massive rewriting to accomodate  message_exit().
+	    Now the NMR processing really makes sense :-)
+	    ... and now to test it..
+	    Seems to work, then to implement the exits..
+
+Tue Jan 11 09:10:29 1994  Matti Aarnio  (mea@nic.funet.fi)
+
+	* sendfile.c, bmail.c:
+	    ASCII header writing altered to conform that of the
+	    incoming files -- that is, 512 bytes of ASCII in the
+	    beginning.
+
+	* util.c parse_envelope(), file_queue.c, unix.c:
+	    If scanned envelope has "FID: 0000\n" in it, get
+	    a new FID number from   send_file.c:get_send_fileid(),
+	    and store it into the file.  It might not be unique
+	    in the system, but it will sequence nicely..
+	    (spool-file must be opened "r+")
+
+	* unix_tcp.c read_passive_tcp_connection():
+	    Yet another approach on handling the passive-side
+	    activation..
+
+	* protocol.c handle_ack():
+	    When remote end wants to shut down, it starts rejecting
+	    new streams. (or whatever reason there is to reject something)
+	    Sender didn't spend its time on efficient data sending, rather
+	    it went to use  handle_ack() every T_ACK, which was SLOW..
+	    Rearranging   S_REFUSED  handling a bit, and adding some
+	    new tests did increase its efficiency dramatically.
+
+Tue Jan 11 08:20:40 1994  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* protocol.c:
+	    Rearranged queue handling calls inside protocol by
+	    moving  dequeue_file_entry(), and delete_file() from
+	    complete_rcb() into handle_ack().
+
+Mon Jan 10 08:52:40 1994  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* io.c:
+	    When gets  UCP SHUT, or UCP SHUT ABORT, closes immediately
+	    the passive end, and then signs off links.  That way the
+	    other ends won't cause link-restarts all the time..
+
+	* unix_tcp.c  send_unix_tcp():
+	    Do  select-for-write  and timeout via that method..
+	    Also uses microsecond accurate (well,  struct timeval)
+	    timing.  Should work faster on Linux..
+
+	* prototypes.h, util.c:
+	    NEW: timevaladd(), timevalsub() -- time arithmetic routines.
+
+	* file_queue.c dequeue_file_entry(), io.c init_link_state():
+	    dequeue_file_entry() relies on   CurrentStream -variable,
+	    made sure it is set properly when calling it.
+	    Now queueing works :)
+
+	* protocol.c, prototypes.h, send_file.c:
+	    Some rearrangements of   send_njh_dsh_data()  usage.
+
+Mon Jan 10 08:52:40 1994  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* protocol.c  handle_text_block():
+	    Rearranged stream EOF acknowledgement code to be more robust.
+
+Fri Jan  7 10:41:11 1994  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* prototypes.h:
+	    Added long missing entries for a couple routines in
+	    file_queue.c
+
+	* rscsacct.c, protocol.c:
+	    Moved sending account collection into S_NJT_SENT state.
+	    (Old was S_EOF_SENT, but it was called rarely.. it seems..)
+
+
+Thu Jan  6 15:10:51 1994  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix_tcp.c  unix_tcp_receive():
+	    "Skulldruggery..."  Aargh..
+	    Yes, some elementary errors can be of most difficult to
+	    understand, and to find out.   RecvSize was able to go
+	    negative, and thus screw up the buffer management logic..
+
+Wed Jan  5 12:46:47 1994  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix_tcp.c  unix_tcp_receive():
+	    Still more joggling with   TTB  processing, is it
+	    correct now ?
+
+Tue Jan  4 08:52:07 1994  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* libsendcmd.c, unix.c, unix_tcp.c:
+	    Found out about spurious   htonl() on returning results
+	    of inet_addr() to network-order s_addr -fields..
+	    On SPARC system the  hton*(), and ntoh*() are no-ops,
+	    on 386'es they are not...
+
+
+Fri Dec 24 02:25:35 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix_tcp.c, unix.c:
+	    Hunted out why  unix_tcp.c:unix_tcp_receive()
+	    didn't process all arrived bytes at once.
+	    Things have improved - I hope.
+	    (io.c:  Q SYS  output has temporarily a display of
+	                   in, and outbound buffer ages & sizes.)
+
+	* protocol.c:
+	    Changed all logger() calls before  restart_channel()
+	    to be of level 1.
+
+Thu Dec 23 11:49:18 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* protocol.c, io.c, file_queue.c, unix_tcp.c:
+	    Reorganized file queue routines into one file.
+	    Located common link state ripup routines into
+	       IO.C:init_link_state().
+	    Made sure there is a preceeding logger() message
+	    (at least on level 2) before  restart_channel()
+	    is called.
+
+
+Tue Dec 21 11:11:34 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix_tcp.c:
+	    Rewrote the  setsockopt() usage. Model from BSD net2 rmt
+	    program.
+
+Mon Dec 20 00:04:22 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix_tcp.c:
+	    Teached new trick:  setsockopt()  sets TCP level buffers
+	    to be 32k, with hope of not needing any fancy NBSTREAM
+	    bufferings..
+
+	* main.c:
+	    Make sure the PID_FILE has protection 0644 -- so, it is globally
+	    readable..
+
+	* protocol.c, io.c, file_queue.c:
+	    Tracked queue accounting, maybe it now will
+	    not loose files from its queues.
+
+
+Sun Dec 19 02:01:36 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix_tcp.c send_unix_tcp():
+	    A non-blocking read()+write() so that system won't
+	    deadlock in case of kernel tcp-buffer filling, and
+	    local process waiting on write() that the other end
+	    read()s, while it is waiting on write(), that we
+	    read()...
+
+	    Code makes an serious assumtion:
+	       8kB gets transmitted in under 15 seconds
+	       time of waiting on this module!
+
+	    On systems with in-kernel TCP buf-sizes being 16k, or
+	    more this is no problem.  On systems with SMALLER
+	    buffers it may well be, as that time is spent in
+	    synchronous mode waiting the receiver to act upon
+	    the data..
+
+	    One possibility is to do:
+		setsockopt(fd,TCP,SO_RCVBUF,&var32k,sizeof(var32k)),
+		setsockopt(fd,TCP,SO_SNDBUF,&var32k,sizeof(var32k)),
+	    but will it work on all systems ?
+
+Wed Dec 15 08:35:10 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* protocol.c, unix_tcp.c, io.c
+	    Trying to eradict occasional spurious write() hangups..
+
+	* unix_files.c:
+	    Report message of Act_DISCARD is changed to a more informative
+	    one.
+
+	* protocol.c, read_config.c, consts.h:
+	    A new stream-interleave mode:  F_SLOW_INTERLEAVE
+
+	* recv_file.c save_header():
+	    Still had some wrong buffer-references inside  sizeof()s..
+
+	* consts.h:
+	    Got rid of `GuardBuffer' from inside the link data structure.
+	    (Relict from a couple days earlier for debugging the stream
+	     overflows / ActiveStreams -flags problems.)
+
+	* protocol.c:
+	    An attempt to have SHUTDOWN to really shut down,
+	    and not to complain about SIGNOFF ACKs..
+
+Tue Dec 14 13:05:21 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* recv_file.c:
+	    When reporting a failure of "Missing JOB HEADER", `just'
+	    abort_file(), don't restart the whole link..
+
+	* protocol.c:
+	    Do a fast (at every record) stream switch-over at the
+	    S_SENDING_FILE phase so that N streams will go out at
+	    approximately same speed.
+
+Mon Dec 13 11:09:43 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* protocol.c:
+	    Link restart will need to zero ActiveStreams -flags.
+	    It will also need to free non-held streams.
+
+	    With REQUEST_RCB an open of bad stream (receiver has 2
+	    streams enabled, and sender has 3, 3rd stream open
+	    (parallel)) will cause a REJECT_RCB to be generated,
+	    and stream shunted immediately.
+
+	* unix.c  handle_alarm():
+	    Rearm the  SIGALRM  handler... (SYSV/Posix)
+
+
+Sat Dec 11 00:55:26 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix_tcp.c:
+	    More carefull approach at timer queueing..
+	    when read() returned due to EINTR, no read was queued,
+	    and link collapsed..
+
+Fri Dec 10 11:10:50 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix.c, protocol.c:
+	    Got rid of  OrigFileName's  in favor of  SpoolFileName..
+
+	* version.sh (NEW) (version.c), main.c, consts.h, io.c, Makefile:
+	    Generate automatically updated date/time stamp on the
+	    distribution file set, and report it in  Q SYS/Q STAT
+
+Thu Dec  9 01:03:33 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix_tcp.c unix_tcp_receive(), io.c:
+	    struct TTR, and struct TTB usage finetuned,
+	    did it lick the memory copy errors ?
+
+Wed Dec  8 09:48:58 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* mailify.c:
+	    Finally "the first cut" version.
+	    Can be used with Zmailer mail_open()/mail_abort()/mail_close()
+	    library (-DUSE_ZMAILER), as well as with  /usr/lib/sendmail
+
+	    Processing of other than BSMTP is lacking as of yet.
+
+	* libstrsave.c:  NEW
+	    NEW:  strsave() which mallocs space for a string, copies it in,
+	          and returns the pointer.
+
+	* libreceive.c, receive.c, mailify.c:
+	    libreceive's dump_*line() get now a (struct ndparam *),
+	    instead of (FILE *) to the output file, and process
+	    accordingly with possible  ndp->outproc(), if defined..
+
+	* bmail.c:
+	    BSMTP punch of 80+ chars ling lines needs a VERY CAREFULL
+	    handling of `.'s...
+
+Tue Dec  7 14:44:11 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* sendfile.c, receive.c:
+	    Minor tweaks to please Sun bundled CC (and any other K&R compiler)
+
+	* send_file.c:
+	    NDHGXWTR variable shall be set only for non-print formats,
+	    for prints it shall be XL8'00'...
+
+
+Thu Dec  2 14:17:50 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* nmr.c find_line_index():
+	    Logics rewrite, no more recursive call to itself to figure out
+	    where to route the file..  Tests are:
+	      - Local hostname, its alias, or "LOCAL" ? -> annouce so
+	      - to some active link ?  -> announce so
+	      - via route database to some active link ? -> announce so
+	      - to some inactive link ? -> announce so
+	      -> report failure
+
+	* ucp.c, ygone.c:
+	    Call arguments of  send_cmd_msg()  had a problem...
+	    ... as these are interactive tools, they should report
+	    an error, when the main-program is not online.  The 3rd
+	    argument is a flag of that effect, and it had wrong value.
+
+Wed Dec  1 08:49:54 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* consts.h, unix_tcp.c, io.c:
+	    Renamed input `buffer' to be `InBuffer' on the link structure.
+	    (As for output there is  XmitBuffer) -- must check that under
+	    no circumstances shall it ever be written outside that buffer!
+
+	* util.c  parse_envelope():
+	    Added size-limits on several copy-operators (in fact ALL of
+	    them) so that they will never overwrite anything trailing
+	    their respective buffer variables.
+
+	    Nevertheless, handling of  LINE->buffer  seems also suspicuous..
+	    On the other hand...  It feels a lot like some intrrupt-routine
+	    would screw the memory references..
+
+	* protocol.c, nmr.c:
+	    Some  (struct MESSAGE)  related pointer cleanups, but suspect
+	    the real cause of core-drops be in util.c, as variables AFTER
+	    last OutFileParam get somewhat written over..
+
+Fri Nov 26 14:16:26 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* logger.c logger():
+	    Rewrote logger() to be <varargs.h> routine..
+
+	* unix_files.c inform_filearrival():
+	    Reordering argument expansion into subprogram caused
+	    used pointer to be undefined, and contain junk..
+	    logger() caused core-drop when it was used..
+
+	* send_file.c  send_njh_dsh_record():
+	    Make JobName to contain same numeric value, as does
+	    the FileId word..
+
+Thu Nov 25 10:04:12 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* unix.c handle_sig*():
+	    All but SIGTERM need to be re-instantiated on SYSV machines,
+	    and it doesn't hurt the BSD style signals either..
+
+Mon Nov 22 09:58:33 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* mailify.c:
+	    Started coding it, didn't finish yet, though..
+
+	* unix_files.c, man/hujinje.8:
+	    Added argument tag $$, which is like its name-sake in
+	    shells.  For things like:  /tmp/rcv.$$ -> /tmp/rcv.14323
+
+	* libndfuncs.c:
+	    Had a missing upperstr() when creating  INMDSNAM text unit.
+	    In the end the VM/SP CMS receive didn't like it..
+
+	* io.c, send.c:
+	    Have `send' command capable to send a `system' messages.
+	    So, messages w/o username at all.
+
+	* unix_tcp.c:
+	    If a pending-connect is in progress, DON'T ACCEPT passive open!
+
+	* nmr.c, unix_brcst.c:
+	    Collected \r\n....\r(\n) all into same place: unix_brcst.c,
+	    and thus hopefully got local and remote messages to have
+	    somewhat more uniform outlook.
+
+	* man/hujinje.8, unix_files.c:
+	    Added exit variable $FID
+
+	* Makefile
+	    Do `install' on `receive' also.
+
+Tue Nov 16 15:01:32 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* prototypes.h:
+	    Added  tolower(), and  toupper()
+
+	* Updated man-pages, but didn't finish them yet..
+
+Mon Nov 15 11:09:35 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* read_config.c:
+	    Have an alias of  USEREXITS  keyword, which is intended to
+	    take over it (and is now in the documents..):  FILEEXITS
+
+	* ndlib.h, libndparse.c:
+	    If the file is MVS TSO dataset with a MEMBR info, parse
+	    its name to be:  FILENAME.FILETYPE.MEMBR, else parse
+	    its name to be:  FILENAME.FILETYPE
+
+	* receive.c:
+	    The argument is at first assumed to be full (well, adequate)
+	    path to a file, if it fails, it is assumed to be a filename
+	    in the default spool directory.  If it fails still, it is
+	    assumed to be numeric, and if it turns out to be an integer
+	    in range of 1..9900, it is formatted with "%04d" -format,
+	    and open attempt is directed there.
+
+	* receive.c:
+	    Non-netdata reception had problems after output file
+	    open rearrangements.  Now used  defaultoutname[], if
+	    the user has not specified anything.
+
+	* libndparse.c:
+	    More carefull handling of  INMFTIME, and INMCREAT output
+	    strings.
+
+	* ndlib.h, receive.c, ndparse.c:
+	    Changes in common used datastructures, to minimize compiler
+	    warnings about 'const' property being discarded.
+
+	* bitsend.c, bitreceive.c:
+	    First attemptes since 1990 to update them.
+	    Wow!  Did I have that kind of ideas about user readers ??
+	    (~/.bitspool/ for every user..)
+
+Sun Nov 14 18:16:44 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* receive.c:
+	    Will restore original (netdata) file date from  INMCREAT,
+	    else tries to use INMFTIME.
+
+	* libndfuncs.c:
+	    Will create INMCREAT text unit into outgoing ND file with
+	    file creation timestamp in it (well, last modification..)
+	    IFF THE infile IS A REGULAR DISK FILE -- Pipes etc will
+	    not contain INMCREAT timestamp in them..
+
+	* bmail.c:
+	    Implemented  -u -option, which my mailer had assumed for ages..
+	    (And had to manually re-generate 180 or so files..)
+
+	* file_queue.c:
+	    When it complains about lack of `@' in file, rename
+	    that file with RN_JUNK.. and tell the new file-name
+	    in the log..
+
+	* sendfile.c:
+	    ND-things are now in  ndlib.h, not in clientutils.h..
+
+	* receive.c, ndlib.h, libndparse.c, ndparse.c:
+	    Altered NETDATA PARSER call sequence -- now it passes
+	    pointer to a fairly large struct with various modalities.
+
+	* qrdr.c:
+	    Altered the output structure.  No more of original FID, we
+	    are interested in of our own SpoolIDs..
+
+Fri Nov 12 14:13:16 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* receive.c:
+	    Teached  SPOOLID (receiver's own)  usage.
+	    Improved (A lot!) debug output of NJH, DSH, and NJT.
+
+	* libndparse.c, clientutils.h ndparse.c, receive.c:
+	    Changed ND-parser calling convention.  Now it
+	    can figure out the output filename from ND data.
+	    (Unless user defined something explicite.)
+
+Fri Nov 12 08:31:12 1993  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* unix_route.c:
+	    Corrected  DefaultRoute  usage.
+
+Thu Nov 11 08:48:20 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* nmr.c:
+	    Don't know, if  (NMRTYPE & 0x04) == 0  really means
+	    there is some timestamp in the message record.
+	    It looks like there is no such thing at all.
+
+	* qrdr.c:
+	    Recognize `.spoolid', and don't look at it at all.
+
+	* unix_files.c  RenameToUniqueFileid():
+	    Have `.spoolid' -file in every receiver directory,
+	    and place files to be  0001, 0002, ... 9900, and
+	    wrap around.  If there are A LOT of files in receiver
+	    directory, it may take some time to do it thru, though..
+	    As a fall-back, older scheme of  A<hextime>X -names
+	    is used, but only when there are 9900 files in one
+	    directory (which means the recipient in in great
+	    trouble anyway..)
+
+Wed Nov 10 09:52:39 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* libsendcmd.c:
+	    Have some effect on the `offlineok' flag too...
+
+	* recv_file.c finish_file():
+	    Altered the structure of finish_file(), which now will
+	    rename_file(..,RN_HOLD_ABORT,..) a file which is found
+	    not to be routable, all else are renamed  RN_NORMAL.
+
+	* nmr.c handle_NMR():
+	    Had excessively difficult comparison routine, cleaned it,
+	    and some unused variables...
+
+	* send_file.c get_send_fileid(), protocol.c open_xmit_file():
+	    Pick a new spoolid for local sending, and use it as
+	    originator spoolid, if user has not set anything in
+	    advance.. (default set by  bmail, and  sendfile  is 0.)
+
+	* util.c despace():
+	    Damn difficult..  Finally fixed it.
+
+Tue Nov  9 10:21:13 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* util.c, recv_file.c, nmr.c, unix_tcp.c, unix_brcst.c  despace():
+	    NEW routine -- scattered all around was code to do similar
+	    (or same) function.  Made it a sort of internal library module.
+
+
+Sat Nov  6 10:22:24 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* read_config.c, io.c, protocol.c, consts.h:
+	    Retry periods configurable backoff.
+	    Configuring it is missing, but default is
+	    in there... (1, 2, 5, 15, 15, 15.. minutes)
+
+	* unix.c  timer_*():
+	    Timeout at clocktime X, not in so many calls to the
+	    timer_ast()..  Latter depends upon the speed of
+	    the timeout on the poll_socket() routine.
+
+	* recv_file.c, send_file.c:
+	    RSCS and General section LENGTH_4 calculation & checkup
+	    retuned.  Now produces (and receives) files as the IBM
+	    does..
+
+	* consts.h, unix.c, file_queue.c  rename_file():
+	    New rename_file() flag: RN_JUNK.
+	    Use this routine for all renames.. (Well, local
+	    delivery by  unix_files.c  is a different thing..)
+
+	* util.c, file_queue.c  parse_envelope():
+	    Cleanup of envelope preliminary data initializations.
+	    Placed all that we can into parse_envelope() itself.
+
+	* libsubmit.c:
+	    FileSize treatment fix..  I was wondering, why freshly
+	    submitted 800 byte file claimed to be 400k...
+
+	* file_queue.c, io.c, nmr.c  show_files_queue():
+	    Show at most 30 files on a link, if somebody
+	    asks it via CMD  Q linkname Q
+	    For  UCP SHOW QUEUE  show at most 1000 queued items.
+
+	* file_queue.c, unix.c
+	  init_files_queue(), poll_sockets(), parse_file_queue():
+	    If at all possible, fork a child-process and read a list
+	    of files from special pipe(2) created for IPC.
+	    (System will work, even if it can't fork()..  Although
+	     at such situation the things are bad indeed..)
+
+	* unix.c  writen(), readn():
+	    Corrected return values.
+
+	* recv_file.c:
+	    Noticed the lack of incoming records counter.
+	    Also reorganized (ASCII) TAG rewriting.
+	    (Now incoming files get record count logged properly.)
+
+	* rscsacct.c
+	    Fixed bad time-string generation.
+	    (Seconds were lacking from it..)
+
+	* acctcat.c: (NEW)
+	    Simple tool to output RSCSACCT data, and thus verify it.
+	    ... found some bugs..
+
+	* recv_file.c  parse_headers():
+	    Found one file from NETSERV which had different size of
+	    DSH General Section, than the expected one, therefore
+	    DSH RSCS section was offset, and the real file name
+	    was not found, and thus NETINIT processor didn't know
+	    what to do with the file it got...
+
+Fri Nov  5 08:11:43 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* sendfile.c
+	    Usage partially rewritten (mostly ok..)
+
+	* libetbl.c, libebc2asc.c, libasc2ebc.c, bmail.c, send.c, sendfile.c,
+	  bitcat.c, ndparse.c, receive.c, main.c, hujinje.8, bmail.8,
+	  ebcdictbl.5, send.1, bitcat.1, ndparse.1, sendfile.1:
+	    Implemented user-definable EBCDIC<->ASCII tables.
+	    Environment variable:  EBCDICTBL, and explicite keyword
+	    on   /etc/hujinje.cf.   Environment overrides the keyword.
+
+	* consts.h, main.c, unix.c, read_config.c, protocol.c, recv_file.c,
+	  hujinje.8:
+	    Integrate RSCSACCT in.
+
+	* consts.h, io.c, main.c, unix.c:
+	    Have cumulative statistics as well as periodic ones..
+
+Thu Nov  4 10:30:36 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* rscsacct.c:  NEW!
+	    RSCSv1 style account records (in EBCDIC of course).
+	    Need still a new config parameter for defining the log
+	    file, and calls of  rscsacct_log()  to use it..
+
+	* headers.h:  (documenting)
+	    Added some comments on various FLAG values in the NJE headers.
+
+	* file-exit.cf, unix_files.c, hujinje.8:
+	    Altered order of parameters, and made old MAILIFY, et.al.
+	    to be just RUN and program path + args..
+
+	* recv_file.c:
+	    Yet more logics changes to implement more VM/SP like behaviour.
+	    Detects if NJE DSH does not have RSCS section in it, and then
+	    won't go boinkers due to a lack of data..
+
+	* send_file.c, util.c, consts.h, bitspool.5:
+	    Build NJH  PRT and PUN  directions (optionally) explicitely.
+	    Default value comes from "FRM:" ASCII header.
+
+	* nmr.c, protocol.c:
+	    Hunting mysterious error on NMR queue "->next" value
+	    corruption.
+
+Wed Nov  3 09:09:28 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* transfer.c:
+	    Changed argument order, and moves to BITNET QUEUE directory..
+
+	* unix_files.c inform_filearrival(),  hujinje.8:
+	    Implemented fork processing macro expansions..
+
+	* bmail.c, bitsend.c, ygone.c, send.c, receive.c:
+	    Removed unnecessary  #include "headers.h"
+
+Wed Nov  3 08:55:16 1993  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* receive.c:
+	    Finishing touches here & there
+
+	* unix_files.c inform_filearrival():
+	    When having arguments on executable program, place them on
+	    correct  ARGV[]  indexes..
+
+	* nmr.c list_users(); CPQ U/N -commands
+	    Corrected user counting especially on Linux, but problem was
+	    somewhat generic.
+
+Tue Nov  2 15:52:13 1993  Gerald Hanusch (root@alijku65.edvz.uni-linz.ac.at)
+
+	* receive.c:
+	    Finished the first write-thru.  Matti didn't have time
+	    for it.
+
+Sat Oct 30 03:52:17 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* receive.c: 
+	    NEW: A combination of  ndparse,  and bitcat.
+	    Initial version, which eventually will include
+	    also the  mailify,  and then removes separate
+	    modules handling various formats at present.
+
+	* unix_files.c, hujinje.8:
+	    Radical changes on FILE-EXIT.CF parsing, and handling.
+	    File exit syntax changed, keywords changed, ...
+	    Yet to be introduced are various $TOUSER, $TONODE, et.al.
+	    argument macroes.
+
+Fri Oct 29 08:54:56 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* Makefile:
+	    In the  clientlib.a, depend of the internal modules only only.
+
+	* libndparse.c:
+	    Name change, was: netdata-parse.c
+
+	* libndfuncs.c:
+	    We generated bad INMDSNAM, when there was no FT defined..
+
+	* prototypes.h:
+	    Some finetunings of various declarations.
+
+	* unix_brdcst.c:
+	    Added some alarm()'s
+
+	* nmr.c:
+	    CPQ U, CPQ N listings look a lot different now..
+
+	* unix.c writen():
+	    Add  alarm(3)  usage into the writen().  Makes sure we
+	    won't stuck on it forever (I HOPE there will be EINTR
+	    exit from the write()..)
+
+	* bitsend.c, bmail.c, detach.c, libreadcfg.c, libsendcmd.c,
+	  main.c, unix.c, unix_tcp.c
+
+	    Linux patches by Gerald Hanusch
+
+Wed Oct 27 13:31:44 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* netdata-parse.c  get_text_unit():
+	    NETDATA key INMDSNAM (X'0002') CAN have 0 size text
+	    value units.  (Such was on one MVS output..)
+	    **** Turned out to be our own libndfunc bug.. ****
+
+	* sendfile.c, recv_file.c, libhdrtbx.c, bitspool.5:
+	    Gerald Hanusch: Changed (somewhat) usage of  "TYP:" header
+			    entry.  "PRINT is PRINT even with ASA.."
+			    Also there is no more of such a type as "MAIL"..
+			    Only used ones are: PUNCH, PRINT, and JOB
+
+	* bitcat.c:
+	    Matti Aarnio:   Extended debug dumping of NJH,DSH, and NJT records.
+	    Gerald Hanusch: ASA processing changes
+
+	* consts.h, send_file.c, protocol.c:
+	    Changed names of the constants to be feed to
+	    send_njh_dsh_record() by prefixing them with  "SEND_".
+
+Tue Oct 26 08:10:29 1993  Matti Aarnio  (mea@ftp.funet.fi)
+
+	* send_file.c send_njh_dsh_record():
+	    If the  "TAG:" is empty (blank), don't fill it in the
+	    DSH either, nor send it at all!
+
+	* main.c:
+		signal(SIGCLD,SIG_IGN);  on Linux system.
+	    waitpid() does not look too successfull, and actually we are
+	    not that interested of return codes...
+
+	* io.c, unix_tcp.c, unix.c, consts.h:
+			"-DNBSTREAM instead of -DNBCONNECT"
+	    Attempt to create a non-blocking write, but first edition was
+	    not successfull...
+
+	* qrdr.c:
+	    Add a missing check of content SRCBs 0xA0, and 0xB0 (there were
+	    0x80, and 0x90 in place..)
+
+Mon Oct 25 10:16:01 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* unix.c, unix_tcp.c:
+	    writen() -- An attempt to make sure all gets written out, but
+	                got a situation where it seem to generate a deadlock..
+
+	* nmr.c find_line_index():
+	    When claiming  LINK_INACTIVE,  make sure also telling what
+	    name of the link it was..
+
+	* file_queue.c queue_file():
+	    Use claimed link-name to figure out where to put the queued
+	    file, when the link is inactive..
+
+Fri Oct 22 10:13:05 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* nmr.c list_users():
+	    Proper usage of  utmp  data.  There were difficulties at
+	    handling (listing) users with 8 characters long names..
+	    Also shows if the terminal is on "mesg n" status, or not.
+
+	* recv_file.c parse_headers():
+	    More parsing and processing of incoming NJE headers to make
+	    it behave even more like VM/SP
+
+	* net_routes.8:
+	    Documented route definitions, especially alternate
+	    routes.
+
+Thu Oct 21 08:59:50 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* util.c parse_envelope():
+	    Bad buffer length parameter for  fgets().  Now it can
+	    handle transit files.
+
+	* nmr.c, unix_route.c:  routing things..
+	    Now uses a database of "struct ROUTE_RECORD" in all modules.
+	    Also other changes into routing logic.
+
+	* unix_tcp.c:
+	    Changed some error messages.
+	    Connection creation did never store NAK reason code into
+	    outbound NAK..
+
+	* unix.c: poll_sockets()
+	    Improved (?) connection acceptance by removing a possible
+	    window where it was possible to have incoming connection
+	    accepted, and before resulting  PassiveReadChannel  became
+	    processed, ANOTHER accept was possible to happen..
+	    Now will do accepts only after previous link login is done.
+	    (CHECK: if there happens a timeout, what eventually happens ?)
+
+Wed Oct 20 09:58:34 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* bitcat.c, sendfile.c, recv_file.c, unix.c, clientutils.h,
+	  libsendcmd.c:
+	    Back-ported the source to  K&R CC, specifically  SunOS 4.1.3 cc
+
+	* sendfile.c, libndfuncs.c, libdondata.c:
+	    Do better composition of NETDATA -- use VARYING size records,
+	    not shortened VSB.  Also  -fix  option affects this by defining
+	    output to be FIXED records.
+
+	* netdata-parse.c:
+	    More concise debug output, shows symbolic names on keys, and
+	    some data.
+
+Tue Oct 19 01:12:29 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* libdondata.c, libndfuncs.c, clientlibs.h:
+	    Added `askack' option into INMR01 generation.
+
+	* nmr.c: list_users()
+	    Gerald Hanusch:  Proper version of  CPQ U <username>
+			     command behaviour.
+
+	* netdata-parse.c:
+	    Major rewrite so that it understands segmented
+	    netdata records.  Now handles several esoteric
+	    input files which until now have been impossible..
+
+Mon Oct 18 14:05:12 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* recv_file.c: parse_headers()
+	    Teach some more manners for the incoming envelope parsing
+	    (By Gerald Hanusch) -- MVS TSO is pecular kind of system.
+
+	* main.c: bug_check()
+	    Inform users also!
+
+Sun Oct 17 22:58:20 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* file_queue.c: queue_file()
+	    Added a debug tracer, which turned out to be unnecessary.
+	    Earlier fix to   nmr.c:find_line_index()  was correct.
+
+Sat Oct 16 03:10:09 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* Many modules:
+	    Use  lowerstr(), upperstr()  routines instead of open
+	    coded non-unsigned comparisons.  Also changed calls to
+	    compare() to be  strcasecmp(), or where appropriate
+	    strcmp().
+
+	* nmr.c: find_line_index()
+	    Figured out why the route finding didn't work properly..
+
+	* unix_route.c:
+	    Corrected  NDBM routine call arguments.
+
+Fri Oct 15 13:29:32 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* main.c:
+	    Complain about other running HUJINJE program before reading
+	    in configurations, or anything such.
+
+	* recv_file.c save_headers(), parse_headers():
+	    Null the header buffers before saving into them.
+	    Parse the TAG: data from DSH header only if the 
+	    DSH has sufficient size, and thus contains it...
+
+	* unix.c, unix_tcp.c, consts.h, Makefile: (multiple modules)
+	    A NON-BLOCKING connect(2)
+
+	    Essentially an observation that stream can be ioctl(2)ed into
+	    FIONBIO before connect(2), and then the connect(2) will return
+	    error EINPROGRESS meaning the attempt is initiated, and will
+	    take a moment to complete.  Select(2) can be used to see, if
+	    stream's state has reached a 'ready to run', or 'failed' state.
+	    If later, treat it as connect(2) failure.
+	    (It was all in the connect(2) man page..  Just carefull reading..)
+	    
+Wed Oct 13 02:01:44 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* recv_file.c save_headers():
+	    Make sure we save only as much as we have buffers for.
+	    Don't wonder about multiple DSH's -- MVSes send them anyway..
+
+	* bitcat.c:
+	    Reworked print-file outputs.  Again "one-off"..
+
+	* libreadcfg.c:
+	    Modified the   file-exit   parsing somewhat thus fixing
+	    problems with wrong defaults creeping to system users
+	    who don't have things in same places as I do.. (spool dirs)
+
+	* Nearly all modules:
+	    Had a closer look at what is needed in each module,
+	    and what is not.  Got rid of many `#include "headers.h"'
+	    that way..  Also updated dependencies in the Makefile.
+
+	    And also did "my style" (mostly Emacs') C-indentations
+	    to the source modules.
+
+Tue Oct 12 10:27:08 1993  Matti Aarnio  (mea@nic.funet.fi)
+
+	* Created  ChangeLog
+
+(in history -- 1990..1993)  Matti Aarnio  (mea@nic.funet.fi)
+
+
+	* Received original HUJI-NJE, and started modifying it.
+	  - Original system is a `do it all' module, which
+	    does file reception on behalf of the user, etc.
+	    That may be the only way in the VMS (I doubt as
+	    JNET has spools too..) but it definitely isn't
+	    very good in UNIX, thus:
+
+	* Ported the beast into strict-alignment RISC processors
+	  (=Sun SPARC) by rewriting some CISC code which paid
+	  no attention on how to do things right..  ANSI-C warned
+	  that pointers to anything but chars (and void*) can have
+	  expected alignment of target datatype, and thus misaligned
+	  referral thru them won't work..
+
+	* Separated transport, and file postprocessing in case
+	  of local recipient.
+
+	  Rewrote all modules to some extend, but then:
+	  Rewrote following modules completely:
+	    - recv_file.c
+	    - send_file.c
+	    - bmail.c
+	    - sendfile.c
+	    - main.c
+	  Wrote new modules:
+	    - Makefile
+	    - detach.c (took from elsewere)
+	    - unix_files.c
+	    - bitcat.c
+	    - bitsend.c
+	    - client library parts (by collecting them from all over
+	    			    the system into single fileset)
+	    - unix_files.c
+	    - logger.c
+	    - ndparse.c
+	    - netdata-parse.c
+	    - qrdr.c
+
+	* Implemented dual spool system: (configurable)
+		/usr/spool/bitnet/LINKNAME/   - for transmission links
+		/usr/spool/bitspool/USERNAME/ - for local users
+
+	* Wrote UNIX man-pages of the system
+
+	* Implemented a bunch of tools for post-processing files,
+	  also file sending tools.  After all, netdata processing
+	  et.al. are entirely of users responsiblity.
+
+	* Implemented an exit mechanism to generalize incoming file
+	  handling -- like `MAILER', which now can accept NETDATA BSMTP.
+
+	* Implemented 3 (and half) selectable (via Pre-processor symbols
+	  in the Makefile) inter-process-communication methods, and added
+	  some resemblance of security into them.
+
+	* Implemented SYSIN file generation and reception.
+
+	* Made spool files to be local host byte-order independent
+	  (uwrite()/uread() in utils.c, Uread()/Uwrite() in client lib.)
+	  and thus now can share this spool in mixed hosts via NFS, if
+	  so desired.
+
+	* Fixed IP address parsing and DNS usages so that addresses do work
+	  now.
+
+	* This system generates TAGfull data always, even when no TAG
+	  is really defined.  TAGs generate larger DSH blocks, so large
+	  in fact that they must get fragmented.
+
+	* Accept queued spool file names to reside under the `QUEUE'
+	  directory (defined in hujinje.cf -file) only.  Also forget
+	  files whose name starts with a period.
+
+	* Four facettes for  sendfile.c  program:
+	     sendfile	sends NETDATA
+	     punch	punches 80 char records
+	     print	prints 132 char records
+	     submit	sends 80 char records in SYSIN format
+
+	* Made NETDATA generation into a library module, and
+	  use that one to implement both the  sendfile, and  bmail's
+	  NETDATA abilities.
+
+	* Traded ASCII<->EBCDIC translation macroes into
+	  utility library modules.
+
+	* Cleaned memcpy() usage, and other alignment issues.
+
+	* Corrected IBM-time to UNIX-time conversion.
+
+	* Made spool files to be host byte-order independent.
+	  In practice: Spool files can now be copied over from one
+	  machine to any other via whatever means.
+
+	* Made passive connection initiation happen again, and
+	  again, until it is done successfully.   Does it every
+	  minute or so, not every second..

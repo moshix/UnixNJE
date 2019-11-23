@@ -1,0 +1,71 @@
+From:	root@alijku65.edvz.uni-linz.ac.at (Gerald Hanusch)
+Subject: ACCOUNTING records ...
+To:	mea@nic.funet.fi
+Date:	Thu, 4 Nov 1993 12:18:49 +0200
+
+Ok, here it is :
+
+position:	contents:
+  0		ACCTLOGU  CL8' '	   logger userid ('RSCSEARN')
+  8		ACNTUSER  CL8' '           originating location user id
+ 16		ACNTDATE  CL12' ' 	   dat and time mmddyyhhmmss
+ 28		ACNTOID	  XL2'00'	   origin spool file ID
+ 30		ACNTID    XL2'00'	   local spool file ID
+ 32		ACNTILOC  CL8' '	   originating location id
+ 40		ACNTDEST  CL8' '	   destination location id
+ 48		ACNTCLAS  CL1' '	   Class letter
+ 49		ACNTINDV  XL1'00'	   origin device type; 0x8n = Punch,
+							       0x4n = Printer 
+ 50			  CL2'  '	   2 filling blanks ...
+ 52		ACNTRECS  XL4'00'	   number of records in file
+ 56		ACNTTOVM  CL8' '	   destination location user id
+ 64			  CL8' '	   8 filling blanks ...
+ 72		ACNTSYS   CL5' '	   system id (serial + cpu model)
+ 77		ACNTCODE  XL1'01'	   Transmission code; 01 = send,
+					   02 = receive
+ 78		ACNTTYPE  CL2'C0'	   the CP assigned record type
+					   for RSCS accounting 'C0'
+ 80 - end
+
+Now you'd ask why these are not 80 characters - pos 0 - 69 are filled by rscs,
+cp appends an 8 character userid of the user producing these records in front
+of 0x0 above, in  the sample file the RSCSEARN is this leading string,
+and actual start is behind this ...
+
+
+
+00000  d9 e2 c3 e2 c5 c1 d9 d5 f0 f4 f0 f3 f0 f0 40 40  +RSCSEARN040300  +
+00010  f1 f0 f1 f8 f9 f3 f0 f0 f0 f1 f0 f0 00 00 ef 4a  +101893000100...[+
+00020  00 05 12 e8 00 02 86 cd 00 00 2c 9a 00 00 01 d2  +...Y..f........K+
+00030  00 01 42 2b 00 00 4b 29 00 00 16 3b 00 00 00 00  +................+
+00040  00 00 00 00 00 00 00 00 40 40 40 40 40 40 f0 f1  +........      01+
+
+00050  d9 e2 c3 e2 c5 c1 d9 d5 f0 f4 f0 f3 f0 f0 40 40  +RSCSEARN040300  +
+00060  f1 f0 f1 f8 f9 f3 f0 f0 f0 f1 f0 f0 00 00 00 00  +101893000100....+
+00070  00 00 00 01 00 00 00 01 00 00 00 00 00 00 00 00  +................+
+00080  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  +................+
+00090  00 00 00 00 00 00 00 00 40 40 40 40 40 40 f0 f1  +........      01+
+
+000a0  d9 e2 c3 e2 c5 c1 d9 d5 d5 c5 e3 d5 c5 e6 e2 40  +RSCSEARNNETNEWS +
+000b0  f1 f0 f1 f8 f9 f3 f0 f0 f0 f1 f2 f3 21 5c 21 5c  +101893000123.*.*+
+000c0  c1 d3 c9 d1 d2 e4 f1 f1 c8 e4 c5 c1 d9 d5 40 40  +ALIJKU11HUEARN  +
+000d0  c1 82 40 40 00 00 00 36 d5 c5 e3 d5 c5 e6 e2 40  +Ab  ....NETNEWS +
+000e0  40 40 40 40 40 40 40 40 02 22 55 30 84 01 c3 f0  +        ....d.C0+
+
+000f0  d9 e2 c3 e2 c5 c1 d9 d5 d5 c5 e3 d5 c5 e6 e2 40  +RSCSEARNNETNEWS +
+00100  f1 f0 f1 f8 f9 f3 f0 f0 f1 f1 f4 f1 22 7f 00 00  +101893001141."..+
+00110  c2 d3 c5 d2 e4 d3 f1 f1 c1 d3 c9 d1 d2 e4 f1 f1  +BLEKUL11ALIJKU11+
+00120  c1 82 40 40 00 00 00 6c d5 c5 e3 d5 c5 e6 e2 40  +Ab  ...%NETNEWS +
+00130  40 40 40 40 40 40 40 40 02 22 55 30 84 02 c3 f0  +        ....d.C0+
+
+02670  d9 e2 c3 e2 c5 c1 d9 d5 d4 c1 c9 d3 c5 d9 40 40  +RSCSEARNMAILER  +
+02680  f1 f0 f1 f8 f9 f3 f0 f4 f0 f1 f2 f2 24 5e 00 00  +101893040122.;..+
+02690  c1 e6 c9 e4 d5 c9 f1 f1 c1 d3 c9 d1 d2 e4 f1 f1  +AWIUNI11ALIJKU11+
+026a0  d4 82 40 40 00 00 00 25 d4 c1 c9 d3 c5 d9 40 40  +Mb  ....MAILER  +
+026b0  40 40 40 40 40 40 40 40 02 22 55 30 84 02 c3 f0  +        ....d.C0+
+
+02a80  d9 e2 c3 e2 c5 c1 d9 d5 e7 d4 c1 c9 d3 c5 d9 40  +RSCSEARNXMAILER +
+02a90  f1 f0 f1 f8 f9 f3 f0 f4 f3 f6 f1 f0 23 b4 23 b4  +101893043610....+
+02aa0  c1 d3 c9 d1 d2 e4 f1 f1 c1 d3 c9 d1 d2 e4 f2 f1  +ALIJKU11ALIJKU21+
+02ab0  d4 82 40 40 00 00 00 2f d4 c1 c9 d3 c5 d9 40 40  +Mb  ....MAILER  +
+02ac0  40 40 40 40 40 40 40 40 02 22 55 30 84 01 c3 f0  +        ....d.C0+

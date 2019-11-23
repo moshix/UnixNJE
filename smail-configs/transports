@@ -1,0 +1,523 @@
+# @(#)samples/generic/transports	1.11 9/6/92 04:41:55
+
+# This file defines the configuration of the transport subsystem as
+# compiled into the smail binary.  By modifying the source files
+# conf/EDITME, src/config.h or src/default.c the actual internal
+# configuration can be changed.  Thus, this should be matched up
+# against thes files before assuming this is completely correct.
+#
+# If a run-time transports file is created, then its entries will
+# complement or replace the compiled-in transport entries.  Thus,
+# contrary to use of the routers and directors files, you do not need
+# to copy and localize this file in order to add new transports.
+#
+#
+# IMPORTANT FOR INTERNET USERS
+#
+# The smtp, uucp_zone_smtp, inet_zone_smtp, and local_smtp transports
+# should be configured to use the DNS for finding MX and A records,
+# if the host was not resolved by the bind version of the inet_hosts
+# router.  To configure this, uncomment the use_bind attributes on
+# the various tcpsmtp-based transport definitions.
+#
+#
+# IMPORTANT FOR SCO UNIX SYSTEMS
+#
+# Recent SCO UNIX systems use the MMDF file format.  If you wish to
+# have smail generate this format, then comment out the unix_from_hack
+# and the first suffix lines, in the "local" and "file" transports,
+# and uncomment all lines that are commented with "MMDF mailbox format".
+#
+#
+# IMPORTANT FOR SYSTEM V RELEASE 4 USERS
+#
+# The SVR4 mailx expects to find Content-Length header fields on
+# messages.  If such a header is not found (or if a remote site
+# supplies an incorrect Content-Length header), then mailx may split
+# your mailbox file into messages at inappropriate boundaries.  To
+# add a Content-Length field to messages appended to your mailbox
+# files, and sent to shell-command or file addresses, uncomment all
+# attributes that are indicated with "SVR4 mailbox format".  This
+# will also ensure that you have a "Content-Type" field, defaulting
+# the content type to "text".
+#
+# You will likely also wish to uncomment unix_from_hack from the
+# local, pipe, and file transports, since prepending > to lines
+# starting with From is not necessary with this the SVR4 mailbox
+# format.  You can also comment out the suffix="\n" lines in the
+# local, and file transports, since a blank line is not required
+# between messages for the SVR4 mailbox format.
+#
+#
+# IMPORTANT FOR USE WITH HoneyDanBer UUCP
+#
+# Systems with HoneyDanBer UUCP (for example, System V Release 4)
+# can invoke uux with -a$sender -g$grade to cause UUCP errors to
+# be mailed to the message sender, and to alter UUCP queue priorities
+# based on Precedence header fields.  For SVR4, you should add the
+# following to your /etc/uucp/Grades file:
+#
+#	9	9	Any	User	Any
+#	A	A	Any	User	Any
+#	C	C	Any	User	Any
+#	a	a	Any	User	Any
+#	n	n	Any	User	Any
+#
+# This is because the SVR4 HDB UUCP uses long message grade names
+# on the uux command line, which are not supported by Smail.
+#
+#
+# HANDLING TRANSIENT UUCP FAILURES
+#
+# Many systems seem to get failures from uux from time to time.  I
+# guess this is load related.  Smail normally returns bounce messages
+# in such situations.  However, generating a bounce message can be
+# annoying if the failures are truly transient.
+#
+# The only way to handle this, if you encounter this often, is to
+# make sure that your UUCP configuration doesn't have any conflicts
+# with your smail configuration (which implies that uux should never
+# fail for configuration-related errors).  Then, uncomment the
+# defer_child_errors attribute in the various uux-based transports
+# defined in this file.  This will cause smail to retry (at a later
+# time) any failures encountered by executing uux.
+
+
+# local - deliver mail to local users
+#
+# By default, smail will append directly to user mailbox files.
+#
+# IMPORTANT FOR SYSTEM V AND SCO USERS
+#
+# comment out the mode=0600 line below, and uncomment the mode=0660
+# line, to get the correct mailbox file permissions for your system.
+local:	driver=appendfile,		# append message to a file
+	return_path,			# include a Return-Path: field
+	from,				# supply a From_ envelope line
+	unix_from_hack,			# insert > before From in body
+					# comment out the above line for
+					# MMDF mailbox format and for
+					# use with the Content-Length
+					# header fields.
+# SVR4 mailbox format: uncomment the below 3 lines
+#	remove_header="Content-Length",
+#	append_header="${if !header:Content-Type :Content-Type: text}",
+#	append_header="Content-Length: $body_size",
+	local;				# use local forms for delivery
+
+	file=/usr/spool/mail/${lc:user}, # location of mailbox files
+#	file=/usr/mail/${lc:user},	# use this location for System V
+#	group=mail,			# group to own file for System V
+	mode=0600,			# For BSD: only the user can
+					# read and write file
+#	mode=0660,			# under System V, group mail can access
+					# use this for SCO UNIX, as well
+	suffix="\n",			# append an extra newline
+					# comment out the above line for
+					# MMDF mailbox format and for
+					# use with the Content-Length
+					# header fields.
+	notify_comsat,			# notify comsat daemon of delivery
+#	suffix="\1\1\1\1\n",		# MMDF mailbox format
+#	prefix="\1\1\1\1\n",		# MMDF mailbox format
+
+# local - an alternate local transport that calls on /bin/lmail
+#
+# Some systems have special local conventions for mail delivery that
+# smail does not understand.  Such conventions may include adding
+# special headers, or may include particular locking conventions.  For
+# such systems, smail can use a system-provided program for delivery
+# to user mailbox files.  On most systems, the /bin/mail program will
+# perform mail delivery according to local conventions.  However,
+# smail will often require that /bin/mail be replaced with a program
+# that calls out to smail to perform delivery.  By convention, the
+# original /bin/mail program should be saved to /bin/lmail.
+#
+# It may be necessary to modify this entry to operate within your
+# local conventions.
+#
+# NOTE: If you wish to use this alternate local entry, you must
+# comment out the regular local transport entry, and uncomment the
+# entry below.
+#local:	driver=pipe,			# call out to a program
+#	return_path,			# include a Return-Path: field
+#	local,				# use local forms for delivery
+#	from,				# supply a From_ envelope line
+#	-max_addrs;			# give multiple addresses to command
+#
+#	cmd="/bin/lmail $($user$)"
+
+# pipe - deliver mail to shell commands
+#
+# This is used implicitly when smail encounters addresses which begin with
+# a vertical bar character, such as "|/usr/lib/news/recnews talk.bizarre".
+# The vertical bar is removed from the address before being given to the
+# transport.
+pipe:	driver=pipe,			# pipe message to another program
+	return_path,			# include a Return-Path: field
+	from,				# supply a From_ envelope line
+	unix_from_hack,			# insert > before From in body
+					# comment out the above line for
+					# use with the Content-Length
+					# header fields.
+# SVR4 mailbox format: uncomment the below 3 lines
+#	remove_header="Content-Length",
+#	append_header="${if !header:Content-Type :Content-Type: text}",
+#	append_header="Content-Length: $body_size",
+	local;				# use local forms for delivery
+
+	cmd="/bin/sh -c $user",	# send address to the Bourne Shell
+	parent_env,			# environment info from parent addr
+	pipe_as_user,			# use user-id associated with address
+	ignore_status,			# ignore a non-zero exit status
+	ignore_write_errors,		# ignore write errors, i.e., broken pipe
+	umask=0022,			# umask for child process
+	-log_output,			# do not log stdout/stderr
+
+# file - deliver mail to files
+#
+# This is used implicitly when smail encounters addresses which begin with
+# a slash or squiggle character, such as "/usr/info/list_messages" or
+# perhaps "~/Mail/inbox".
+file:	driver=appendfile,
+	return_path,			# include a Return-Path: field
+	from,				# supply a From_ envelope line
+	unix_from_hack,			# insert > before From in body
+					# comment out the above line for
+					# MMDF mailbox format and for
+					# use with the Content-Length
+					# header fields.
+# SVR4 mailbox format: uncomment the below 3 lines
+#	remove_header="Content-Length",
+#	append_header="${if !header:Content-Type :Content-Type: text}",
+#	append_header="Content-Length: $body_size",
+	local;				# use local forms for delivery
+
+	file=$user,			# file is taken from address
+	append_as_user,			# use user-id associated with address
+	expand_user,			# expand ~ and $ within address
+	suffix="\n",			# append an extra newline
+					# comment out the above line for
+					# MMDF mailbox format and for
+					# use with the Content-Length
+					# header fields.
+	mode=0644,			# you may wish to change this
+					# mode, depending upon local
+					# conventions and preferences
+#	suffix="\1\1\1\1\n",		# MMDF mailbox format
+#	prefix="\1\1\1\1\n",		# MMDF mailbox format
+
+# uux - deliver to the rmail program on a remote UUCP site
+#
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+uux:	driver=pipe,
+	uucp,				# use UUCP-style addressing forms
+	from,				# supply a From_ envelope line
+	max_addrs=5,			# at most 5 addresses per invocation
+#	max_addrs=1,			# use this if some of your neighbors
+#					# can't handle multiple addresses
+#					# given to their rmail.  You might,
+#					# alternately, want to configure
+#					# a uux_one_addr transport that
+#					# does this.
+	max_chars=200;			# at most 200 chars of addresses
+
+	# the -r flag prevents immediate delivery, parentheses around the
+	# $user variable prevent special interpretation by uux.
+	cmd="/usr/bin/uux - -r $host!rmail $(($user)$)",
+	#cmd="/usr/bin/uux - -r -a$sender -g$grade $host!rmail $(($user)$)",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+
+# demand - deliver to a remote rmail program, polling immediately
+#
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+demand:	driver=pipe,
+	uucp,				# use UUCP-style addressing forms
+	from,				# supply a From_ envelope line
+	max_addrs=5,			# at most 5 addresses per invocation
+#	max_addrs=1,			# use this if some of your neighbors
+#					# can't handle multiple addresses
+#					# given to their rmail.  You might,
+#					# alternately, want to configure
+#					# a demand_one_addr transport that
+#					# does this.
+	max_chars=200;			# at most 200 chars of addresses
+
+	# with no -r flag, try to contact remote site immediately
+	cmd="/usr/bin/uux - $host!rmail $(($user)$)",
+	#cmd="/usr/bin/uux - -a$sender -g$grade $host!rmail $(($user)$)",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+
+# uusmtp - deliver to the rsmtp program on a remote UUCP site
+#
+# The rsmtp program is assumed to to take batched SMTP requests.
+#
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+uusmtp:	driver=pipe,
+	uucp,				# use !-style addresses for routing
+	bsmtp,				# send batched SMTP commands
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	# supply -r to prevent immedate delivery, the recipient addresses
+	# are stored in the data sent to the standard input of rsmtp.
+	cmd="/usr/bin/uux - -r $host!rsmtp",
+	#cmd="/usr/bin/uux - -r -a$sender -g$grade $host!rsmtp",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+
+# demand_uusmtp - deliver to a remote rsmtp program, polling immediately
+#
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+demand_uusmtp:
+	driver=pipe,
+	uucp,				# use !-style addresses for routing
+	bsmtp,				# send batched SMTP commands
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	# with no -r flag, try to contact remote site immediately
+	cmd="/usr/bin/uux - $host!rsmtp",
+	#cmd="/usr/bin/uux - -a$sender -g$grade $host!rsmtp",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+
+# inet_uusmtp, inet_demand_uusmtp - batched SMTP conforming to specification
+#
+# These transports specify that transmitted addresses will conform to
+# the SMTP specification.  If a route is needed to deliver to a
+# specified host, then route-addr addresses (@host1,@host2:user@destination)
+# will be used.  This violates recommendations of RFC1123, but routes
+# are not generally required in networks where RFC1123 recommendations
+# fully apply.
+#
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+inet_uusmtp:
+	driver=pipe,
+	inet,				# use route-addr addresses for routing
+	bsmtp,				# send batched SMTP commands
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	# supply -r to prevent immedate delivery, the recipient addresses
+	# are stored in the data sent to the standard input of rsmtp.
+	cmd="/usr/bin/uux - -r $host!rsmtp",
+	#cmd="/usr/bin/uux - -r -a$sender -g$grade $host!rsmtp",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+inet_demand_uusmtp:
+	driver=pipe,
+	inet,				# use route-addr addresses for routing
+	bsmtp,				# send batched SMTP commands
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	# with no -r flag, try to contact remote site immediately
+	cmd="/usr/bin/uux - $host!rsmtp",
+	#cmd="/usr/bin/uux - -a$sender -g$grade $host!rsmtp",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+
+# smtp - deliver using SMTP over TCP/IP
+#
+# The below four drivers are configured in only if your system supports
+# BSD socket networking.
+#
+# Connect to a remote host using TCP/IP and initiate an SMTP conversation
+# to deliver the message.  The smtp transport is included only if BSD
+# networking exists.
+#
+# The uucp attribute can be specified for transfers within the UUCP
+# zone.  The inet attribute must be specified for transfers within the
+# Internet.
+#
+# NOTE:	This is hardly optimal, a backend should exist which can handle
+#	multiple messages per connection.
+#
+# ALSO:	It may be necessary to restrict max_addrs to 100, as this is the
+#	lower limit SMTP requires an implementation to handle for one
+#	message.
+smtp:	driver=tcpsmtp,
+	inet,				# if UUCP_ZONE is not defined
+	#uucp,				# if UUCP_ZONE is defined
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	short_timeout=5m,		# timeout for short operations
+	long_timeout=2h,		# timeout for longer SMTP operations
+	service=smtp,			# connect to this service port
+# For internet use: uncomment the below 4 lines
+#	use_bind,			# resolve MX and multiple A records
+#	defnames,			# use standard domain searching
+#	defer_no_connect,		# try again if the nameserver is down
+#	-local_mx_okay,			# fail an MX to the local host
+
+uucp_zone_smtp:
+	driver=tcpsmtp,
+	uucp,				# use !-style addresses for routing
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	short_timeout=5m,		# timeout for short operations
+	long_timeout=2h,		# timeout for longer SMTP operations
+	service=smtp,			# connect to this service port
+# For internet use: uncomment the below 4 lines
+#	use_bind,			# resolve MX and multiple A records
+#	defnames,			# use standard domain searching
+#	defer_no_connect,		# try again if the nameserver is down
+#	-local_mx_okay,			# fail an MX to the local host
+
+inet_zone_smtp:
+	driver=tcpsmtp,
+	inet,				# use route-addr addresses for routing
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	short_timeout=5m,		# timeout for short operations
+	long_timeout=2h,		# timeout for longer SMTP operations
+	service=smtp,			# connect to this service port
+# For internet use: uncomment the below 4 lines
+#	use_bind,			# resolve MX and multiple A records
+#	defnames,			# use standard domain searching
+#	defer_no_connect,		# try again if the nameserver is down
+#	-local_mx_okay,			# fail an MX to the local host
+
+local_smtp:
+	driver=tcpsmtp,
+	local_xform,			# transfer using local formats
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	short_timeout=5m,		# timeout for short operations
+	long_timeout=2h,		# timeout for longer SMTP operations
+	service=smtp,			# connect to this service port
+# For internet use: uncomment the below 4 lines
+#	use_bind,			# resolve MX and multiple A records
+#	defnames,			# use standard domain searching
+#	defer_no_connect,		# try again if the nameserver is down
+#	-local_mx_okay,			# fail an MX to the local host
+
+# local_* - local forms for all of the remote transport entries
+#
+# Local format transports are useful when transferring mail messsages
+# within coordinated networks that all run Smail3.1.  When the local
+# attribute is enabled for a transport that delivers messages to a
+# remote machine, any local addresses in the header or envelope of the
+# message are left as local-format addresses, and the sender is left
+# as a local login name.
+#
+# This convention for message tranfers allows local networks to be
+# hidden by the common mail users and by users external to the
+# network.  Messages transferred to remote nodes in the network will
+# appear as though they originated on the receiving node.  Messages
+# that eventually leave the network (and are thus delivered by a
+# transport that does not have the local attribute set) will be
+# transformed into remote-format messages, with qualified domain names
+# for all local-format addresses.
+#
+# This can be very convenient for networks that have a central mail
+# processor that handles all mailing lists and forwarding for the
+# network, and where user names are kept coordinated throughout the
+# network.
+#
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+local_uux:
+	driver=pipe,
+	local_xform,			# transfer using local message format
+	uucp,				# use uucp-conformant addresses
+	from,				# supply a From_ envelope line
+	max_addrs=5,			# at most 5 addresses per invocation
+	max_chars=200;			# at most 200 chars of addresses
+
+	# the -r flag prevents immediate delivery, parentheses around the
+	# $user variable prevent special interpretation by uux.
+	cmd="/usr/bin/uux - -r $host!rmail $(($user)$)",
+	#cmd="/usr/bin/uux - -r -a$sender -g$grade $host!rmail $(($user)$)",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+local_demand:
+	driver=pipe,
+	local_xform,			# transfer using local formats
+	uucp,				# use uucp-conformant addresses
+	from,				# supply a From_ envelope line
+	max_addrs=5,			# at most 5 addresses per invocation
+	max_chars=200;			# at most 200 chars of addresses
+
+	# with no -r flag, try to contact remote site immediately
+	cmd="/usr/bin/uux - $host!rmail $(($user)$)",
+	#cmd="/usr/bin/uux - -a$sender -g$grade $host!rmail $(($user)$)",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+local_uusmtp:
+	driver=pipe,
+	local_xform,			# transfer using local formats
+	bsmtp,				# send batched SMTP commands
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	# supply -r to prevent immedate delivery, the recipient addresses
+	# are stored in the data sent to the standard input of rsmtp.
+	cmd="/usr/bin/uux - -r $host!rsmtp",
+	#cmd="/usr/bin/uux - -r -a$sender -g$grade $host!rsmtp",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+
+# HDB UUCP users should comment out the first cmd= line below, and
+# uncomment the second.
+local_demand_uusmtp:
+	driver=pipe,
+	local_xform,			# transfer using local formats
+	bsmtp,				# send batched SMTP commands
+	-max_addrs, -max_chars;		# no limit on number of addresses
+
+	# with no -r flag, try to contact remote site immediately
+	cmd="/usr/bin/uux - $host!rsmtp",
+	#cmd="/usr/bin/uux - -a$sender -g$grade $host!rsmtp",
+	pipe_as_sender,			# have uucp logs contain caller
+	log_output,			# save error output for bounce messages
+#	defer_child_errors,		# retry if uux returns an error
+ 
+# BMAIL transport is used with mea-han-nje using BITNET
+#bmail:
+#	driver=pipe,
+#	bsmtp,
+#	-max_addrs, -max_chars;
+#
+#	cmd="/root/hujisrc-940117/sendfile mailer@alijku11 -fn ALIJKU65 MAIL -form QUIET -class m",
+#	pipe_as_sender,
+#	log_output,
+
+#
+bsmtp3nd:
+	driver=pipe,
+	uucp;
+	cmd="/usr/local/lib/smail/bsmtp3nd $user $host $input_addr $name $from",
+	pipe_as_sender,
+
+bsmtp3:
+	driver=pipe,
+	uucp;
+	cmd="/usr/local/lib/smail/bsmtp3 $user $host $input_addr $name $from",
+	pipe_as_sender,
+
+defrt1:
+	driver=pipe;
+	cmd="/usr/local/lib/smail/defrt1 $user $host $input_addr $name $from",
+	pipe_as_sender,

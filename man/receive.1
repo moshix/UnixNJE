@@ -1,0 +1,236 @@
+.\" $Header$
+.\"
+.\"  Man page for FUNET-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 18-Sep-1993, 5-Nov-1993
+.\"
+.fp 4 CW
+.ds ]W Funet-Nje 1 UNIX 1.1
+.TH RECEIVE 1
+.B "** RAW DRAFT ** RAW DRAFT ** RAW DRAFT ** RAW DRAFT **"
+.SH NAME
+receive, transfer
+\- bitnet incoming file processing programs
+.SH SYNOPSIS
+.LP
+receive
+.RB [ "\-n" ]
+.RB [ "\-a|\-b" ]
+.RB [ "\-asa|\-rawpun|\-bitraw|\-bcat" ]
+.RB [ "\-d" ]
+.BR [ "\-u "
+.I username
+.B ]
+.RB [ "\-o "
+.I outpath
+.B ]
+.I {filepath|spoolid}
+.LP
+/usr/lib/huji/transfer
+\f4DestUser@DestNode
+.I /absolute/file/path
+.SH DESCRIPTION
+.IX "bitcat"
+.IX "bitnet"
+.IX "funetnje"
+.IX "sendfile"
+.IX "netdata"
+.IX "ndparse"
+.LP
+.I Receive
+is a relatively simple minded tool for receiving files.
+Default usage is to translate incoming
+.SM EBCDIC
+PUNCH or PRINT records to
+.SM ASCII,
+and output them with appended newlines.
+Trailing spaces may get removed at first, as they are (usually anyway)
+unnecessary.
+At the 
+.SM NETDATA
+receiving, no such stripping is done.
+.LP
+.I Receive
+can enter
+.I \-d (debug)
+mode, and display the contents of the spool file.
+At that mode it will display symbolically NJE header contents,
+and also analyze
+.SM NETDATA
+records.
+No output file is created in this mode.
+.LP
+.I Receive
+can control output conversion with several keys:
+.IP "\fB\-b\fR" 1.0i 0
+Turns on enforced binary mode, which outputs the incoming
+file as is;
+.SM NETDATA
+content is analyzed and output as is, and other
+.SM PUNCH
+modes get also handled in raw manner.
+This is \fBdefault\fR mode for a class N
+.SM NETDATA
+file, and must be explicitely turned off with \fB\-a\fR.
+.IP "\fB\-a\fR" 1.0i 0
+Turns on enforced
+.SM EBCDIC\-ASCII
+conversion, even when a
+.SM NETDATA
+file has class N.
+.IP "\fB\-rawpun\fR" 1.0i 0
+Outputs nominal size record contents; usually 80 characters per
+record
+.SM (PUNCH)
+without adding anything to the records, nor translating them.
+.IP "\fB\-bcat\fR" 1.0i 0
+outputs non-translated records in format:
+
+\f4 <char of reclen>  <chars of record>
+.IP "\fB\-asa\fR" 1.0i 0
+Affects
+.SM PRINT
+files which contain MCC carriage control codes
+.RB "(see " bitspool "(5))"
+by translating them to
+.SM FORTRAN-style
+carriage control.
+.LP
+.I Receive
+outputs to a file whose location is current working directory, and in
+non-NETDATA -case the name is formed from spool entry by lowercasing
+.IR FileName.FileExt ,
+unless
+.RB ` \-o ',
+is used to override it.
+With
+.RB ` \-o '
+one can specify
+.RB ` \- '
+to denote
+.BR STDOUT .
+In case the spool-file contains
+.SM NETDATA,
+default filename is taken from inside the
+.SM "NETDATA INMR02"
+control records;
+The
+.SM INMDSNAM
+contains (usually) three entries: \"Disk FileName FileType\",
+and they get mapped into UNIX file as:
+\"filename.filetype\".
+In case the original file is from MVS TSO, and has
+.SM INMMEMBR
+key defined, resulting UNIX filename is:
+\"filename.filetype.membr\".
+.LP
+Debug output goes to \fISTDERR\fR as usual.
+.LP
+.I Transfer
+modifies file headers changing its destination address so it is possible to
+send that file again to NJE network for new destination.
+However other security related aspects may not allow all tricks.
+(For now origination address in headers will not be changed to point local
+user, and thus it is possible to create a file which seems to be traversing
+the network in wrong direction.)
+.I Transfer
+does also requeueing for file transmission.
+.LP
+.SH OUTPUT FILE NAME MAPPING
+User can explicitely define a name for the output file, or let the
+.I receive
+to invent on its own.
+.LP
+Default output name is formed from
+
+.LP
+When input processing  reaches records to be output, the output file is opened.
+
+
+.SH OPTIONS
+.IP \fInone\fR 1.0i 0
+Punch files are output as is, and Print files get
+converted from whatever carriage-control format
+they use to ASCII-CR/LF/FF format.
+.IP "\fB\-asa\fR" 1.0i 0
+Print files are output with
+.SM FORTRAN-style
+carriage controls.  One line per input record.
+.IP "\fB\-b\fR" 1.0i 0
+Binary output.  See DESCRIPTION on each command.
+.IP "\fB\-bitraw\fR" 1.0i 0
+Special input format switch for
+.IR ndparse .
+Globs output from
+.I bitcat -b
+.IP "\fB\-d\fR" 1.0i 0
+Debug output.  To \fISTDERR\fR.
+.IP "\fB\-n\fR" 1.0i 0
+Original `spool' file should \fBnot\fR be removed after successfull
+file processing is done.  (Successfull == No errors, Netdata file
+translated to ASCII using
+.I bitcat
+might not be usefull.)
+.IP "\fB\-rawpun\fR" 1.0i 0
+Special input format switch for
+.IR ndparse .
+.LP
+.SH ENVIRONMENT
+With environment variable
+.B EBCDICTBL
+user can select alternate EBCDIC <-> ASCII translation
+tables.  For more info, see
+.BR ebcdictbl (5).
+.LP
+.SH FILES
+.nf
+.I /etc/funetnje.cf
+.I /etc/funetnje.pid
+.RI "File processing exit config file, which is defined in " funetnje.cf.
+.fi
+.SH SEE ALSO
+.BR funetnje (8),
+.BR bitspool (5),
+.BR send (1),
+.BR sendfile (1),
+.BR bmail (8),
+.BR ebcdictbl (5),
+.BR mailify (8),
+.BR sysin (8),
+.BR qrdr (8),
+.BR rdrlist (1)
+.SH BUGS
+.LP
+.I Ndparse
+should be able to dig original dates and names from ND file.
+.LP
+Sometimes
+.I ndparse
+fails to understand received netdata file.  Subject for further
+study.
+.LP
+.SH DIAGNOSTICS
+When any of these programs is fed a file containing errorneous
+data (not
+.BR funetnje "(8) spool file,)"
+these mostly recover with a burp, sometimes these
+might even drop a core on pathological input case.
+.SH WARNING
+With
+.I ndparse
+it is one time mistake to forget to use
+.B \-n
+when peeking a file.  That file goes to bit bucket at that
+moment if no errors are detected. (rc=0 -> no file...)
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network \- FUNET, Finland
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, man-pages by Matti Aarnio.

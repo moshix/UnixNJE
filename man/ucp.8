@@ -1,0 +1,74 @@
+.\" $Header$
+.\"
+.\"  Man page for HUJI-NJE/FUNET-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 18-Sep-1993, 11-Feb-1994
+.\"
+.fp 4 CW
+.ds ]W Funet-Nje 8 UNIX 3.0
+.TH "FUNET-NJE on UNIX" 8 "11-Feb 1994"
+.SH NAME
+ucp \- FUNETNJE bitnet communication program control function interface.
+.SH SYNOPSIS
+ucp
+.RB [ " command to be issued " ]
+.SH DESCRIPTION
+.IX "ucp"
+.IX "bitnet"
+.IX "funetnje"
+.LP
+.I Ucp
+command lets system manager to control
+.BR funetnje (8)
+functionality and modify some of parameters given on
+configuration file (which usually is
+.IR /etc/funetnje.cf .)
+.LP
+.I Ucp
+can be started without any command line arguments, and then
+it asks commands with
+\f4NJE-CP>
+prompt.
+.LP
+\f4ucp help\fR gives list of commands that
+.I ucp
+understands.
+.SH SEE ALSO
+.BR funetnje (8),
+.BR mailify (1),
+.BR send (1),
+.BR sendfile (1),
+.BR receive (1),
+.BR bmail (8),
+.SH DIAGNOSTICS
+Obscure.  Most return results come with `mesg' facility, and user
+.B must
+have
+.RB ` mesg (1) " y" '
+to be able to receive those messages.
+.SH NOTE
+To be able to use this facility, you must have write permission to
+the
+.SM FUNET-NJE
+inter-module communications `mailbox', which is implemented as
+owner/group writable FIFO.
+This program
+.B should not
+be turned into a SUID/SGID program, rather those who must be able
+to command the funetnje shall be either super-user capable, or have
+the access-group of the communications pipe.
+See
+.BR funetnje (8)
+for more.
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network \- FUNET, Finland
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, man-pages by Matti Aarnio.

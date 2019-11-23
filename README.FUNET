@@ -1,0 +1,111 @@
+		README.FUNET  about FUNET-NJE  3.0/mea
+
+
+About modifications made on the HUJI-NJE at  FINFILES  by Matti Aarnio
+<mea@finfiles> (aka: mea@nic.funet.fi) -- changes are so large, that
+we eventually started to call this with different name:  FUNET-NJE
+
+	Overall philosophy:
+		FUNET-NJE is TRANSPORTER, and thus all features that
+		within it handle things like NETDATA processing, or
+		feeding files to system mailer via an SMTP session,
+		those are  harmfull,  and  have been  weed out, and
+		replaced with something what I consider better.
+
+As FUNET-NJE is a TRANSPORT system, files received by it will get
+processed by various user programs at their leisure.  To facilitate
+that, it was necessary to implement a spooling scheme with easily
+configurable "exits".  ("exit" mechanism is described the best in
+the "file-exit.cf" -file.)
+
+The File-Exit file configures things like:
+	- location of user spool directories
+	  (Requirement: Must be on the same physical disk, as system
+			"bitnet" spool.  Files are moved there by
+			rename() -library/system call.)
+	- Postmaster spool directory
+	- Disposition of a file, which contains:
+		- defining system mailer
+		- handling of obvious incoming mail
+		- creating pseudo-servers
+
+
+When files are spooled into those dirs for user perursal, they
+are in there with a plain-ascii header, and binary body. 
+The spool file format is described in   bitspool.5  -manpage.
+Below a sort of summary.
+
+
+Of security aspects:
+
+	FUNET's NJE uses named pipe (FIFO) for inter-module
+communication channel, but there are other options as well.
+Only programs/users who have a need to communicate with the
+main-module need write-access to the `CMDMAILBOX' (see
+/etc/funetnje.cf) -pipe, and its associated access key
+(see  funetnje.8.)
+
+The `CMDMAILBOX' gets its group-id from the `QUEUE' directory
+(or where-ever it resides in - within `QUEUE' is most convinient),
+and therefore all programs that need to write to it shall have
+`setgid' capability -- AVOID SUID PROGRAMS! SGID is bad enough..
+
+Every sent command must contain valid  `socket key', which is
+owner+group readable in `QUEUE'/.socket.key -file. (4 bytes)
+Said key is a generated at main module startup time, and is
+a random number..
+
+File submissions (by  sendfile(1), and bmail(1)) are done into
+the `QUEUE' directory with (initially) filenames that start
+with `.'   Once the file is written in full, file is renamed
+to be something without the starting `.', and is submitted
+via client-library submit_file() routine.
+
+The NJE-CP -control program (ucp) is not sgid, as only user(s)
+with real reason for being able to use it will need to use it,
+and they can be equiped with proper ancilliary group(s) for
+doing the access.
+
+Summary of BITSPOOL data:
+
+When files are spooled into those dirs for user perusal, they
+are in there with a plain-ascii header, and binary body.  The
+body contains records of a two-byte record length (in network
+byte order facilitating sharing via NFS, for example), and
+then <len>-bytes of data in the "network line format". (This
+makes store & forward to be a simple thing.)
+
+Locally generated files shall not contain anything but
+PUNCH, or PRINT records, and mark their format as:
+	FMT: BINARY
+
+Externally arrived files are represented as
+	FMT: EBCDIC
+and they contain original RSCS headers, and trailers.
+
+
+When a user-program wants to create a PUNCH file for
+sending out, it shall be coded as follows:
+ASCII headers:
+	FRM: USERNAME@HOSTNAME	<- Real sender, please..  Uppercase only
+	TOA: USERNAME@HOSTNAME	<- Recipient, uppercase only
+	FMT: BINARY		<- MANDATORY
+	FNM: FILENAME		<- 8 characters, uppercase only
+	EXT: FILEEXTN		<- 8 characters, uppercase only
+	FOR: FORMNAME		<- "QUxxxxxx" if you want silence..
+	CLS: P			<- 1 uppercase alpha, default is `A'
+	FID: 0000		<- just that string, system uses it..
+	OID: 0000		<- just that string, system uses it..
+	TAG: xxxxxx		<- 136 characters of RSCS TAG, optional
+	DIS: 88888888		<- RSCS DIST, optional, 8 chars
+	REC: nnnnnnnn		<- Record count of actual data
+	END:			<- the header ends here  ("END:\n")
+Binary body containing length-tagged records of:
+	0x80, 80,		/* line header; 0x80=PUNCH FMT, 80=len */
+	<80 bytes EBCDIC/whatever>	/* the content */
+thus each record is 82(+2) bytes long.
+
+For more detailed info, see man-page:  bitspool(5)
+
+Modification summary:
+	See   ChangeLog

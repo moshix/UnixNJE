@@ -1,0 +1,28 @@
+*
+*	Configuration file for FUNET-NJE program
+*
+
+NAME		VOGON
+IPADDRESS	130.232.8.57
+QUEUE		/usr/spool/bitnet
+CMDMAILBOX	/usr/spool/bitnet/.cmdpipe
+LOG		/usr/adm/bitnet.log
+*RSCSACCT	/usr/adm/bitnet.acct
+* this table is a binary file.
+TABLE		/usr/local/lib/huji/vogon.routes
+INFORM		MEA@VOGON
+FILEEXITS	/usr/local/lib/huji/file-exit.cf
+MSGEXITS	/usr/local/lib/huji/msg-exit.cf
+DEFFORM		STANDARD
+LLEVEL		1
+*DEFAULT-ROUTE	FINHUTC
+*DEFAULT-ROUTE	FIGBOX
+
+LINE 0 FINFILES
+ TYPE		UNIX_TCP
+ BUFSIZE	1024
+ TIMEOUT	3
+ IPPORT		175
+ TCPNAME	nic.funet.fi
+ TCP-SIZE	8192
+ MAX-STREAMS	7

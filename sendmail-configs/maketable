@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+#  By Paul Bryant <P.Bryant@rl.ac.uk>
+#
+#  - script to be called from file-exit.cf when BITEARN.NODES -file
+#    arrives
+#
+
+NJEDIR=/usr/local/nje/huji
+NJEBINDIR=/usr/local/nje/bin
+PAROUTERDIR=/usr/local/nje/paroute
+
+MFLOG=/usr/tmp/maketable.log
+rm $MFLOG
+echo start maketable >> $MFLOG
+TMPFILE=/usr/tmp/maketable.tmp
+TMPFILE1=/usr/tmp/maketablex.tmp
+TMPFILE2=/usr/tmp/maketabley.tmp
+rm $TMPFILE
+rm $TMPFILE1
+rm $TMPFILE2
+
+$NJEBINDIR/receive -a -o $TMPFILE $1
+rc=$?
+
+if [ $rc != 0 ]; then
+     echo "receive failed" >> $MFLOG
+     exit $rc
+fi
+
+$NJEDIR/namesfilter -zmailer < $TMPFILE | sort > $TMPFILE2 
+/newsendmail/makemap/makemap dbm /etc/bitnettable < $TMPFILE2
+rc=$?
+
+if [ $rc != 0 ]; then
+     echo "namesfiilter failed" >> $MFLOG
+     exit $rc
+fi
+
+$PAROUTEDIR/paroute -l $2 -k $PAROUTEDIR/paroute.conf $TMPFILE > $TMPFILE1
+$NJEDIR/njeroutes $NJEDIR/huji_nje.header $TMPFILE1 $NJEDIR/huji_nje.route  >> $MFLOG
+rc=$?
+
+if [ $rc != 0 ]; then
+      echo "njeroutes failed" $rc  >> $MFLOG
+      exit $rc
+fi
+
+rm $TMPFILE
+rm $TMPFILE1
+rm $TMPFILE2
+
+echo "end maketable" >> $MFLOG 

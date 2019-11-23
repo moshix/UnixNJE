@@ -1,0 +1,23 @@
+#!/bin/sh
+from=$5
+ownnode=$4
+user=$3
+IFS='!'
+set $1
+mailer=$1
+node=$2
+IFS='<>'
+set $user
+if [ ${#1} -eq 0 ]
+	then user=$2
+	else user=$1
+fi
+IFS='@'
+set $from
+IFS=' '
+if [ ${#2} -eq 0 ]
+	then from=$1@$ownnode
+	else from=$1@$2
+fi
+/usr/bin/bmail -b $mailer@$node -u MAILER $from $user
+exit 0

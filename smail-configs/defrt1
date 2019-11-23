@@ -1,0 +1,12 @@
+#!/bin/sh
+from=$5
+user=$1
+IFS='@'
+set $from
+IFS=' '
+if [ ${#2} -eq 0 ]
+	then from=$1@alijku65
+	else from=$1@$2
+fi
+/usr/bin/bmail $from $user
+exit 0

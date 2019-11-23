@@ -1,0 +1,66 @@
+#  FILE-EXIT.CF -- Configure file handling on FUNET-NJE
+#
+# Rule for spool disposition path, defines also system default
+# user spool directory for those who don't have specially set
+# something else.
+# Possibilities:	~/bitspool  -- real user's only! (~/ == users home)
+#			/usr/path/path/ -- append 'touser' as subdir,
+#					    it is spool dir.
+#					   Valid for Exits and real users.
+#			/usr/path/path	-- explicite directory.
+#			/dev/null	-- explicite file (special case).
+#	When directory isn't present, it is built from upmost present level
+#	down to users bottommost level hmm...
+#   Question about ownership of directory/files...
+#     Real users:  real protections, programs start with setuid() user.
+#	  Exit users:  POSTMAST	 (exits start as root anyway.)
+#	  Exited reals: real protections, programs start with setuid() user.
+
+Spool-Dir:	/usr/spool/bitspool/
+Postmast-Dir:	/usr/spool/bitspool/POSTMAST
+
+# Now list of things to match and then what to do
+# To do keywords:	DISCARD to /dev/null.
+#			KEEP	just so.  Into default or given spool.
+#			NOTIFY	send an NJE message to someone.
+#			RUN	starts arbitary program with arbitary
+#				arguments telling about file location
+#				and its properties.
+#				If fails, well..
+
+# Defining  SpoolDir  which shall not be attached ToUser must not be done
+# with trailing "/", (and vice versa)
+#	/usr/spool/bitnet/SYSIN-JOB
+
+# Exit table begin keyword:
+Exit-Table:
+
+# Args:
+# touser8 tonode8 fname8   ftype8  pun? class fruser8  frnode8	dist8	SpoolDir			action  ExtraArguments
+#
+# Several special handlings (tests/illustriations)
+#
+#MEA	 FINFILES *	   *	    *	*     HKS      SEARN	*	default				DISCARD
+NOBODY	 FINFILES *	   *	    *	*     *	       *	*	default				DISCARD
+FOOBAT	 FINFILES *	   *	    *	*     *	       *	*	default				RUN   /usr/local/lib/huji/transfer MEA@$TONODE $SPOOL
+ECHO     FINFILES *        *        *   *     *        *        *       default                         RUN   /usr/local/lib/huji/transfer NOBODY@$FRNODE $SPOOL
+#LPR     FINFILES *        *        *   *     *        *        *       default                         RUN   /usr/local/lib/huji/rprint $SPOOL lpr $FRUSER $FRNODE $TOUSER $FID
+#
+#  Define what we do with the SYSINs
+#
+.	 *	  *	   *	    SYSIN *   *	       *	*	/usr/spool/bitnet/SYSIN-JOB	RUN   /usr/local/lib/huji/sysin $SPOOL
+#
+#  Define a MAILER for our node!
+#  And also handle directly sent mail from nodes without mailers...
+#
+MAILER	 FINFILES *	   *	    PUN M   *	     *	      *		default				RUN   /usr/local/lib/huji/mailify $SPOOL
+*	 *	  *	   MAIL	    PUN M   *	     *	      *		default				RUN   /usr/local/lib/huji/mailify $SPOOL
+#
+# NETINIT is pseudo id for automatically re-generating routing tables
+# This is done with  netinit.sh	 which must be configured by hand.
+#
+NETINIT	 FINFILES *	   *	    *	*   *	     *	      *		default				KEEP
+#
+# Finally  a `catch them all' default handling case.
+#
+*	 *	  *	   *	    *	*   *	     *	      *		default				KEEP

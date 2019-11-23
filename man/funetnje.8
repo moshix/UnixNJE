@@ -1,0 +1,455 @@
+.\" $Header$
+.\"
+.\"  Man page for HUJI-NJE/FUNET-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 18-Sep-1993, 28-Jan-1994
+.\"
+.ds ]W Funet-Nje 1 UNIX 3.0
+.TH "FUNET-NJE on UNIX" 8
+.SH NAME
+funetnje \- Bitnet NJE server on UNIX
+.SH SYNOPSIS
+.IR funetnje
+.RI [ loglevel ]
+.RI [ debugflag ]
+.SH DESCRIPTION
+.IX "funetnje"
+.IX "bitnet"
+.LP
+.I funetnje
+is name for main program which does BITNET-II/VMNET-compatible communication
+using IBM developed NJE protocol.
+.LP
+.I loglevel
+is defaulted from configuration file (see below), but can be given
+at startup too: 2..5 are supported, and usually not needed.
+.LP
+.I `debugflag'
+is used when
+.I funetnje
+is wanted to stay connected with controlling terminal for some debugging
+purposes.
+Default for program is to detach itself from controlling terminal and then
+to continue without connection anywhere.  (Usually /dev/console  gets
+connection, but that is for output only.)
+.LP
+Value of
+.I `debugflag'
+is any non-void text or character.
+When argc of program exceeds 2, that fullfills \fI`debugflag'\fR.
+.LP
+Location of 
+.B configuration file
+is usually
+.I /etc/funetnje.cf
+(It is defined in \fIconsts.h\fR source file.)
+.LP
+Sample \fBconfiguration file\fR:
+.LP
+.in +0.5i
+.fp 4 CW
+.fz 4 -2
+.nf
+\f4*
+\f4*       Configuration file for FUNET-NJE program
+\f4*
+\f4
+\f4* BITNET name of node:
+\f4NAME            FINFILES
+\f4* My Internet view of things
+\f4*IPADDRESS      nic.funet.fi
+\f4IPADDRESS       128.214.6.100
+\f4* Directory for in & outbound traffics
+\f4* Protection 2775 (or 2770), group "huji"
+\f4QUEUE           /usr/spool/bitnet
+\f4*  What kind of communication channel we have ?
+\f4*  Choices: two named files, and UDP socket
+\f4*CMDMAILBOX  FIFO /usr/spool/bitnet/.cmdfifo
+\f4*CMDMAILBOX  SOCK /usr/spool/bitnet/.cmdsocket
+\f4CMDMAILBOX   UDP  127.0.0.1 175
+\f4* Logging file
+\f4LOG             /usr/adm/bitnet.log
+\f4* Optional RSCSv1 style accounting log.  Needed only on
+\f4* international EARN nodes, though..
+\f4*RSCSACCT       /var/log/bitacct
+\f4* this table is a binary file, and generated with
+\f4* \fBnjeroutes\fR(8)\f4 program
+\f4TABLE           /usr/local/lib/huji/nje.routes
+\f4* EBCDIC<->ASCII tables, (optional), see \fBebcdictbl\fR(5)
+\f4*EBCDICTBL      /usr/local/lib/huji/ebcdictbl
+\f4* Send information of wierd happenings to:
+\f4INFORM          MEA@FINFILES
+\f4* File containing user exits for files
+\f4FILEEXITS       /usr/local/lib/huji/file-exit.cf
+\f4* File containing user exits for messages (unimplemented)
+\f4MSGEXITS        /usr/local/lib/huji/msg-exit.cf
+\f4* Logging Level (smaller value, less logs)
+\f4LLEVEL  2
+\f4* System-wide default value for FORM.
+\f4DEFFORM         STANDARD
+\f4* Default route when routing table isn't complete for
+\f4* some reason.
+\f4*DEFAULT-ROUTE   FIGBOX
+\f4
+\f4* LINE, line number, remote node name
+\f4LINE 0 FIGBOX
+\f4 * TYPE UNIX_TCP (only available)
+\f4 TYPE           UNIX_TCP
+\f4 * BUFSIZE of single NJE transaction
+\f4 BUFSIZE        1024
+\f4 * TIMEOUT of something odd, 3 works well.
+\f4 TIMEOUT        3
+\f4 * IPPORT is usually fixed 175, unless opposite can't
+\f4 *         manage it (which is true with VMS UCX + JNET
+\f4 *         systems)
+\f4 IPPORT         500
+\f4 * TCPNAME gives opposite end IP address (numeric form
+\f4 *         is fastest to resolve)
+\f4 * TCPNAME       figbox.funet.fi
+\f4 TCPNAME        128.214.6.7
+\f4 * TCP-SIZE tells how much can be lumped into single TCP
+\f4 *          block to be sent out.
+\f4 TCP-SIZE       8192
+\f4 * MAX-STREAMS gives the number of outgoing streams that can
+\f4 *             be used against opposite.  Real IBM takes 7.
+\f4 MAX-STREAMS    1
+\f4
+\f4 * Define another link to an IBM system
+\f4LINE 1  SEARN
+\f4 TYPE           UNIX_TCP
+\f4 BUFSIZE        1024
+\f4 TIMEOUT        3
+\f4 IPPORT         175
+\f4 *TCPNAME       searn.sunet.se
+\f4 TCPNAME        192.36.125.4
+\f4 TCP-SIZE       8192
+\f4 MAX-STREAMS     7
+\f4
+\f4 * Define a link to another HUJINJE/FUNETNJE system
+\f4LINE 1  ALIJKU65
+\f4 TYPE           UNIX_TCP
+\f4 BUFSIZE        1024
+\f4 TIMEOUT        3
+\f4 IPPORT         175
+\f4 *TCPNAME       alijku65.edvz.uni-linz.ac.at
+\f4 TCPNAME        140.78.3.34
+\f4 TCP-SIZE       8192
+\f4 MAX-STREAMS     7
+\f4* End of definitions
+.fi
+.LP
+Sample
+.I file processing exit file:
+.LP
+.nf
+.in +0.5i
+\f4# FILE-EXIT.CF -- File disposition/processing exit file
+\f4 
+\f4# Rule for spool disposition path, defines also system default
+\f4# user spool directory for those who don't have specially set
+\f4# something else.
+\f4# Possibilities:  ~/bitspool  -- real user's only! (~/ == users home)
+\f4#                 /usr/path/path/ -- append 'touser' as subdir,
+\f4#                                     it is spool dir.
+\f4#                                    Valid for Exits and real users.
+\f4#                 /usr/path/path  -- explicite directory.
+\f4#                 /dev/null       -- explicite file (special case).
+\f4#       When directory isn't present, it is built from upmost present
+\f4#       level down to users bottommost level hmm...
+\f4# Question about ownership of directory/files...
+\f4#   Real users:  real protections, programs start with setuid() user.
+\f4#   Exit users:  POSTMAST  (exits start as root anyway.)
+\f4#   Exited reals: real protections, programs start with setuid() user.
+\f4 
+\f4Spool-Dir:      /usr/spool/bitspool/
+\f4Postmast-Dir:   /usr/spool/bitspool/POSTMAST
+\f4 
+\f4# Now list of things to match and then what to do
+\f4# To do keywords:       DISCARD  to /dev/null.
+\f4#                       KEEP     just so.  Into default
+\f4#                                directory, or given spool.
+\f4#                       NOTIFY   KEEP, and send a NJE message
+\f4#                                to somebody.
+\f4#                       RUN      starts arbitary program with
+\f4#                                arbitary arguments telling
+\f4#                                about file location and its
+\f4#                                properties.
+\f4#                                If fails, well..
+\f4#
+\f4# Defining  SpoolDir  must be done with explicite trailing "/":
+\f4#         /usr/spool/bitnet/SYSIN-JOB/
+\f4  
+\f4# Exit table begin keyword:
+\f4Exit-Table:
+\f4 
+\f4# Args:
+\f4# (Note: folding is for document only, real input must be wide.
+\f4#        Continuation lines are prefixed with `+'.)
+\f4# touser8 tonode8 fname8   ftype8  pun? class fruser8  frnode8 \e
+\f4+             dist8     SpoolDir                     action    \e
+\f4+    ExtraArgument
+\f4# (Entry on  PUN?  can be one of:  *, PUN, PRT, SYSIN)
+\f4# (Entry on  EXTRAARGUMENT can be program path arguments for the
+\f4#  RUN  commands.  For TRANSFER it is the target address.    See
+\f4#  funetnje(8) man page for documentation about macro expansion.)
+\f4#
+\f4*        *        *        *        SYSIN *   *        *       \e
+\f4+             *         /usr/spool/bitnet/SYSIN-JOB/ RUN       \e
+\f4+    /usr/local/lib/huji/sysin $SPOOL
+\f4MEA      FINFILES *        *        *   *     HKS      SEARN   \e
+\f4+             *         default                      DISCARD
+\f4MEA      FINFILES *        *        *   *     *        SEARN   \e
+\f4+             *         default                      RUN       \e
+\f4+    /usr/local/lib/huji/transfer MEA@FIRIEN $SPOOL
+\f4MAILER   FINFILES *        *        PUN M     *        *       \e
+\f4+             *         default                      RUN       \e
+\f4+    /usr/local/lib/huji/mailify $SPOOL
+\f4NOBODY   FINFILES *        *        *   *     *        *       \e
+\f4+             *         default                      DISCARD
+\f4#FOOBAT  FINFILES *        *        *   *     *        *       \e
+\f4+             *         default                      RUN       \e
+\f4+    /usr/local/lib/huji/transfer touser@whatnode $SPOOL
+\f4#
+\f4# NETINIT is pseudo id for automatically re-generating routing tables
+\f4# This is done with cron-driven  netinit.sh  which must be configured
+\f4# by hand.
+\f4#
+\f4NETINIT  FINFILES *        *        *   *     *        *       \e
+\f4+             *         default                      KEEP
+\f4*        *        *        *        *   *     *        *       \e
+\f4+             *         default                      KEEP
+.fi
+.LP
+Sample
+.I message processing exit file:
+.LP
+.nf
+.in +0.5i
+\f4#
+\f4# Some first ideas about patterns, et.al.:
+\f4#
+\f4# Actions:  CMD: BUILTIN, RUN
+\f4#           MSG: BRCAST, DISCARD, RUN, PIPE
+\f4#
+\f4 
+\f4CmdHelpFile: /usr/local/lib/huji/cmd-help.txt
+\f4 
+\f4#$TOUSER $TONODE  $FRUSER  $FRNODE  C pattern  ACTION args
+\f4.        FINFILES *        *        C "H*ELP"  BUILTIN HELP
+\f4.        FINFILES *        *        C "FINGER *" RUN     \e
+\f4+ /usr/local/lib/huji/nje-finger $FRUSER $FRNODE $TEXT
+\f4#
+\f4#$TOUSER $TONODE  $FRUSER  $FRNODE  M ACTION args
+\f4#                 "." == FRUSER is blank
+\f4MAILER   *        *        *        M  DISCARD
+\f4MAILSERV FINFILES .        *        M  DISCARD
+\f4MAILSERV FINFILES *        *        M  RUN               \e
+\f4+ /usr/local/lib/mailserver/nje-msg $FRUSER $FRNODE $TEXT
+\f4ECHO     FINFILES .        *        M  DISCARD
+\f4ECHO     FINFILES *        *        M  RUN               \e
+\f4+ /usr/local/bin/send -u echo $FRUSER@$FRNODE *Got Message: $TEXT
+\f4#
+\f4# The default
+\f4*        *        *        *        M  BRCAST
+.fi
+.LP
+.SH MACROES ON FILE-EXIT CONFIGURATION
+.LP
+On overall, following macro identifiers can be placed on the argument string.
+.IP "\fB$SPOOL\fR" 1.5i 0
+When no argument string is defined, this defaults as the only argument.
+If this is not defined in the argument string, it defaults to be
+the \fBlast\fR one.
+.IP "\fB$$\fR" 1.5i 0
+Expands to decimal process-id string, like in:  "/tmp/temp$$file"
+.IP "\fB$FID\fR" 1.5i 0
+The original spoolid on form of a string of 4 digits: 0001 \- 9900
+.IP "\fB$TOUSER\fR" 1.5i 0
+Destination user name.
+.IP "\fB$TONODE\fR" 1.5i 0
+Destination node name.
+.IP "\fB$FNAME\fR" 1.5i 0
+RSCS file name.
+.IP "\fB$FTYPE\fR" 1.5i 0
+RSCS file extension.
+.IP "\fB$CLASS\fR" 1.5i 0
+Spool file class
+.IP "\fB$FRUSER\fR" 1.5i 0
+Originating user name.
+.IP "\fB$FRNODE\fR" 1.5i 0
+Originating node name.
+.IP "\fB$SPTYPE\fR" 1.5i 0
+Spool file type, one of:
+.BR PUNCH ", " PRINT ", " SYSIN .
+.IP "\fB$TAG\fR" 1.5i 0
+The RSCS tag.  Often 0-size string..
+.IP "\fB$DIST\fR" 1.5i 0
+Possibly defined RSCS DIST data.
+.IP "\fB$DEST\fR" 1.5i 0
+Possibly defined RSCS DEST data.
+.B "(Not implemented yet!)"
+.LP
+Argument string chopping is done before macro expansion.
+Thus if a macro expression expands to a string with blanks in it,
+the resulting argument segment will then contain those blanks.
+.LP
+.SH FILES
+There are two hardwired files which control the behaviour
+of the rest of the system:
+.IP "\fB/etc/funetnje.pid\fR" 1.0i 0
+The "pid file" giving easy pointer to the running program.
+.IP "\fB/etc/funetnje.cf\fR" 1.0i 0
+The configuration file described above.
+.LP
+Rest of these are configured in the above-mentioned file, or
+in its exit extensions.
+.IP "\fB/usr/spool/bitnet\fR" 1.0i 0
+Configured
+.SM `QUEUE'
+directory of transport routing.
+Protection 2770 (or only mildly more open)
+Group must be the same as set-gid programs
+of FUNET-NJE have for accessing the intermodule
+communication channel.
+.br
+This directory gets also file
+.RB ` .socket.key ',
+which contains the security code for all communications
+via `CMDMAILBOX' channel.
+.br
+Another file that goes into there is a database file containing
+system spoolids.
+ A number in range 1 to 9900, inclusive.
+File
+.RB ` .spoolid.htdb '
+contains a
+.I HeapTree
+database which is essentially an array implementation of (partially)
+ordered tree, using userids as keys, and spoolids as data.
+Content of data on that database is machine specific,  but on the other
+hand, nobody is supposed to need to share them...
+.IP "\fB/usr/spool/bitnet/.cmdpipe\fR" 1.0i 0
+Configured
+.SM `CMDMAILBOX'
+of FUNET-NJE intermodule communication channel.
+If it is a FIFO ("F"), it is protected as 660,
+and in principle those who need to communicate
+via it must to so either by being superusers,
+using setgid programs, or having the groupid that
+the
+.SM `QUEUE'
+has.
+Alternate modes for this are SOCKET ("S"), and
+UDP ("U"), FIFO and SOCKET define path to named
+file, and UDP defines server host address (0.0.0.0, or
+perhaps preferrably 127.0.0.1) and port (174).
+.IP "\fB/usr/spool/bitnet/.spoolid\fR" 1.0i 0
+A special file saving last used outbound spoolid in
+binary format.  Transporter internal usage.
+
+Recipient spool directories have also these
+.B .spoolid
+files, and their function is similar; keep status log.
+.IP "\fB/usr/spool/bitspool/\fR" 1.0i 0
+Configured (via exit files)
+.SM `Spool-Dir:'
+under which local recipients will get their own subdirectories..
+Directory protection to be 111 or somewhat more open
+(like 555.)
+.SH SEE ALSO
+.BR send (1),
+.BR sendfile (1),
+.BR bmail (8),
+.BR bitspool (5),
+.BR ebcdictbl (5),
+.BR mailify (8),
+.BR sysin (8),
+.BR qrdr (8),
+.BR rdrlist (8),
+.BR njeroutes (8),
+.BR receive (1),
+.BR ucp (8),
+.BR ygone (1),
+.BR transfer (1)
+.SH BUGS
+.LP
+Some of then, see  BUGS.FUNET  for a list of open issues.
+.LP
+.SH DIAGNOSTICS
+Plenty, obtainable into configurable file,
+example gives \f4LOG\fR file value \f4/usr/adm/bitnet.log\fR.
+Amount of log is controllable with \f4LLEVEL\fR in the configuration
+file, startup time \fIloglevel\fR option, and
+.BR ucp (8)
+`\f4"LOGLEVEL nn"\fR' control commands.
+.SH WARNING
+Updating routing tables (see
+.BR njeroutes (8))
+without proper care (shutdown of server), may cause routing data
+corruption, and/or crash of the router.
+Very least the new routes will not get proper attention.
+.SH NOTES
+The following signals have the specified effect when sent to the
+server process using the
+.BR kill (1)
+command.
+.TP
+.SB SIGHUP
+Causes server to reread configuration file
+.RI "(usually " /etc/funetnje.cf )
+and exits specified in it.
+This does
+.B not
+reinitiate link-setups/tear old ones down.
+Use only for re-reading in the exits.
+.LP
+This will also close, and reopen routes database.
+.TP
+.SB SIGTERM
+Causes server to dump statistics counters to log file, and to do shutdown.
+(Compare with
+.I ucp shut\fR.)
+.TP
+.SB SIGUSR1
+Dumps statistics counters to log file.
+.LP
+FUNET's UNIX-version is somewhat different from the HUJI's VMS version,
+when it comes to handling of files destined to local channel, as well
+as when sending something out.
+.LP
+HUJI's version opens
+.SM NETDATA
+encodings (if present), and usually translates file contents to
+.SM ASCII
+(class N netdata is not translated, assuming it to be binary).
+Also handling of file conversion to mail is done inside
+the transport system.
+.LP
+FUNET's style is to let user and user programs to handle all such
+details, and just to provide the raw datafile to them.
+Also there the user (or his programs) must create the spool-files
+containing
+.SM RSCS PUNCH/PRINT
+line images.
+See
+.BR bitspool (5),
+.BR bmail (8),
+.BR sendfile (1).
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network \- FUNET, Finland
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Gerald Hanusch, Johannes Kepler Universitaet/Universitaet Linz, Austria
+<k000165@alijku11.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, file handling exits,
+man-pages by Matti Aarnio.
+Batch (SYSIN) facilities, and bug fixes prompted by Gerald Hanusch,
+and in large part implemented by Matti Aarnio.

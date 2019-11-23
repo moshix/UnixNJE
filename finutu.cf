@@ -1,0 +1,51 @@
+*
+*	Configuration file for FUNET-NJE program
+*
+
+NAME		FINUTU
+*ALIAS		HAMSTER
+*IPADDRESS	nic.funet.fi
+IPADDRESS	130.232.1.14
+QUEUE		/usr/spool/bitnet
+CMDMAILBOX	/usr/spool/bitnet/.cmdpipe
+LOG		/usr/adm/bitnet.log
+* this table is DBM/GDBM binary file.
+TABLE		/usr/local/huji/huji_nje.route
+INFORM		MEA@FINUTU
+USEREXITS	/usr/local/huji/file-exit.cf
+MSGEXITS	/usr/local/huji/msg-exit.cf
+LLEVEL	2
+*DEFAULT-ROUTE	FIGBOX
+
+LINE 2 FIGBOX
+ TYPE		UNIX_TCP
+ BUFSIZE	1024
+ TIMEOUT	3
+ IPPORT		502
+* TCPNAME	figbox.funet.fi
+ TCPNAME	128.214.6.7
+ TCP-SIZE	8192
+ MAX-STREAMS	7
+
+LINE 2  FINFILES
+ TYPE		UNIX_TCP
+ BUFSIZE	1024
+ TIMEOUT	3
+ IPPORT		175
+* TCPNAME	nic.funet.fi
+ TCPNAME	128.214.6.100
+ TCP-SIZE	8192
+ MAX-STREAMS	7
+
+* REAL line 2..
+
+LINE 2 ALIJKU65
+ TYPE		UNIX_TCP
+ BUFSIZE	400
+ TIMEOUT	3
+ IPPORT		175
+* TCPNAME	alijku65.edvz.uni-linz.ac.at
+ TCPNAME	140.78.3.34
+ TCP-SIZE	500
+ MAX-STREAMS	7
+ 

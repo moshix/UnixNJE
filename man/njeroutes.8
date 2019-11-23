@@ -1,0 +1,118 @@
+.\" $Header$
+.\"
+.\"  Man page for HUJI-NJE/FUNET-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 18-Sep-1993, 22-Oct-1993
+.\"
+.fp 4 CW
+.ds ]W Funet-Nje 8 UNIX 3.0
+.TH NJEROUTES 8
+.SH NAME
+njeroutes \- FUNETNJE bitnet software routing database generator.
+.SH SYNOPSIS
+njeroutes
+.I header.filename
+.I routes.filename
+.I database.filename
+.SH DESCRIPTION
+.IX "bitnet"
+.IX "funetnje"
+.IX "njeroutes"
+.LP
+.I Net_routes
+builds routing database of BITNET nodes for
+.I funetnje
+program internal usage.
+If no
+\f4DEFAULT-ROUTE
+has been defined in
+.I /etc/funetnje.cf
+(see
+.BR funetnje (8))
+then this is ONLY way to route messages and files from local node
+to anywhere.
+.LP
+Example of
+.I header.file
+for node \f4FINFILES\fR having alias name \f4HAMSTER\fR.
+.LP
+.nf
+\f4*
+\f4*  Header of HUyNJE/FUNETNJE package routing table
+\f4*
+\f4*  Generic format:
+\f4*	SITE	LINE	(FORMAT/INFO)
+\f4*
+\f4 ROUTE FINFILES LOCAL ASCII
+\f4 ROUTE HAMSTER  LOCAL ASCII
+.fi
+.LP
+It may also be usefull to define alternate routes just in
+case the direct link doesn't work:
+.LP
+.nf
+\f4 ROUTE FIGBOX FIGBOX
+\f4 ROUTE FINHUTC FIGBOX
+.fi
+.LP
+First one defines that \f4FIGBOX\f4 has no alternatives, while
+\f4FINHUTC\fR can get routed via \f4FIGBOX\fR in case direct
+link to it is not active.
+.LP
+Example routing data for same node.  Used format is same as
+IBM RSCS v1 uses, thus it is easily obtainable using common BITNET
+tools.
+Next step connection of the example node is \f4FIGBOX\fR.
+.LP
+.nf
+\f4* * The position of the network name and country *
+\f4* * assumes that the RSCS ROUTE command does not *
+\f4* * have more than two parameters.               *
+\f4ROUTE VERS9012 FIGBOX   EARN     NL
+\f4ROUTE LINKS012 FIGBOX   BITNET   US
+\f4ROUTE FINABO   FIGBOX   EARN     FI
+\f4ROUTE FINALKO  FIGBOX   EARN     FI
+\f4ROUTE FINFUN   FIGBOX   EARN     FI
+\f4ROUTE FINGATE  FIGBOX   EARN     FI
+\f4ROUTE FINHUT   FIGBOX   EARN     FI
+.fi
+.LP
+.SH SEE ALSO
+.BR funetnje (8),
+.BR send (1),
+.BR sendfile (1),
+.BR bmail (8),
+.BR ucp (8).
+.SH BUGS
+.LP
+None, we hope.
+.SH DIAGNOSTICS
+All error conditions are reported with self explanatory text messages.
+.LP
+If multiple entries of same node are attempted (for example one in
+header, other in routes), first one stays as routing definition, rest
+are reported as duplicates.
+.SH WARNING
+It is not adviced to create output on same
+.BR file ,
+as the current database is, although they will not be intermixed, as
+if there is a file with the target name, it will be unlinked before
+the processing starts.
+.LP
+Once the database is generated, and placed (with
+.BR mv (1),
+for example) on place of the active database, a
+.RB ` ucp "(8) " "rescan route" '
+-command is suggested (or full restart of the emulator.)
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network \- FUNET, Finland
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, man-pages by Matti Aarnio.

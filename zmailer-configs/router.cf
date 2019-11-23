@@ -1,0 +1,110 @@
+#!/l/mail/bin/router -dkf
+#
+# ZMailer 2 configuration file for a generic SMTP host (with UUCP links)
+#
+
+ZCONFIG=/etc/zmailer.conf
+
+. $ZCONFIG
+
+PATH=.:$MAILSHARE/cf:$MAILBIN/bin ; export PATH
+PS1=z$PS1
+#
+# Configure error logging (squirrel)
+#
+squirrel -breakin
+squirrel badheader
+
+# The transport preference order
+
+protocols='routes bitnet usenet smtp'	# Local tables at first, then
+					# the DNS interactions..
+
+# We may want .forward and mailing list files to be private, i.e., we ignore
+# the current privileges when checking the privileges of such files.
+# Don't add 'include' to this list, since anyone can :include: any file.
+
+private='.forward maillist'
+
+# Set up the dependency checking
+
+. consist.cf
+require siteinfo router crossbar process server
+
+# The following are standard setup files and must be loaded in this order
+
+. standard.cf
+. trusted.cf
+
+# Load the databases so they and the variables defined (e.g. network-specific
+# node names for this host) can be used in the site specific configuration.
+
+for method in $protocols
+do
+	test -f $MAILSHARE/cf/i-${method}.cf && . i-${method}.cf
+done
+
+# List of toplevel domains on which we DO canonicalize the hosts..
+# These give a possibility to 
+toplevels='-'
+
+mailconf () {
+	local hname
+
+	# My official hostname
+	if [ -f /bin/hostname ]; then
+		rawhostname=$(/bin/hostname)
+	elif [ -f /etc/sys_id ]; then
+		read rawhostname < /etc/sys_id
+	else
+		rawhostname=$(/bin/uname -n)
+	fi
+
+	hname=$(canon $rawhostname)
+
+	# Try to discover the organizational domain name
+	orgdomain=$hname
+	sift $hname in
+	$rawhostname\.(.+)
+		orgdomain=\1
+		;;
+	tfis
+	hostname=$hname
+
+	# This is what it will say on out mail
+	mydomain=$hostname
+}
+
+orgdomains=x
+: ${MAILCONF:=/etc/mail.conf}
+if [ ! -r $MAILCONF ]; then
+	echo "$0: missing $MAILCONF: using the following values:"
+	mailconf
+	echo orgdomain=$orgdomain
+	echo hostname=$hostname
+	echo mydomain=$mydomain
+	provide siteinfo
+else
+	. $MAILCONF && provide siteinfo
+fi
+world=""
+[ "$orgdomains" = x ] && orgdomains=$orgdomain
+
+# set hostname to enable message-id generation and checking
+hostname $hostname
+
+. aliases.cf
+. canon.cf
+. rrouter.cf
+. crossbar.cf
+
+for method in $protocols
+do
+	. p-${method}.cf
+done
+
+. process.cf
+. server.cf
+
+consist || exit 1
+

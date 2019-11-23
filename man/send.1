@@ -1,0 +1,140 @@
+.\" $Header$
+.\"
+.\"  Man page for HUJI-NJE/FUNET-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 18-Sep-1993, 10-Oct-1993
+.\"
+.ds ]W Funet-Nje 1 UNIX 3.0
+.TH SEND 1
+.SH NAME
+send, ygone \- bitnet message send tools
+.SH SYNOPSIS
+.IP send 0.5i 0
+.RB [ "\-s|\-u username" ]
+.BI "\-c{ommand}" " host "
+[ text of command ]
+.IP send 0.5i 0
+.RB [ "\-s|\-u username" ]
+.RB [ "\-c\fR{\fBommand" }]
+.I " @host "
+[ text of command ]
+.IP send 0.5i 0
+.RB [ "\-s|\-u username" ]
+.RB [ "\-m\fR{\fBessage" }]
+.I " user@host "
+[ text of message ]
+.IP ygone 0.8i 0
+.BR [ " \-d " ]
+.SH DESCRIPTION
+.IX "send"
+.IX "bitnet"
+.IX "funetnje"
+.IX "sendfile"
+.IX "submit"
+.IX "netdata"
+.IX "ygone"
+.LP
+.I send
+sends NMR messages over RSCS network to target
+.I host/user.
+Only necessary argument is the first one telling if this is
+.I command
+to be sent to a hostname without giving
+.RB ` @ '
+in its name.
+Commands go to (usual name) `RSCS' subsystem at each host,
+Messages to specificied users.
+.LP
+Examples:
+.LP
+.nf
+.fp 4 CW
+\f4send @bitnic cpq time
+\f4send -c bitnic cpq time
+\f4    \fR(Sends a "CPQ TIME" to BITNIC)
+\f4send user@bitnic hello
+\f4    \fR(Sends a "hello" to user@bitnic)
+\f4send -u foo user@bitnic hello
+\f4    \fR(Sends a "hello" to user@bitnic from user foo@<localhost>)
+\f4send -s user@bitnic hello
+\f4    \fR(Sends a "hello" to user@bitnic from local system: "@<localhost>")
+.fi
+.LP
+When
+.I send
+is left without
+.RI [ "text of message" ]
+portion of arguments, it prompts that from user giving target address
+as prompt string.  Hit empty line or EOF to quit.
+.LP
+If no 
+.RI [ "text of message" ]
+is given,
+.I STDIN
+is used as an input for 
+.IR send ,
+thus IO redirection can be used.
+.LP
+When
+.I send
+is left without target address, that too is asked from the user.
+.LP
+.I Ygone
+controls temporary disposition of incoming NMR-messages into
+a personal logfile.  In UNIX systems that file is
+.I .ygone.messages
+in user's home directory.
+This association is broken when
+.BR funetnje (8)
+is restarted, as the list of service requesters is kept only in core..
+.LP
+With option
+.B -d
+user can disable
+.IR ygone ,
+and look at latest set of arrived messages (if any).
+.LP
+.SH ENVIRONMENT
+With environment variable
+.B EBCDICTBL
+user can select alternate EBCDIC <\-> ASCII translation
+tables.  For more info, see
+.BR ebcdictbl (5).
+.LP
+.SH FILES
+.I /etc/funetnje.cf
+.SH SEE ALSO
+.BR bitspool (5),
+.BR bmail (8),
+.BR ebcdictbl (5),
+.BR funetnje (8),
+.BR mailify (8),
+.BR qrdr (8),
+.BR receive (1),
+.BR sendfile (1)
+.SH BUGS
+Doesn't always 
+.LP
+.SH DIAGNOSTICS
+These programs show their usage summary, when there is something
+wrong with input parameters.  Subtle usage bugs might not be detected!
+.SH NOTES
+.I Ygone
+is subject to further developement.
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network \- FUNET, Finland
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Gerald Hanusch, Johannes Kepler Universitaet/Universitaet Linz, Austria
+<k000165@alijku11.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, file handling exits,
+man-pages by Matti Aarnio.
+Port of ygone to FUNET's version by Gerald Hanusch.

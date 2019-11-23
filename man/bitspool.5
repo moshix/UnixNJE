@@ -1,0 +1,300 @@
+.\" $Header$
+.\"
+.\"  Man page for HUJI-NJE/FUNET-NJE  on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 18-Sep-1993
+.\"
+.ds ]W Funet-Nje 5 UNIX 3.0
+.TH BITSPOOL 5
+.SH NAME
+bitspool \- format of funetnje(8) spool files
+.SH SYNOPSIS
+.nf
+.ft B
+  ASCII-header records with last being "END:"
+  Binary body containing records of format:
+	<16 bit length> <length worth of bytes>
+.ft R
+.fi
+.SH AVAILABILITY
+.LP
+Systems running
+.BR funetnje (8)
+sofware.
+.SH DESCRIPTION
+.IX "bitnet"
+.IX "funetnje"
+.IX "sendfile"
+.IX "netdata"
+.IX "mailify"
+.IX "bitspool"
+.IX "receive"
+.I Bitspool
+format consists of an
+.SM ASCII
+header, and a binary body containing length-tagged
+"records".
+The length-tag is
+.RB ` "network byte order" '
+\-ordered 16 bit short integer.
+This is to facilitate transfer of spool files in between systems, and
+to make it simpler to use non-homogenous hardware in clusters which
+share the same
+.SM BITNET
+node..
+.LP
+Known
+.SM ASCII
+headers are:
+.IP "\fBFRM:\fR  USERNAME@HOSTNAME" 1.8i 0
+Mandatory (fall-back default: "***@****").
+Uppercase-only data in fixed 17 chars wide field, left justified.
+.IP "\fBTOA:\fR  USERNAME@HOSTNAME" 1.8i 0
+Mandatory (fall-back default: "POSTMAST@<localname>").
+Uppercase-only data in fixed 17 chars wide field, left justified.
+.IP "\fBFNM:\fR  FILENAME" 1.8i 0
+Optional, default value: "UNKNOWN".
+Mixed-case alphanumeric data in fixed 12 chars wide field, left justified.
+.IP "\fBEXT:\fR  FILEEXTN" 1.8i 0
+Optional, default value: "DATA".
+Mixed-case alphanumeric data in fixed 12 chars wide field, left justified.
+.IP "\fBTYP:\fR  type" 1.8i 0
+Optional, defaults to "PUNCH".
+Controls physical device attribute on the outgoing NJE headers.
+When sending PRINT files, use "\fBTYP: PRINT\fR".
+When you want to send SYSIN jobs, use "\fBTYP: JOB\fR",
+and if it is just a PUNCH something, use "\fBTYP: PUNCH\fR".
+
+Recognized obsolete keywords:
+MAIL, BSMTP, FILE, and FASA, which are in reality synonyms for PUNCH,
+and PASA, which is synonym for PRINT.
+.IP "\fBCLS:\fR  class" 1.8i 0
+Optional, defaulted by the
+.B TYP:
+if not defined.
+This is
+.B one
+(1) uppercase alpha in range A-Z.
+.br
+Customary values are:
+MAIL, BSMTP files: M, NETDATA containing binary data: N,
+console printouts: O, all others: A.
+.IP "\fBFOR:\fR  FILEFORM" 1.8i 0
+Optional, recommended.
+If you don't want to see file-traversal notes from the network,
+BITNET style is to start the form name with two characters: "QU".
+That matches at "QUIET", "QUMAIL", ...
+
+System wide default is taken from
+.I /etc/funetnje.cf DEFFORM
+entry, and it often has value
+.SM STANDARD.
+.IP "\fBFMT:\fR  spool-format" 1.8i 0
+Mandatory (fall-back default: 
+.SM BINARY ).
+.br
+.SM BINARY
+for all locally generated files, and for cases where the
+.SM ASCII
+headers have been mungled after the file was received from
+the network.
+.br
+.SM EBCDIC
+denotes spool file which has been received from the network,
+and contains all possible data blocks in it.
+(Users will ignore all, but PUNCH, and PRINT records..)
+.IP "\fBFID:\fR  9900" 1.8i 0
+Mandatory, sender original spoolid; A number between 1, and 9900.
+File submitter should put "0000" in there, and delivery facility
+will do something about it.. When system picks up this field, it
+will assign there next spoolid from file sender's store, however
+network delivery uses "\fBOID:\fR", which it assigns..
+.IP "\fBOID:\fR 0000" 1.8i 0
+Mandatory, for spool-id allocation at the first time it is queued
+for delivery to somewhere remote.
+.IP "\fBTAG:\fR  RSCS-TAG-STRING" 1.8i 0
+Optional.
+The IBM NJE TAG string of 136 characters.
+.IP "\fBDIS:\fR  RSCS-DIST" 1.8i 0
+Optional.
+Fixed width, left justified 8 characters field of RSCS DIST information.
+Default: 
+.SM "SYSTEM."
+.IP "\fBREC:\fR   nnnn" 1.8i 0
+Highly preferred (almoast mandatory!)
+Tells the number of records of data; necessary to get job-header
+right on file transmission, altough not really mandatory for
+successfull file sending.  As the count of records isn't
+known before all are written (in the usual case), this entry
+is written at first to reserve space for later seek, and rewite
+with correct information.
+.IP "\fBJNM:\fR JOBNAME" 1.8i 0
+Optional.
+Contains NJE job name (8 characters).
+.IP "\fBPRT:\fR  prtfiles@tonode" 1.8i 0
+Optional.
+For
+.SM SYSIN
+jobs this defines alternate address for sending the job PRINT outputs to.
+Default is taken from "\fBFRM:\fR".
+.IP "\fBPUN:\fR  punfiles@tonode" 1.8i 0
+Optional.
+For
+.SM SYSIN
+jobs this defines alternate address for sending the job PUNCH outputs to.
+Default is taken from "\fBFRM:\fR".
+.IP "\fBEND:\fR" 1.8i 0
+Mandatory.
+Ends the
+.SM ASCII
+portion of the headers.
+Terminating newline must be immediately after the colon character.
+.LP
+With all (except 
+.BR END: )
+above header tags there must be exactly one space (ascii 32)
+after the colon, and before data.  With the
+.B END:
+there must not be any extra blanks after the colon, and before
+terminating newline.
+.LP
+Order of the
+.SM ASCII
+format headers is not fixed, except that
+.B END:
+must be last.
+.LP
+Binary format data follows syntax:
+.LP
+.nf
+.ft B
+    <16-bit length> <length number of bytes>
+.ft R
+.fi
+.LP
+where the
+.B "<16-bit length>"
+is encoded as
+.B network-byte-order
+short integer.
+This is to facilitate easy copying of
+.BR funetnje (8)
+spool files from one machine to another.
+This also makes it possible to share common
+.SM BITNET
+spool between several machines independent
+of their native byte order.
+.LP
+Sample data formats:
+.LP
+.B PUNCH
+(any content, like plain text, and 
+.BR NETDATA )
+.LP
+.nf
+\f4 0x80, 80,                          0x80 = PUNCH, 80=content length
+\f4 <80 bytes of EBCDIC/whatever>      The PUNCH content, 80 bytes
+.fi
+.LP
+.B PRINT
+Machine Carriage Control:
+.LP
+.nf
+\f4 0x90, 132, MCCbyte,                0x90 = PRINT MCC, 132=content length
+\f4 <132 bytes of EBCDIC/whatever>     The PRINT content, 132 bytes
+.fi
+.LP
+.B PRINT ASA
+Carriage Control:
+.LP
+.nf
+\f4 0xA0, 132, ASAbyte,                0xA0 = PRINT ASA, 132=content length
+\f4 <132 bytes of EBCDIC/whatever>     The PRINT content, 132 bytes
+.fi
+.LP
+.B PRINT CPDS
+Carriage Control:
+.LP
+.nf
+\f4 0xB0, 132, CPDSbyte,               0xB0 = PRINT CPDS, 132=content length
+\f4 <132 bytes of EBCDIC/whatever>     The PRINT content, 132 bytes
+.fi
+.LP
+Trailing
+.SM EBCDIC
+spaces can be suppressed in the spool files, thus above are given
+ranges of lengths.  If the record content is shorter than its defined
+size, receiver
+.I must
+pad it with
+.SM EBCDIC
+spaces.
+(Of course, this way spool-size of a megabyte of spaces will be
+13108 records of (2+)2 bytes + header, which makes circa 53kB.
+When received, it will expand by a fractionally filled last record.)
+The length-byte at each record
+.I must
+be of its nominal value, record truncation is coded with
+the 16-bit-length value.
+.LP
+The
+.IR MCCbyte ,
+and
+.I ASAbyte
+are two kinds of
+.I "carriage control"
+mechanisms.
+The
+.I CPDSbyte
+is third kind, however documenting it is left for further study.
+.LP
+IBM printers are fixed 132 characters wide, and on overall those
+systems function on records, and a write in this respect means
+write of whole line.
+On overall the IO-operations on IBM mainframe happen on records, or
+preferrably chains of records on which single start-IO instruction
+can be used to start the IO-channel.
+.LP
+Carriage-control mechanisms contain two kinds of controls, both
+pre-write, and post-write controls exist in MCC mode.
+In ASA-mode only pre-writes are defined.
+Pre-write controls happen before the printout line is written,
+for example `jump to nearest VFU channel 1 forward' (in plain
+english: Form-Feed..)
+.LP
+.IP "\fBJump to next page\fR" 1.0i 0
+ASA: `1', Pre-MCC: X'8B'
+.IP "\fBOverwrite\fR" 1.0i 0
+Defined only in pre-write.   
+ASA: `\+', MCC: X'01'
+.IP "\fBWrite and advance one line\fR" 1.0i 0
+ASA: Space, Pre-MCC: X'0B', Post-MCC: X'09'
+.IP "\fBWrite and advance two lines\fR" 1.0i 0
+ASA: `0', Pre-MCC: X'13', Post-MCC: X'11'
+.IP "\fBWrite and advance three lines\fR" 1.0i 0
+ASA: `-', Pre-MCC: X'1B', Post-MCC: X'19'
+.LP
+.SH "SEE ALSO"
+.BR bitsend (1),
+.BR bmail (8),
+.BR funetnje (8),
+.BR qrdr (8),
+.BR receive (1),
+.BR sendfile (1)
+.SH NOTES
+.LP
+Other formats, than  0x80, 0x90, 0xA0, 0xB0  of binary portion records
+should be ignored. (Received network transport layer headers are there, etc.)
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network - FUNET
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features including spool mechanism, plenty of other modifications,
+man-pages by Matti Aarnio.

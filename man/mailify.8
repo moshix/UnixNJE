@@ -1,0 +1,79 @@
+.\" $Header$
+.\"
+.\"  Man page for FUNET-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 4-Oct-1993
+.\"
+.fp 4 CW
+.ds ]W Funet-Nje 8 UNIX 3.0
+.TH MAILIFY 8
+.SH NAME
+mailify, sysin
+\- bitnet incoming file processing programs
+.SH SYNOPSIS
+.LP
+/usr/lib/huji/mailify
+.RB [ " \-n " ]
+.I filepath
+.LP
+/usr/lib/huji/sysin
+.RB [ " \-n " ]
+.I filepath
+.LP
+.SH DESCRIPTION
+.IX "bitnet"
+.IX "funetnje"
+.IX "mailify"
+.IX "sysin"
+.LP
+.I Mailify
+is a special purpose program to receive BSMTP
+.\"  and plain mail files (hdr+body,
+.\"  which is within BSMTP envelope anyway).
+Transport system launches this program
+.\"  (usually implemented as a script)
+to handle incoming mail.
+Reception of PROFS NOTES
+and DEFRT1 plain mail-files (non BSMTP)
+is left for further study.
+.LP
+.I Sysin
+is a special purpose program for receiving RJE jobs from the network.
+Actual operation is subject for further study.
+.SH OPTIONS
+.IP -n 1.0i 0
+Original `spool' file should \fBnot\fR be removed after successfull
+file processing is done.
+.SH FILES
+.nf
+.I /etc/funetnje.cf
+.RI "File processing exit config file, which is defined in " funetnje.cf.
+.fi
+.SH SEE ALSO
+.BR funetnje (8),
+.BR bitspool (5),
+.BR send (1),
+.BR sendfile (1),
+.BR bmail (8),
+.BR transfer (1),
+.BR qrdr (8),
+.BR receive (1),
+.BR rdrlist (1)
+.SH DIAGNOSTICS
+When any of these programs is fed a file containing errorneous
+data (not
+.BR funetnje (8)
+spool file,) these mostly recover with a burp, sometimes these
+might even drop a core on pathological input case.
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network \- FUNET, Finland
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, man-pages by Matti Aarnio.

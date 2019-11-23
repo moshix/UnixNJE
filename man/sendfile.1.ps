@@ -1,0 +1,337 @@
+%!PS-Adobe-2.1
+%%Creator: groff version 1.00
+%%DocumentFonts: Times-Italic Times-Bold Times-Roman
+%%DocumentSuppliedFonts:
+%%DocumentNeededFonts: Times-Italic Times-Bold Times-Roman
+%%Pages: 2
+%%EndComments
+/grops 100 dict def grops begin
+% If you add definitions here, be sure to check that MAX_PROLOGUE_DEFS
+% in ps.c is large enough.
+
+% The ASCII code of the space character.
+/SC 32 def
+
+/A /show load def
+/B { 0 SC 3 -1 roll widthshow } bind def
+/C { 0 exch ashow } bind def
+/D { 0 exch 0 SC 5 2 roll awidthshow } bind def
+/E { 0 rmoveto show } bind def
+/F { 0 rmoveto 0 SC 3 -1 roll widthshow } bind def
+/G { 0 rmoveto 0 exch ashow } bind def
+/H { 0 rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/I { 0 exch rmoveto show } bind def
+/J { 0 exch rmoveto 0 SC 3 -1 roll widthshow } bind def
+/K { 0 exch rmoveto 0 exch ashow } bind def
+/L { 0 exch rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/M { rmoveto show } bind def
+/N { rmoveto 0 SC 3 -1 roll widthshow } bind def
+/O { rmoveto 0 exch ashow } bind def
+/P { rmoveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+/Q { moveto show } bind def 
+/R { moveto 0 SC 3 -1 roll widthshow } bind def
+/S { moveto 0 exch ashow } bind def
+/T { moveto 0 exch 0 SC 5 2 roll awidthshow } bind def
+
+% name size font SF -
+
+/SF {
+	findfont exch
+	[ exch dup 0 exch 0 exch neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+% name a c d font MF
+
+/MF {
+	findfont
+	[ 5 2 roll
+	0 3 1 roll % b
+	neg 0 0 ] makefont
+	dup setfont
+	[ exch /setfont cvx ] cvx bind def
+} bind def
+
+	
+% BP -
+
+/BP {
+	/level0 save def
+	1 setlinecap
+	1 setlinejoin
+	72 RES div dup scale
+	LS {
+		90 rotate
+	} {
+		0 PL translate
+	} ifelse
+	1 -1 scale
+} bind def
+
+/EP {
+	level0 restore
+	showpage
+} bind def
+
+
+% centerx centery radius startangle endangle DA -
+
+/DA {
+	newpath arcn stroke
+} bind def
+
+% x y SN - x' y'
+% round a position to nearest (pixel + (.25,.25))
+
+/SN {
+	transform 
+	.25 sub exch .25 sub exch
+	round .25 add exch round .25 add exch
+	itransform
+} bind def
+	
+% endx endy startx starty DL -
+% we round the endpoints of the line, so that parallel horizontal
+% and vertical lines will appear even
+
+/DL {
+	SN
+	moveto
+	SN
+	lineto stroke
+} bind def
+
+% centerx centery radius DC -
+
+/DC {
+	newpath 0 360 arc closepath
+} bind def
+
+
+/TM matrix def
+
+%  width height centerx centery DE -
+
+/DE {
+	TM currentmatrix pop
+	translate scale newpath 0 0 .5 0 360 arc closepath
+	TM setmatrix
+} bind def
+
+% these are for splines
+
+/RC /rcurveto load def
+/RL /rlineto load def
+/ST /stroke load def
+/MT /moveto load def
+/CL /closepath load def
+
+% fill the last path
+
+% amount FL -
+
+/FL {
+	currentgray exch setgray fill setgray
+} bind def
+
+% fill with the ``current color''
+
+/BL /fill load def
+
+/LW /setlinewidth load def
+% new_font_name encoding_vector old_font_name RE -
+
+/RE {
+	findfont
+	dup maxlength dict begin
+	{
+		1 index /FID ne { def } { pop pop } ifelse
+	} forall
+	/Encoding exch def
+	dup /FontName exch def
+	currentdict end definefont pop
+} bind def
+
+% hpos vpos EBEGIN -
+
+/EBEGIN {
+	moveto
+	DEFS begin
+} bind def
+
+/EEND /end load def
+
+% llx lly newwid wid newht ht newllx newlly -
+
+/PICTURE {
+	translate
+	div 3 1 roll div exch scale
+	neg exch neg exch translate
+	% set the graphics state to default values
+	0 setgray
+	0 setlinecap
+	1 setlinewidth
+	0 setlinejoin
+	10 setmiterlimit
+	[] 0 setdash
+	newpath
+} bind def
+/DEFS 1 dict def DEFS begin/u{.001 mul}bind def end end
+%%IncludeFont: Times-Italic
+%%IncludeFont: Times-Bold
+%%IncludeFont: Times-Roman
+grops begin/#copies 1 def/RES 72 def/PL 841.89 def/LS false def/ENC0[
+/asciicircum/asciitilde/Scaron/Zcaron/scaron/zcaron/Ydieresis/trademark/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/space/exclam/quotedbl/numbersign
+/dollar/percent/ampersand/quoteright/parenleft/parenright/asterisk/plus/comma
+/hyphen/period/slash/zero/one/two/three/four/five/six/seven/eight/nine/colon
+/semicolon/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J/K/L/M/N/O/P/Q/R/S
+/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright/circumflex/underscore
+/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z/braceleft/bar
+/braceright/tilde/.notdef/quotesinglbase/guillemotleft/guillemotright/bullet
+/florin/fraction/perthousand/dagger/daggerdbl/endash/emdash/ff/fi/fl/ffi/ffl
+/dotlessi/dotlessj/grave/hungarumlaut/dotaccent/breve/caron/ring/ogonek
+/quotedblleft/quotedblright/oe/lslash/quotedblbase/OE/Lslash/.notdef/exclamdown
+/cent/sterling/currency/yen/brokenbar/section/dieresis/copyright/ordfeminine
+/guilsinglleft/logicalnot/minus/registered/macron/degree/plusminus/twosuperior
+/threesuperior/acute/mu/paragraph/periodcentered/cedilla/onesuperior
+/ordmasculine/guilsinglright/onequarter/onehalf/threequarters/questiondown
+/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla/Egrave/Eacute
+/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex/Idieresis/Eth/Ntilde/Ograve
+/Oacute/Ocircumflex/Otilde/Odieresis/multiply/Oslash/Ugrave/Uacute/Ucircumflex
+/Udieresis/Yacute/Thorn/germandbls/agrave/aacute/acircumflex/atilde/adieresis
+/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave/iacute
+/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex/otilde/odieresis
+/divide/oslash/ugrave/uacute/ucircumflex/udieresis/yacute/thorn/ydieresis]def
+/Times-Italic@0 ENC0/Times-Italic RE/Times-Bold@0 ENC0/Times-Bold RE
+/Times-Roman@0 ENC0/Times-Roman RE
+%%EndProlog
+%%Page: 1 1
+BP/F0 10/Times-Roman@0 SF 347.74(SENDFILE\(1\) SENDFILE\(1\))72 48 R/F1 9
+/Times-Bold@0 SF(NAME)72 84 Q F0
+(send\214le, submit, punch, print \255 bitnet \214le send tools)108 96 Q F1
+(SYNOPSIS)72 112.8 Q F0(send\214le)108 124.8 Q/F2 10/Times-Italic@0 SF -.92(To)
+165.6 124.8 S(User@T).92 E(oNode)-.92 E F0([)3.701 E/F3 10/Times-Bold@0 SF
+1.201(\255\214x | \255raw)3.701 F F0 3.701(][)3.701 G F3(\255bin)A F0 3.701(][)
+3.701 G F3(\255lr)A 1.2(ecl nn)-.18 F F0 3.7(][)3.7 G F3(\255fn)A F2 1.2
+(fname ftype)3.7 F F0 3.7(][)3.7 G F3 1.2(\255class N)B F0 3.7(][)3.7 G F3
+(\255form)165.6 136.8 Q F2(Fr)2.5 E(omName)-.37 E F0 2.5(][)2.5 G F3(\255dist)A
+F2(Distribution)2.5 E F0 2.5(][)2.5 G F3(\255tag)A F2(RSCS-T)2.5 E(AG)-.74 E F0
+2.5(][)2.5 G F2(\214lepath)-.64 E F0(]).23 E(punch)108 153.6 Q F2 -.92(To)165.6
+153.6 S(User@T).92 E(oNode)-.92 E F0([)2.608 E F3(\255rawpun)2.608 E F0 2.608
+(][)2.608 G F3 .108(\255\214x | \255raw)B F0 2.608(][)2.608 G F3(\255fn)A F2
+.109(fname ftype)2.609 F F0 2.609(][)2.609 G F3 .109(\255class N)B F0 2.609(][)
+2.609 G F3(\255form)A F2(Fr)2.609 E(om-)-.37 E(Name)165.6 165.6 Q F0 2.5(][)2.5
+G F3(\255dist)A F2(Distribution)2.5 E F0 2.5(][)2.5 G F3(\255tag)A F2(RSCS-T)
+2.5 E(AG)-.74 E F0 2.5(][)2.5 G F2(\214lepath)-.64 E F0(]).23 E(print)108 182.4
+Q F2 -.92(To)165.6 182.4 S(User@T).92 E(oNode)-.92 E F0([)3.315 E F3(-asa)3.315
+E F0 3.314(][)3.314 G F3 .814(\255\214x | \255raw)B F0 3.314(][)3.314 G F3
+(\255bin)A F0 3.314(][)3.314 G F3(\255fn)A F2 .814(fname ftype)3.314 F F0 3.314
+(][)3.314 G F3 .814(\255class N)B F0 3.314(][)3.314 G F3(\255form)A F2(Fr)165.6
+194.4 Q(omName)-.37 E F0 2.5(][)2.5 G F3(\255dist)A F2(Distribution)2.5 E F0
+2.5(][)2.5 G F3(\255tag)A F2(RSCS-T)2.5 E(AG)-.74 E F0 2.5(][)2.5 G F2
+(\214lepath)-.64 E F0(]).23 E(submit)108 211.2 Q F2 -.92(To)165.6 211.2 S
+(User@T).92 E(oNode)-.92 E F0([)2.5 E F3(\255\214x | \255raw)2.5 E F0 2.5(][)
+2.5 G F3(\255form)A F2(Fr)2.5 E(omName)-.37 E F0 2.5(][)2.5 G F2(\214lepath)
+-.64 E F0(]).23 E F1(DESCRIPTION)72 228 Q F2(Send\214le)108 240 Q F0 .663
+(command sends out)3.163 F/F4 9/Times-Roman@0 SF(NETDA)3.163 E -.72(TA)-.999 G
+F0 .664(encoded \214le with given)3.634 F F2 .664(fname + ftype)3.164 F F0(and)
+3.164 E F2(FormName,)3.164 E F0 .664(if they are)3.164 F(speci\214ed.)108 252 Q
+F2(Punch)108 268.8 Q F0 1.189
+(command sends out 80-chars per record punch-card images with given)3.69 F F2
+1.189(fname + ftype)3.689 F F0(and)3.689 E F2(Form-)3.689 E(Name,)108 280.8 Q
+F0(if they are speci\214ed.)2.5 E F2(Submit)108 297.6 Q F0(command sends out a\
+ punch with special \215ags directing it to be a NJE SYSIN job.)2.5 E .548
+(When a \214le is de\214ned,)108 314.4 R F2 -.37(re)3.048 G
+(allylong\214lename.r).37 E(eally-long-extension.mor)-.37 E(e.dots)-.37 E F0
+.548(maps to:)3.048 F F2 -.37(re)3.048 G .548(allylong\214le + r).37 F(eally-)
+-.37 E(long-)108 326.4 Q F0(\(12 + 12 chars.\))2.5 E
+(Default \214lename \(when nothing is de\214ned\) is:)5 E F2(ST)2.5 E
+(ANDARD INPUT)-.74 E F0(.).96 E(Default for)108 343.2 Q F2(form)2.5 E F0(is)2.5
+E F2(ST)2.5 E(ANDARD)-.74 E F0(.)A(When no input \214le is de\214ned,)108 360 Q
+F2(STDIN)2.5 E F0(is assumed)2.5 E(Options for)108 376.8 Q F3(punch)2.5 E F0(,)
+A F3(print)2.5 E F0(,)A F3(send\214le)2.5 E F0 2.5(,a)C(nd)256.35 376.8 Q F3
+(submit)2.5 E F0(are:)2.5 E F3(\255asa)108 393.6 Q F0(For)237.6 393.6 Q F2
+(print)2.642 E F0 2.642(,a).6 G(nd)283.764 393.6 Q F2(send\214le)2.982 E F0
+5.142(.A).18 G .141(print format which expects to get)344.98 393.6 R F4(FOR)
+2.641 E(TRAN)-.54 E F0(car)2.391 E(-)-.2 E(riage control style input.)237.6
+405.6 Q F3(\255bin)108 422.4 Q F0(For)237.6 422.4 Q F3(send\214le)2.53 E F0 .03
+(\(1\) only)B 5.03(.D)-.65 G .03
+(e\214nes binary transmission, and defaults class `N', if)332.32 422.4 R
+(nothing else is de\214ned.)237.6 434.4 Q F3(\255class C)108 451.2 Q F0 1.478(\
+De\214nes single uppercase alpha letter for the NJE spool class of the \214le.)
+237.6 451.2 R(For)237.6 463.2 Q F3(send\214le)3.505 E F0 1.005
+(the \255bin option defaults class to be `N', otherwise default is)3.505 F(`A)
+237.6 475.2 Q('.)-1.11 E F3<ad8c78>108 492 Q F0 1.199
+(Makes padded records of native width; 80 for punch, and submit, 132+1)237.6
+492 R 1.602(for print.)237.6 504 R 1.602
+(On send\214le it asks output to be of \214xed size.)6.602 F 1.603
+(On such cases)6.602 F
+(input lines get padded by the receiver to the \214xed format.)237.6 516 Q F3
+(\255fn fname ftype)108 532.8 Q F0(For)237.6 532.8 Q F3(send\214le)4.23 E F0
+(\(1\),)A F3(punch)4.23 E F0(\(1\),)A F3(print)4.23 E F0 1.73(\(1\) only)B 6.73
+(.D)-.65 G 1.73(e\214nes NJE level)422.55 532.8 R F2 1.73(`\214le name')4.23 F
+F0(and)237.6 544.8 Q F2(`\214le type')2.5 E F0 2.5(strings. Default)2.5 F
+(values are: `ST)2.5 E(ANDARD', and `INPUT'.)-.8 E F3(\255form FormName)108
+561.6 Q F0 1.243(De\214nes NJE level)237.6 561.6 R F2 1.243(`\214le form name')
+3.743 F F0 1.243(to be used.)3.743 F 1.244(Default value is `ST)6.244 F(AN-)-.8
+E(DARD'.)237.6 573.6 Q F3(-lr)108 590.4 Q(ecl ##)-.18 E F0(For)237.6 590.4 Q F3
+(send\214le)3.759 E F0 1.259(\(1\) de\214nes logical record length.)B 1.259
+(Defaults are: binary: 1022,)6.259 F .412(others: 132.)237.6 602.4 R .413
+(If your ASCII input is wider \(or narrower\), do consider using)5.412 F
+(this option to optimize receiver performance.)237.6 614.4 Q F3(\255rawpun)108
+631.2 Q F0(For)237.6 631.2 Q F3(punch)3.74 E F0 1.24(\(1\) only)B 6.24(.O)-.65
+G 1.24(utputs \214xed 80 chars per record lines, and expects)330.4 631.2 R
+(same from input.)237.6 643.2 Q
+(\(No cr/lfs wanted, just 80 bytes for each record.\))5 E F3
+(\255dist Distribution)108 660 Q F0 1.994
+(De\214nes the RSCS Distribution code \(max. 8 characters\) which may be)237.6
+660 R .458
+(used to identify printed outputs. Defaults to user name of the sender trans-)
+237.6 672 R 1.108
+(lated to upper case. If not set here, the emulator inserts the default SYS-)
+237.6 684 R(TEM.)237.6 696 Q F3(\255tag RSCS-T)108 712.8 Q(AG)-.74 E F0 1.23
+(De\214nes NJE RSCS T)237.6 712.8 R 1.23
+(AG \(136 characters\) which is used to carry various)-.8 F
+(informations especially at RJE applications.)237.6 724.8 Q(1)535 768 Q EP
+%%Page: 2 2
+BP/F0 10/Times-Roman@0 SF 347.74(SENDFILE\(1\) SENDFILE\(1\))72 48 R .991
+(Default behaviour is to read in lines, and convert them from)108 84 R/F1 9
+/Times-Roman@0 SF(ASCII)3.492 E F0(to)3.242 E F1(EBCDIC)3.492 E F0 .992
+(and pad or truncate to 80)3.242 F
+(char \(132 for print\) records which get spooled for transmission.)108 96 Q/F2
+9/Times-Bold@0 SF(ENVIRONMENT)72 117.6 Q F0 -.4(Wi)108 129.6 S .438
+(th environment variable).4 F/F3 10/Times-Bold@0 SF(EBCDICTBL)2.938 E F0 .437
+(user can select alternate EBCDIC <\255> ASCII translation tables.)2.938 F
+(For more info, see)108 141.6 Q F3(ebcdictbl)2.5 E F0(\(5\).)A F2(FILES)72
+163.2 Q/F4 10/Times-Italic@0 SF(/etc/funetnje.cf)108 175.2 Q F2(SEE ALSO)72 192
+Q F3(bitspool)108 204 Q F0(\(5\),)A F3(bmail)2.5 E F0(\(8\),)A F3(ebcdictbl)2.5
+E F0(\(5\),)A F3(funetnje)2.5 E F0(\(8\),)A F3(mailify)2.5 E F0(\(8\),)A F3
+(qrdr)2.5 E F0(\(8\),)A F3 -.18(re)2.5 G(ceive).18 E F0(\(1\),)A F3(send)2.5 E
+F0(\(1\),)A F3(transfer)2.5 E F0(\(1\))A F2(BUGS)72 220.8 Q F0 .883(Send\214le\
+ should \214gure out the lrecl in text \214les by smart pre-scanning of the \
+\214le -- doable if sending real)108 232.8 R(\214les ?)108 244.8 Q F2
+(DIAGNOSTICS)72 266.4 Q F0 .412(These programs show their usage summary)108
+278.4 R 2.912(,w)-.65 G .411
+(hen there is something wrong with input parameters.)295.622 278.4 R(Subtle)
+5.411 E(usage bugs might not be detected!)108 290.4 Q F2(NOTES)72 307.2 Q F0
+.187(This program quartet is actually same program with 4 dif)108 319.2 R .188
+(ferent invocation names, and therefore 4 \(slightly\))-.18 F(dif)108 331.2 Q
+(ferent functions.)-.18 E F2(AUTHORS)72 348 Q F0 -1(Ye)108 360 S
+(havi Bourvine, Hebrew University of Y)1 E(erusalem, Israel)-1 E F4
+(<yehavi@hujivms.bitnet>.)2.5 E F0 4.499
+(Matti Aarnio, Finnish University and Research Network \255 FUNET)108 376.8 R
+6.999(,F)-.74 G(inland)426.421 376.8 Q F4(<mea@nic.funet.\214>)6.999 E
+(<mea@\214n\214les.bitnet>.)108 388.8 Q F0(Gerald Hanusch, Johannes Kepler Uni\
+versitaet/Universitaet Linz, Austria <k000165@alijku1)108 405.6 Q(1.bitnet>.)
+-.37 E 1.113(Original \(VMS oriented package\) software by Y)108 422.4 R 1.114
+(ehavi Bourvine, UNIX features, plenty of modi\214cations,)-1 F .465
+(\214le handling exits, man-pages by Matti Aarnio.)108 434.4 R .464
+(Batch \(SYSIN\) facilities, and bug \214xes prompted by Ger)5.465 F(-)-.2 E
+(ald Hanush, and in lar)108 446.4 Q(ge part implemented by Matti Aarnio.)-.18 E
+(2)535 768 Q EP
+%%Trailer
+end

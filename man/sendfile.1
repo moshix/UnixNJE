@@ -1,0 +1,210 @@
+.\" $Header$
+.\"
+.\"  Man page for HUJI-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 20-Oct-1993
+.\"
+.ds ]W Funet-Nje 1 UNIX 1.1
+.TH SENDFILE 1
+.SH NAME
+sendfile, submit, punch, print \- bitnet file send tools
+.SH SYNOPSIS
+.IP sendfile 0.8i 0
+.I ToUser@ToNode
+.RB [ " \-fix | \-raw " ]
+.RB [ " \-bin " ]
+.RB [ " \-lrecl nn " ]
+.RB [ " \-fn \fIfname ftype " ]
+.RB [ " \-class N " ]
+.RB [ " \-form \fIFromName " ]
+.RB [ " \-dist \fIDistribution " ]
+.RB [ " \-tag \fIRSCS-TAG " ]
+.RI [ filepath ]
+.IP punch 0.8i 0
+.I ToUser@ToNode
+.RB [ " \-rawpun " ]
+.RB [ " \-fix | \-raw " ]
+.RB [ " \-fn \fIfname ftype " ]
+.RB [ " \-class N " ]
+.RB [ " \-form \fIFromName " ]
+.RB [ " \-dist \fIDistribution " ]
+.RB [ " \-tag \fIRSCS-TAG " ]
+.RI [ filepath ]
+.IP print 0.8i 0
+.I ToUser@ToNode
+.RB [ " -asa " ]
+.RB [ " \-fix | \-raw " ]
+.RB [ " \-bin " ]
+.RB [ " \-fn \fIfname ftype " ]
+.RB [ " \-class N " ]
+.RB [ " \-form \fIFromName " ]
+.RB [ " \-dist \fIDistribution " ]
+.RB [ " \-tag \fIRSCS-TAG " ]
+.RI [ filepath ]
+.IP submit 0.8i 0
+.I ToUser@ToNode
+.RB [ " \-fix | \-raw " ]
+.RB [ " \-form \fIFromName " ]
+.RI [ filepath ]
+.SH DESCRIPTION
+.IX "bitnet"
+.IX "funetnje"
+.IX "sendfile"
+.IX "submit"
+.IX "netdata"
+.LP
+.I Sendfile
+command sends out
+.SM NETDATA
+encoded file
+with given
+.I "fname + ftype"
+and
+.I "FormName,"
+if they are specified.
+.LP
+.I Punch
+command sends out 80-chars per record punch-card images
+with given
+.I "fname + ftype"
+and
+.I "FormName,"
+if they are specified.
+.LP
+.I Submit
+command sends out a punch with special flags directing it to be
+a NJE SYSIN job.
+.LP
+When a file is defined,
+.I reallylongfilename.really-long-extension.more.dots
+maps to:
+.I "reallylongfile + really-long-"
+(12 + 12 chars.)
+Default filename (when nothing is defined) is:
+.IR "STANDARD INPUT" .
+.LP
+Default for
+.I form
+is
+.IR STANDARD .
+.LP
+When no input file is defined,
+.I STDIN
+is assumed
+.LP
+Options for
+.BR punch ,
+.BR print ,
+.BR sendfile ,
+and 
+.B submit
+are:
+.IP "\fB\-asa\fR" 1.8i 0
+For
+.IR print ", and " sendfile .
+A print format which expects to get
+.SM FORTRAN
+carriage control style input.
+.IP "\fB\-bin\fR" 1.8i 0
+For
+.BR sendfile (1)
+only.
+Defines binary transmission, and defaults class `N', if nothing
+else is defined.
+.IP "\fB\-class C\fR" 1.8i 0
+Defines single uppercase alpha letter for the NJE spool
+class of the file.   For
+.B sendfile
+the
+\-bin
+option defaults class to be `N', otherwise default is `A'.
+.IP "\fB\-fix\fR" 1.8i 0
+Makes padded records of native width; 80 for punch, and submit,
+132+1 for print.
+On sendfile it asks output to be of fixed size.  On such cases
+input lines get padded by the receiver to the fixed format.
+.IP "\fB\-fn fname ftype\fR" 1.8i 0
+For
+.BR sendfile "(1), " punch "(1), " print "(1) only."
+Defines NJE level \fI`file name'\fR and \fI`file type'\fR strings.
+Default values are: `STANDARD', and `INPUT'.
+.IP "\fB\-form FormName\fR" 1.8i 0
+Defines NJE level \fI`file form name'\fR to be used.
+Default value is `STANDARD'.
+.IP "\fB-lrecl ##\fR" 1.8i 0
+For
+.BR sendfile (1)
+defines logical record length.
+Defaults are: binary: 1022, others: 132.
+If your ASCII input is wider (or narrower), do consider using this
+option to optimize receiver performance.
+.IP "\fB\-rawpun\fR" 1.8i 0
+For
+.BR punch (1)
+only.
+Outputs fixed 80 chars per record lines, and expects same from input.
+(No cr/lfs wanted, just 80 bytes for each record.)
+.IP "\fB\-dist Distribution\fR" 1.8i 0
+Defines the RSCS Distribution code (max. 8 characters) which may be
+used to identify printed outputs. Defaults to user name of the sender
+translated to upper case. If not set here, the emulator inserts the
+default SYSTEM.
+.IP "\fB\-tag RSCS-TAG\fR" 1.8i 0
+Defines NJE RSCS TAG (136 characters) which is used to carry various
+informations especially at RJE applications.
+.LP
+Default behaviour is to read in lines, and convert them from
+.SM ASCII
+to
+.SM EBCDIC
+and pad or truncate to 80 char (132 for print) records
+which get spooled for transmission.
+.LP
+.SH ENVIRONMENT
+With environment variable
+.B EBCDICTBL
+user can select alternate EBCDIC <\-> ASCII translation
+tables.  For more info, see
+.BR ebcdictbl (5).
+.LP
+.SH FILES
+.I /etc/funetnje.cf
+.SH SEE ALSO
+.BR bitspool (5),
+.BR bmail (8),
+.BR ebcdictbl (5),
+.BR funetnje (8),
+.BR mailify (8),
+.BR qrdr (8),
+.BR receive (1),
+.BR send (1),
+.BR transfer (1)
+.SH BUGS
+.LP
+Sendfile should figure out the lrecl in text files by smart pre-scanning
+of the file -- doable if sending real files ?
+.LP
+.SH DIAGNOSTICS
+These programs show their usage summary, when there is something
+wrong with input parameters.  Subtle usage bugs might not be detected!
+.SH NOTES
+This program quartet is actually same program with 4 different
+invocation names, and therefore 4 (slightly) different functions.
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network \- FUNET, Finland
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Gerald Hanusch, Johannes Kepler Universitaet/Universitaet Linz, Austria
+<k000165@alijku11.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, file handling exits,
+man-pages by Matti Aarnio.
+Batch (SYSIN) facilities, and bug fixes prompted by Gerald Hanush,
+and in large part implemented by Matti Aarnio.

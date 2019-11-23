@@ -1,0 +1,40 @@
+From P.Bryant@rl.ac.uk  Wed Apr 19 11:06:38 1995
+Received: from mailbox.rl.ac.uk ([130.246.9.65]) by nic.funet.fi with SMTP id <2870-3>; Wed, 19 Apr 1995 11:06:22 +0300
+Received: from peb-pc by mailbox.rl.ac.uk  with SMTP
+           id JAA24951; Wed, 19 Apr 1995 09:06:18 +0100
+Message-Id: <199504190806.JAA24951@mailbox.rl.ac.uk>
+X-Sender: peb@mailbox.rl.ac.uk (Unverified)
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Date:	Wed, 19 Apr 1995 09:06:19 +0100
+To:	Matti Aarnio <mea@NIC.FUNET.FI>
+From:	P.Bryant@rl.ac.uk (Paul Bryant)
+Subject: Re: Your comments on FUNETNJE bugs..
+X-Mailer: <Windows Eudora Version 2.0.2>
+Status: RO
+
+Many thanks for the useful comments on FUNETNJE. I will try the new code in
+a few days. I hope to put the system into service in July to replace the IBM
+(UKACRL). It all works very well and I am now working on automating the
+updateing of tables and automatic house keeping (claering out dead mail and
+producing statistics. I attach my sendmail.cf as requested. There is a
+serious flaw that I have just found in that mail addressed to a nonexistant
+user on the machine via NJE is not returned. I have not yet had time to
+chase this fault. I have recently obtained PAROUTE and it compiled OK. I
+will send you my version of file.cf and a script it calls, maketable.
+maketable receives bitearn.nodes and produces the tables needed by sendamail
+and funetnje. Both these are a bit primative - file.cf needs a bit more
+security when I decide where bitearn.nodes will come from and maketable
+needs a bit more checking that things have gone OK and to stop and restart
+sendmail and funetnje cleanly to bring the new tables into use .(The three
+files are concatinated and follow). I hope you find them useful and I would
+appreceiate any suggestions for improvments or bug fixes.
+Paul.
+
+........... [ files taken out into separate pieces ] ..............
+
+Paul Bryant - Rutherford Appleton Laboratory, Chilton, Didcot, OX11 0QX, UK
+Mail P.Bryant@rl.ac.uk 
+Tel.+44 1235 445 267 Fax. +44 1235 446 626
+
+

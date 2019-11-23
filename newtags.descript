@@ -1,0 +1,4319 @@
+1
+-
+-
+-
+-
+                                                                    NODES File
++                                                                   NODES File
++                                                                   NODES File
++                                                                   NODES File
+                                                           Format and Contents
++                                                          Format and Contents
++                                                          Format and Contents
++                                                          Format and Contents
+-
+-
+-
+-
+0
+                                                                  31 Mar. 1993
+-
+-
+-
+                                                                  File editor:
+0
+                                                                 Daniele Bovio
+                                                                 HI at FRORS12
+                                                                   EARN Office
+                                                                  CIRCE BP 167
+                                                           F-91403 Orsay CEDEX
+                                                                        France
+1
+-
+   PREFACE
++  PREFACE
++  PREFACE
++  PREFACE
++  _______
+-
+   Applicability
++  Applicability
++  Applicability
++  Applicability
++  _____________
+0
+   This   format   description  refers  to  the  nodes  file  format  used  in
+   EARN/BITNET/NETNORTH since August 1991.
+-
+   Change indicators
++  Change indicators
++  Change indicators
++  Change indicators
++  _________________
+0
+   Changes to previous versions of this document are indicated by revision co-
+   des to the left of the changed lines.
+ 
+ |    Lines marked like this one have been changed in the September  29,  1992
+ | version.
+ | Changes of that version are:
+ 
+ | *   Formally  restricted  the  usage  of  all  the  NJE related tags to the
+ |     :type.NJE entries only.
+ | *   Added clarifications to the definition of the :serverN tag.
+ | *   Added clarifications to the definition of the :linksN tag.
+ | *   Changed description and definition of the :newnode/:oldnode tags.
+ | *   Imbedded all the foot notes into the text
+ 
+ *    Lines marked like this one have been changed in the March 31, 1993  ver-
+ * sion.
+ * Changes of this version are:
+ 
+ * *   Changed the usage of the :internet tag.
+ * *   Changed the usage of the :serverN tag.
+ * *   Changed the description of the :p_name tags.
+-
+   Special character usage
++  Special character usage
++  Special character usage
++  Special character usage
++  _______________________
+0
+   <      is the left square bracket (used to enclose optional items).
+ 
+      >      is the right square bracket (used to enclose optional items).
+ 
+      |      is the logical OR operator.
+ 
+      If  these  characters don't print correctly on your printer you may want
+   to change them in the file before printing.
+-
+0
+   Preface                                                                  ii
+1
+-
+   Acknowledgements
++  Acknowledgements
++  Acknowledgements
++  Acknowledgements
++  ________________
+0
+   A big thanks goes to Berthold Pasch, former editor and maintainer  of  this
+   document  since  the  beginning  of  the  network, and to all those who are
+   actively helping me in the not trivial task of filling the gap left by  his
+   separation from the network.
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+   Preface                                                                 iii
+1
+-
+   TABLE OF CONTENTS
++  TABLE OF CONTENTS
++  TABLE OF CONTENTS
++  TABLE OF CONTENTS
++  _________________
+-
+   1.0  Description of the NODES File   . . . . . . . . . . . . . . . . . .  1
++  1.0  Description of the NODES File   . . . . . . . . . . . . . . . . . .  1
++  1.0  Description of the NODES File   . . . . . . . . . . . . . . . . . .  1
++  1.0  Description of the NODES File   . . . . . . . . . . . . . . . . . .  1
+   1.1  Purpose   . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  1
+   1.2  Contents of the NODES File  . . . . . . . . . . . . . . . . . . . .  1
+     1.2.1  Entries and Tags  . . . . . . . . . . . . . . . . . . . . . . .  2
+     1.2.2  Organization of Member/Site/Node and People Information   . . .  4
+     1.2.3  Suggested Structure of Entries  . . . . . . . . . . . . . . . .  6
+       1.2.3.1  For 3-level hierarchy (member/site/node)  . . . . . . . . .  6
+       1.2.3.2  For 2-level hierarchy (member/node)   . . . . . . . . . . .  9
+ 
+   2.0  Description of the TAGs   . . . . . . . . . . . . . . . . . . . . . 11
++  2.0  Description of the TAGs   . . . . . . . . . . . . . . . . . . . . . 11
++  2.0  Description of the TAGs   . . . . . . . . . . . . . . . . . . . . . 11
++  2.0  Description of the TAGs   . . . . . . . . . . . . . . . . . . . . . 11
+   2.1  Overview of defined TAGs  . . . . . . . . . . . . . . . . . . . . . 12
+     2.1.1  Tags for NJE-NODE entries   . . . . . . . . . . . . . . . . . . 12
+     2.1.2  Tags for SITE entries   . . . . . . . . . . . . . . . . . . . . 14
+     2.1.3  Tags for MEMBER entries   . . . . . . . . . . . . . . . . . . . 15
+   2.2  TAG Descriptions in Alphabetical Order  . . . . . . . . . . . . . . 16
+     2.2.1  The :a_member Tag  (in MEMBER entries)  . . . . . . . . . . . . 16
+     2.2.2  The :a_site Tag  (in SITE entries)  . . . . . . . . . . . . . . 16
+     2.2.3  The :cks Tag  (in all entries)  . . . . . . . . . . . . . . . . 17
+     2.2.4  The :connect Tag  (in NJE entries)  . . . . . . . . . . . . . . 17
+     2.2.5  The :country Tag  (in all entries)  . . . . . . . . . . . . . . 18
+     2.2.6  The :fax Tag  (in all entries)  . . . . . . . . . . . . . . . . 18
+     2.2.7  The :fclass Tag  (in NJE entries)   . . . . . . . . . . . . . . 19
+     2.2.8  The :fformat Tag  (in NJE entries)  . . . . . . . . . . . . . . 19
+     2.2.9  The :hegis Tag  (in BITNET MEMBER entries)  . . . . . . . . . . 20
+     2.2.10  The :internet Tag  (in NJE entries)  . . . . . . . . . . . . . 20
+     2.2.11  The :lastup Tag  (in all entries)  . . . . . . . . . . . . . . 22
+     2.2.12  The :linksN Tags  (in NJE entries)   . . . . . . . . . . . . . 22
+     2.2.13  The :machine Tag  (in NJE entries)   . . . . . . . . . . . . . 26
+     2.2.14  The :member Tag  (in MEMBER entries)   . . . . . . . . . . . . 26
+     2.2.15  The :memclass Tag  (in MEMBER entries)   . . . . . . . . . . . 27
+     2.2.16  The :memdate Tag  (in BITNET MEMBER entries)   . . . . . . . . 28
+     2.2.17  The :msgs Tag  (in NJE entries)  . . . . . . . . . . . . . . . 29
+     2.2.18  The :net Tag  (in all entries)   . . . . . . . . . . . . . . . 29
+     2.2.19  The :netsoft Tag  (in NJE entries)   . . . . . . . . . . . . . 30
+     2.2.20  The :newnode and :oldnode Tags (in NJE entries)  . . . . . . . 30
+     2.2.21  The :node Tag  (first tag of any entry)  . . . . . . . . . . . 32
+     2.2.22  The :nodedesc Tag  (in NJE entries)  . . . . . . . . . . . . . 33
+     2.2.23  The :nodenum Tag  (in NJE entries)   . . . . . . . . . . . . . 33
+     2.2.24  The :noderesist Tag  (in NJE entries)  . . . . . . . . . . . . 34
+     2.2.25  The :nsv Tag  (in NJE entries)   . . . . . . . . . . . . . . . 35
+     2.2.26  The :oldnode Tag  (in NJE entries)   . . . . . . . . . . . . . 35
+     2.2.27  The :phone Tag  (in all entries)   . . . . . . . . . . . . . . 35
+     2.2.28  The :ref Tag  (in all entries)   . . . . . . . . . . . . . . . 36
+     2.2.29  The :remarkN Tag  (in all entries)   . . . . . . . . . . . . . 36
+     2.2.30  The :routtab Tag  (in NJE entries)   . . . . . . . . . . . . . 37
+     2.2.31  The :serversN Tag  (in NJE entries)  . . . . . . . . . . . . . 39
+       2.2.31.1  MAIL type_dependent_fields:  . . . . . . . . . . . . . . . 40
+     2.2.32  The :site Tag  (in SITE entries)   . . . . . . . . . . . . . . 40
+     2.2.33  The :system Tag  (in NJE entries)  . . . . . . . . . . . . . . 41
+0
+   Table of Contents                                                        iv
+1
+-
+     2.2.34  The :type Tag  (in all entries)  . . . . . . . . . . . . . . . 41
+     2.2.35  The :x400 tag  (in NJE entries)  . . . . . . . . . . . . . . . 42
+   2.3  Tags for people-related information   . . . . . . . . . . . . . . . 43
+     2.3.1  The :p_nickname Tags  . . . . . . . . . . . . . . . . . . . . . 44
+     2.3.2  The :a_locid Tags   . . . . . . . . . . . . . . . . . . . . . . 45
+     2.3.3  The ROLE Tags   . . . . . . . . . . . . . . . . . . . . . . . . 46
+     2.3.4  Role tags unique to Member entries  . . . . . . . . . . . . . . 47
+       2.3.4.1  The :dir Tag  . . . . . . . . . . . . . . . . . . . . . . . 47
+       2.3.4.2  The :inforep Tag  . . . . . . . . . . . . . . . . . . . . . 47
+       2.3.4.3  The :techrep Tag  . . . . . . . . . . . . . . . . . . . . . 48
+     2.3.5  Role tags unique to Site entries   (only for 3-level hierarchy) 48
+       2.3.5.1  The :sitedir Tag  . . . . . . . . . . . . . . . . . . . . . 48
+     2.3.6  Role tags in Node or Site or Member entries   . . . . . . . . . 49
+       2.3.6.1  The :admin Tag  . . . . . . . . . . . . . . . . . . . . . . 49
+       2.3.6.2  The :netop Tag  . . . . . . . . . . . . . . . . . . . . . . 50
+       2.3.6.3  The :techinfo Tag   . . . . . . . . . . . . . . . . . . . . 50
+       2.3.6.4  The :userinfo Tag   . . . . . . . . . . . . . . . . . . . . 50
+       2.3.6.5  The :useradm Tag  . . . . . . . . . . . . . . . . . . . . . 50
+ 
+   3.0  The special VERSION entry   . . . . . . . . . . . . . . . . . . . . 52
++  3.0  The special VERSION entry   . . . . . . . . . . . . . . . . . . . . 52
++  3.0  The special VERSION entry   . . . . . . . . . . . . . . . . . . . . 52
++  3.0  The special VERSION entry   . . . . . . . . . . . . . . . . . . . . 52
+   3.1  Overview on the tags for the Version entry  . . . . . . . . . . . . 53
+   3.2  Description of the Tags in VERSnnnn Entry   . . . . . . . . . . . . 55
+     3.2.1  The :applN Tag  . . . . . . . . . . . . . . . . . . . . . . . . 55
+     3.2.2  The :genrouts Tag   . . . . . . . . . . . . . . . . . . . . . . 55
+     3.2.3  The :remarkN Tags   . . . . . . . . . . . . . . . . . . . . . . 55
+     3.2.4  The :totcks Tag   . . . . . . . . . . . . . . . . . . . . . . . 56
+     3.2.5  The :updnodes Tag   . . . . . . . . . . . . . . . . . . . . . . 56
+ 
+   4.0  Appendices  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57
++  4.0  Appendices  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57
++  4.0  Appendices  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57
++  4.0  Appendices  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57
+   4.1  Appendix A  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57
+   4.2  Appendix B  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 59
+   4.3  Appendix C  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 61
+-
+-
+-
+-
+-
+-
+-
+0
+   Table of Contents                                                         v
+1
+-
+   1.0  DESCRIPTION OF THE NODES FILE
++  1.0  DESCRIPTION OF THE NODES FILE
++  1.0  DESCRIPTION OF THE NODES FILE
++  1.0  DESCRIPTION OF THE NODES FILE
++  __________________________________
+-
+   1.1  PURPOSE
++  1.1  PURPOSE
++  1.1  PURPOSE
++  1.1  PURPOSE
++  ____________
+0
+   The  NODES file described hereafter is used in BITNET, EARN and NETNORTH to
+   hold and distribute information about  nodes  in  the  network,  about  the
+   organizations  running  these  nodes  and  about people who perform certain
+   "roles" in relation to the network.  These are the main purposes for  which
+   the NODES file is used:
+ 
+   *   Generate routing tables.
+ 
+   *   Identify  network-related  people to the network coordinators, to other
+       people and to servers/programs.
+ 
+   *   Provide a set of information about nodes (e.g. hardware/software),  si-
+       tes  and members (e.g. names, locations) which are required for network
+       management or are of general interest.
+-
+   1.2  CONTENTS OF THE NODES FILE
++  1.2  CONTENTS OF THE NODES FILE
++  1.2  CONTENTS OF THE NODES FILE
++  1.2  CONTENTS OF THE NODES FILE
++  _______________________________
+0
+   The nodes file contains one entry of :type.NJE for  each  NJE-node  in  the
+   network  (NJE nodes are nodes which use the NJE protocols, e.g. JESx, RSCS,
+   JNET, etc.).  In addition it may contain entries for non-NJE-node  entities
+   such as:
+ 
+   *   Mail-Only-nodes  entries (:type.MAIL)(i.e.   nodes which are indirectly
+       connected to the NJE network via mailers or local gateways).
+ 
+   *   Member entries (:type.MEMBER)
+ 
+   *   Site entries (:type.SITE), etc.
+ 
+   Note: The MEMBER and SITE entry-types  are  optional.  It  depends  on  the
++  Note:
++  Note:
++  Note:
+   network administration whether separate member and site entries are used to
+   store  the member and site related information or if the corresponding tags
+   are included in one of the member's or site's node entries.
+   This proposal does not describe information required for Mail-Only nodes or
+   other types of entries besides :type.NJE, :type.MEMBER and :type.SITE.  But
+   while writing the following description the possible inclusion of such  en-
+   tries has been kept in mind.
+ 
+      The  file  also  contains one special node entry - the "Version" entry -
+   which looks like a real NJE-node entry but describes a node that  does  not
+   exist. (See the section "Special Version Entry" for more details).
+-
+ 
+   Description of the NODES File                                             1
+1
+-
+      Each  entry  is uniquely identified by an entry-id which is contained in
+   the :node tag.  (Note to program developers:  Please note that only in  the
+   NODES file the first tag of an entry has to be a :node tag.  In other files
+   of  the  same  or  similar  format  the  tagname  of  the  first tag may be
+   different).    The  :node tag must always be the first tag of an entry. The
+   :node tag is used for all entries in the nodes file, no matter what type of
++                        all
++                        all
++                        all
+   entry it is.  An entry-id must not be reused for another entry in the  same
++                            must not
++                            must not
++                            must not
+   file.    Entries  are  usually sorted by entry-id (except for the "version"
+   entry, which, for performance reasons, is the first one in the  distributed
+   file).    However they may be sorted on other criteria when necessary for a
+   certain application.
+-
+   1.2.1  Entries and Tags
++  1.2.1  Entries and Tags
++  1.2.1  Entries and Tags
++  1.2.1  Entries and Tags
++  _______________________
+0
+   Each entry contains miscellaneous fields (tags) which  describe  properties
+   of the related object.  A tag consists of tagname and tagdata.
+ 
+      A  tagname  is identified by a colon (:) in front of it.  The colon must
++        tagname
++        tagname
++        tagname
+   not be preceded by any character except blank.   The tagname  is  separated
+   from  the  tagdata  by  the first period (.)  that appears after the colon.
+   Null tagnames (i.e. :.) are not allowed.  Tagnames are determined by mutual
+   agreement among the cooperating NJE networks and are normally restricted to
+   lowercase letters, the numerals 0...9,  and  the  underscore  character  to
+   ensure  that they are available for printing in all countries.  The tagname
+   may appear in upper, lower or mixed case.  Programs should ignore the  case
+   of  tagnames.  The  distributed  nodes  file  however  will  always contain
+   tagnames in lower case. This is done to allow the  use  of  case  sensitive
+   utilities.
+ 
+      In this document tagnames are always shown in lower case, e.g. :node
+ 
+      There  may  be  some numbered tagnames in the nodes file, i.e.  tagnames
++                          numbered tagnames
++                          numbered tagnames
++                          numbered tagnames
+   with a number appended to the name-stem.  Example:  :links1, :links2,  etc.
+   These  numbers  may range from 1 to 99. The general rules for such numbered
+   tagnames are:
+ 
+   *   Numbers are used without leading zero, i.e. 1, 2, 3,  ...  9,  10,  11,
+       etc.
+ 
+   *   The tagdata of all numbered tags with the same tagname-stem are treated
+ |     as multiple occurrences during syntax parsing.
+ 
+   *   The numbering need not be consecutive when sending updated node entries
+       to the network coordination.
+ 
+   *   The  distributed  nodes  file however will always contain consecutively
+       numbered tags. This is achieved by shifting the  data  into  tags  with
+       lower  numbers  when these tags would otherwise be empty. The increased
+       amount of update information to be shipped when this  method  is  used,
+-
+   Description of the NODES File                                             2
+1
+-
+       seems  negligible if compared to the savings in programming efforts and
+       program performance.
+ 
+   *   It  is  not  guaranteed  that  numbered  tags appear in a certain order
+       within a node entry.
+ 
+      In this document numbered tagnames are always shown  with  the  stem  in
+   lower case and with an upper case N for the number.  Example:  :linksN
+ 
+      The  tagdata  may  contain  any  character except the combination blank-
++          tagdata
++          tagdata
++          tagdata
+   colon, since a colon preceded by a blank denotes the start of another  tag.
+   For  alphabetic characters it is recommended to use only a-z and A-Z. Usage
+   of national characters  will  certainly  cause  problems  when  reading  or
+   printing  the  entry  in  another  country  where  these characters are not
+   supported by displays or printers. Also special characters must  be  chosen
+ | with care since they might not be available on all systems.  The tagdata is
+ | assumed  to  have  no trailing blanks.   Wherever the tag format allows the
+ | definition of multiple values in  tagdata,  however,  the  values  must  be
+ | separated at least by one blank.
+ 
+      The following rules apply to building an entry in the nodes file:
+ 
+   *   A  ":node" tag beginning in column 1 of a record indicates the start of
+       an entry.   This record and all the  following  ones  up  to,  but  not
+       including  the  next ":node" record belong to one entry.  Blank records
+       are ignored. The ":node" tag must not occur anywhere else but beginning
+       in column 1 of a record.
+ 
+   *   The length of a tag (tagname plus tagdata) must not exceed 255.
+ 
+   *   A record may contain as many tags as fit into it.
+ 
+   *   It is recommended not to use too small record length.  Sometimes  words
+       may become as long as 30 or 40 characters. Therefore the minimum record
+       length should be significantly larger (say 80).
+       The  official master nodes file will always be distributed to NJE-nodes
+       with a maximum number of 255 characters  in  a  record.    Thus,  while
+       working  on this file, programs don't need to take care of this feature
+       since no split tags will occur.
+ 
+   *   No tagname may occur twice in the  same  entry.  If  this  happens  the
+       results  are unpredictable. Some programs may use the first occurrence,
+       some  may  use  the  last  one  and  some  may  behave  in  some  other
+       unpredictable way.
+ 
+   *   Tags  without  tagdata  are  treated  the same way as if the tag is not
+       specified: a null string is presented to the program when it  asks  for
+       the data of that tag. This means that null tags can be left out for the
+       sake of smaller files.
+-
+-
+   Description of the NODES File                                             3
+1
+-
+     Examples of valid tags:
+ 
+     :node.IMISIAM :nodenum.0402
+          :a_member.SIAM IFC
+              ;CNR Milano Area Computing Center;Via A.M. Ampere, 56
+              ;I-20133 Milano;Italy
+-
+   1.2.2  Organization of Member/Site/Node and People Information
++  1.2.2  Organization of Member/Site/Node and People Information
++  1.2.2  Organization of Member/Site/Node and People Information
++  1.2.2  Organization of Member/Site/Node and People Information
++  ______________________________________________________________
+0
+   In  order  to  allow member, site and people information to be stored along
++                       member  site     people
++                       member  site     people
++                       member  site     people
+   with node information the  structure  of  a  simple  nodes  file  has  been
++       node
++       node
++       node
+   extended  to  include such information while avoiding redundancy, i.e. each
+   member, site or person is described only once.    (Actually  a  mixture  of
+   hierarchical  database  (for  the  member-site-node  data)  and  relational
+   database (for people information) would be appropriate.  However, there  is
+   no  such  database  system  available that can be run on all systems in the
+   network at no extra cost. Even if such a database existed, the distribution
+   of updates to the individual installations would require  some  development
+   effort.   Therefore it seems best to get along with the existing nodes file
+   format for which many tools exist already and  for  which  also  an  update
+   concept for the distributed files is established).
+ 
+      The additional information for sites and members may either be placed in
++                                    sites     members
++                                    sites     members
++                                    sites     members
+   the  corresponding  first  node  entry  of the site or member (this "first"
+   entry means the first entry being registered for that site  or  member,  it
+   does  not  refer  to the physical location of the entry in the file), or it
+   may  be  placed  in  separate  entries  with  :type.SITE  and  :type.MEMBER
+   respectively.
+   Which method is used (separate :type.SITE/MEMBER entries or using :type.NJE
+   entries for storing the site/member information) depends on the preferences
+   of the responsible administration office.  People information may be placed
++                                             People
++                                             People
++                                             People
+   in any entry of :type NJE, SITE or MEMBER where it is most appropriate.
+ 
+      The necessary hierarchy of node-site-member is established by "ref" tags
++                   hierarchy
++                   hierarchy
++                   hierarchy
+   in  each  entry  which  point  to  the  corresponding parent entry (site or
+   member).  The highest entry points to itself.  This pointer structure works
+   in both cases: with site and member data included in  another  node  entry,
+   and with separate site and member entries.
+ 
+   Note: For  the  sake  of simplicity we shall use the terms "site entry" and
++  Note:
++  Note:
++  Note:
+   "member entry" without regard to where the site or member  data  is  really
+   included,  in  another  node  entry or in their own entries of type SITE or
+   MEMBER. "Site entry" and "member entry"  simply  defines  the  entry  which
+   holds the site or member data.
+ 
+      If  the site information is not required (e.g. the member's organization
+   is rather simple) then the member's structure may be  reflected  by  member
+   and  node  entries  only.    The site information is simply omitted and all
+   affected node entries point directly to the entry with  the  member  infor-
+   mation.
+0
+   Description of the NODES File                                             4
+1
+-
+      The  pointers to people information may point to a person's entry in the
+   same entry or in another entry  up  the  hierarchy  (i.e.  site  or  member
+   entry).
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+ 
+   Description of the NODES File                                             5
+1
+-
+   1.2.3  Suggested Structure of Entries
++  1.2.3  Suggested Structure of Entries
++  1.2.3  Suggested Structure of Entries
++  1.2.3  Suggested Structure of Entries
++  _____________________________________
+-
+   1.2.3.1  For 3-level hierarchy (member/site/node)
++  1.2.3.1  For 3-level hierarchy (member/site/node)
++  1.2.3.1  For 3-level hierarchy (member/site/node)
++  1.2.3.1  For 3-level hierarchy (member/site/node)
+0
+   With member and site information included in the node entry
++  With member and site information included in the node entry
++  With member and site information included in the node entry
++  With member and site information included in the node entry
+0
+      See Appendix A for an example.
+ 
+     The first node of a member being registered
+ 
+     +----------------------------------------------------------+
+     | :node.nodeid :type.NJE                                   |
+     |       ........... node-related information ...........   |
+     +----------------------------------------------------------+
+     |       :site.short site descriptor                        |
+     |             ........ site-related information ........   |
+     +----------------------------------------------------------+
+     |       :member.short member descriptor                    |
+     |               ...... member-related information ......   |
+     +----------------------------------------------------------+
+     |       :ref.nodeid (of parent entry, since there is no    |
+     |                parent in this case it points to itself)  |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+ 
+     The first node of a site being registered
+ 
+     +----------------------------------------------------------+
+     | :node.nodeid :type.NJE                                   |
+     |       ........... node-related information ...........   |
+     +----------------------------------------------------------+
+     |       :site.short site descriptor                        |
+     |             ........ site-related information ........   |
+     +----------------------------------------------------------+
+     |       :ref.nodeid (of parent entry, i.e. entry with      |
+     |                member information)                       |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+-
+-
+-
+0
+   Description of the NODES File                                             6
+1
+-
+     All other nodes of a site
+ 
+     +----------------------------------------------------------+
+     | :node.nodeid :type.NJE                                   |
+     |       ........... node-related information ...........   |
+     +----------------------------------------------------------+
+     |       :ref.nodeid (of parent entry, i.e. entry with      |
+     |                site information)                         |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+0
+   Description of the NODES File                                             7
+1
+-
+   With member and site information in separate entries
++  With member and site information in separate entries
++  With member and site information in separate entries
++  With member and site information in separate entries
+0
+      See Appendix C for an example.
+ 
+     +----------------------------------------------------------+
+     | :node.memberid :type.MEMBER                              |
+     |       :member.short member descriptor                    |
+     |               ...... member-related information ......   |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+     |       :ref.parent-id (points to itself since no parent)  |
+     +----------------------------------------------------------+
+ 
+     +----------------------------------------------------------+
+     | :node.siteid :type.SITE                                  |
+     |       :site.short site descriptor                        |
+     |             ........ site-related information ........   |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+     |       :ref.parent-id (i.e. member entry id.)             |
+     +----------------------------------------------------------+
+ 
+     +----------------------------------------------------------+
+     | :node.nodeid :type.NJE                                   |
+     |       ........... node-related information ...........   |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+     |       :ref.parent-id (i.e. site entry id.)               |
+     +----------------------------------------------------------+
+-
+-
+-
+-
+-
+-
+-
+ 
+   Description of the NODES File                                             8
+1
+-
+   1.2.3.2  For 2-level hierarchy (member/node)
++  1.2.3.2  For 2-level hierarchy (member/node)
++  1.2.3.2  For 2-level hierarchy (member/node)
++  1.2.3.2  For 2-level hierarchy (member/node)
+0
+   With member information included in the node entry
++  With member information included in the node entry
++  With member information included in the node entry
++  With member information included in the node entry
+0
+      See Appendix B for an example.
+ 
+     The first node of a member being registered
+ 
+     +----------------------------------------------------------+
+     | :node.nodeid :type.NJE                                   |
+     |       ........... node-related information ...........   |
+     +----------------------------------------------------------+
+     |       :member.short member descriptor                    |
+     |               ...... member-related information ......   |
+     +----------------------------------------------------------+
+     |       :ref.nodeid (of parent entry, since there is no    |
+     |                parent in this case it points to itself)  |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+ 
+     All other nodes of a member
+ 
+     +----------------------------------------------------------+
+     | :node.nodeid :type.NJE                                   |
+     |       ........... node-related information ...........   |
+     +----------------------------------------------------------+
+     |       :ref.nodeid (of parent entry, i.e. entry with      |
+     |                member information)                       |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+ 
+   With member information in a separate entry
++  With member information in a separate entry
++  With member information in a separate entry
++  With member information in a separate entry
+ 
+     +----------------------------------------------------------+
+     | :node.memberid :type.MEMBER                              |
+     |       :member.short member descriptor                    |
+     |               ...... member-related information ......   |
+     +----------------------------------------------------------+
+     |       :ref.parent-id (points to itself since no parent)  |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+-
+-
+-
+   Description of the NODES File                                             9
+1
+-
+     +----------------------------------------------------------+
+     | :node.nodeid :type.NJE                                   |
+     |       ........... node-related information ...........   |
+     +----------------------------------------------------------+
+     |       :ref.parent-id (entry-id of member entry)          |
+     +----------------------------------------------------------+
+     |       ........ people and address information ........   |
+     +----------------------------------------------------------+
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+0
+   Description of the NODES File                                            10
+1
+-
+   2.0  DESCRIPTION OF THE TAGS
++  2.0  DESCRIPTION OF THE TAGS
++  2.0  DESCRIPTION OF THE TAGS
++  2.0  DESCRIPTION OF THE TAGS
++  ____________________________
+-
+   In  the  tag  descriptions the following information is to be applied where
+   appropriate:
+ 
+   *   maxtaglength = 255
+ 
+   *   maxtagdatalength = maxtaglength - length(tagname) - 2  (for  colon  and
+       period)
+ 
+   *   in  the  "Verification  Rules" often the content of other tags is to be
+       checked. If such a referred-to tag  is  an  optional  tag  and  is  not
+       present then its default value is to be assumed.
+         Example: "if :msgs.Y ..." is true if :msgs is missing.
+ 
+      Default  values  for  some  of  the  optional  tags  are provided by the
++     Default  values
++     Default  values
++     Default  values
+   VERSnnnn entry which may be used by programs rather  than  using  hardcoded
+   defaults.   This allows to change defaults later, if necessary, without the
+   need for a program change. The default tags and values in the version entry
+   are shown in the chapter "The Special Version Entry".  Of course the values
+   in the VERSnnnn entry will always match the defaults defined in this  docu-
+   ment.
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+ 
+   Description of the TAGs                                                  11
+1
+-
+   2.1  OVERVIEW OF DEFINED TAGS
++  2.1  OVERVIEW OF DEFINED TAGS
++  2.1  OVERVIEW OF DEFINED TAGS
++  2.1  OVERVIEW OF DEFINED TAGS
++  _____________________________
+-
+   2.1.1  Tags for NJE-NODE entries
++  2.1.1  Tags for NJE-NODE entries
++  2.1.1  Tags for NJE-NODE entries
++  2.1.1  Tags for NJE-NODE entries
++  ________________________________
+0
+     +----- Optional/Required
+     | +--- Provided by: node admin.(A), coordinator(C) or generated(G)
+     | |
+     | |   tagname    description
+     | |   ---------  ----------------------
+ 
+     R A   node       node-id (must be the first tag of the entry)
+     R A   type       type of entry (NJE)
+     O A   nodedesc   short node descriptor
+     R A   ref        pointer to parent entry (site or member)
+ 
+           --- technical node information ---
+ 
+     R AC  linksN     link definitions
+     R G   nodenum    node-number
+     R A   routtab    routing table format (+ subscription info)
+ 
+     O A   fclass     file class (default=*)
+     O A   fformat    file format (default=ND PU)
+     O A   internet   full domain-style host name(s) for this NJE system
+     O A   machine    cpu-type
+     O A   msgs       message capability (default=Y)
+     O A   netsoft    networking software
+     O AC  noderesist resistance of the node (default=0.001)
+     O A   serversN   server definitions
+     O A   system     operating system software
+     O A   x400       list of X.400 attributes for this NJE system
+ 
+           --- role, person and address tags ---
+ 
+     O A   admin      entry registrar (default=admin of parent)
+           (Default for the following role tags is the admin; if admin
+           is not specified then it defaults to same tag in parent entry)
+     O A   netop      network operations of node
+     O A   techinfo   technical info contact
+     O A   useradm    user registration
+     O A   userinfo   user information
+ 
+     O A   p_NICK     person information for person with nickname NICK
+ 
+     O A   a_LOCID    address info. for locations referred to with LOCID
+-
+-
+ 
+   Description of the TAGs                                                  12
+1
+-
+           --- administrative information ---
+ 
+     R G   cks        checksum of entry
+     R ACG connect    connection date of node
+     R C   country    country-id | country.province-id
+     R G   lastup     last update of entry
+     R C   net        network-id
+     R C   nsv        subnet-id of associated Netserv
+ 
+     O A   fax        FAX number
+     O A   newnode    for rename: used in old node entry
+     O A   oldnode    for rename: used in new node entry
+ 
+     O A   phone      switch-board or secretary (general contact point)
+                      (default=phone of parent entry)
+     O AC  remarkN    remarks
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+   Description of the TAGs                                                  13
+1
+-
+   2.1.2  Tags for SITE entries
++  2.1.2  Tags for SITE entries
++  2.1.2  Tags for SITE entries
++  2.1.2  Tags for SITE entries
++  ____________________________
+0
+     +----- Optional/Required; 1 = required only in separate site entries
+     | +--- Provided by: node admin.(A), coordinator(C) or generated(G)
+     | |
+     | |   tagname    description
+     | |   ---------  ----------------------
+ 
+     R1A   node       site-id (must be the first tag of the entry)
+     R1A   type       type of entry (SITE)
+     R A   site       short site descriptor
+     R A   ref        pointer to member entry
+ 
+            --- role, person and address tags ---
+ 
+     O A   admin      entry registrar (default=admin of member)
+           (Default for the following role tags is the admin; if admin is
+           not specified then it defaults to same tag in member entry.)
+     O A   netop      network operations of site
+     O A   techinfo   technical info contact
+     O A   sitedir    director of site
+     O A   useradm    user registration
+     O A   userinfo   user information
+ 
+     O A   p_NICK     person information for person with nickname NICK
+ 
+     O A   a_SITE     address of site (default = a_MEMBER)
+     O A   a_LOCID    address info. for locations referred to with LOCID
+ 
+           --- administrative information ---
+ 
+     R G   cks        checksum of entry
+     R C   country    country-id | country.province-id
+     R G   lastup     last update of entry
+     R C   net        network-id
+ 
+     O A   fax        FAX number
+     O A   phone      switch-board or secretary (general contact point)
+                      (default=phone of parent entry)
+     O AC  remarkN    remarks
+-
+-
+-
+-
+0
+   Description of the TAGs                                                  14
+1
+-
+   2.1.3  Tags for MEMBER entries
++  2.1.3  Tags for MEMBER entries
++  2.1.3  Tags for MEMBER entries
++  2.1.3  Tags for MEMBER entries
++  ______________________________
+0
+     +----- Optional/Required; 1 = required only for separate member entries
+     |                         2 = required for BITNET members
+     | +--- Provided by: node admin.(A), coordinator(C) or generated(G)
+     | |
+     | |   tagname    description
+     | |   ---------  ----------------------
+ 
+     R1A   node       member-id (must be the first tag of the entry)
+     R1A   type       type of entry (MEMBER)
+     R A   member     short member descriptor
+     R A   ref        pointer to member entry (i.e to itself)
+ 
+     R2C   hegis      BITNET's 'hegis'-code for the member
+     O C   memclass   membership class
+     R2C   memdate    date when member joined network
+ 
+           --- role, person and address tags ---
+ 
+     R A   admin      entry registrar
+     R A   dir        director of member institution
+     R2A   inforep    BITNET's 'inforep' of the member
+     R2A   techrep    BITNET's 'techrep' of the member
+           (Default for the following role tags is the admin.)
+     O A   netop      network operations of site
+     O A   techinfo   technical info contact
+     O A   sitedir    director of site
+     O A   useradm    user registration
+     O A   userinfo   user information
+ 
+     O A   p_NICK     person information for person with nickname NICK
+ 
+     R A   a_MEMBER   member address
+     O A   a_LOCID    address info. for locations referred to with LOCID
+ 
+           --- administrative information ---
+ 
+     R G   cks        checksum of entry
+     R C   country    country-id | country.province-id
+     R G   lastup     last update of entry
+     R C   net        network-id
+ 
+     O A   fax        FAX number
+     O A   phone      switch-board or secretary (general contact point)
+                       (default=phone of parent entry)
+     O AC  remarkN    remarks
+-
+-
+ 
+   Description of the TAGs                                                  15
+1
+-
+   2.2  TAG DESCRIPTIONS IN ALPHABETICAL ORDER
++  2.2  TAG DESCRIPTIONS IN ALPHABETICAL ORDER
++  2.2  TAG DESCRIPTIONS IN ALPHABETICAL ORDER
++  2.2  TAG DESCRIPTIONS IN ALPHABETICAL ORDER
++  ___________________________________________
+0
+   The  description  of  the  tags  is  arranged  in alphabetical order of the
+   tagnames. Please note that the :node tag must be  the  first  one  of  each
+   entry. The order of the other tags in an entry is irrelevant.
+ 
+   Note: Role  tags,  person  tags  and  address  tags  (other than a_SITE and
++  Note:
++  Note:
++  Note:
+   a_MEMBER) are described in the section: "People-related information".
+-
+ 
+   2.2.1  The :a_member Tag  (in MEMBER entries)
++  2.2.1  The :a_member Tag  (in MEMBER entries)
++  2.2.1  The :a_member Tag  (in MEMBER entries)
++  2.2.1  The :a_member Tag  (in MEMBER entries)
++  _____________________________________________
+0
+   This is the full postal address of  the  member,  including  name,  street,
+   city,  zip-code,  country  and other things required to send normal mail to
+   people of this member.
+ 
+   Note: For further information  on  address  tags  see  the  description  of
++  Note:
++  Note:
++  Note:
+   :a_locid in the chapter "Tags for People-related Information".
+ 
+   Format  :a_member.addrline1;addrline2; . . . addrline5
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :member tag is present then
+              TAG is REQUIRED
+              count(ADDRLINEs) = 1..5
+              length(ADDRLINEn) = 1..30
+           else
+              TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :a_member.Gesellschaft fuer
+                  ;  Schwerionenforschung mbH
+                  ;Planckstrasse 1
+                  ;D-6100 Darmstadt
+                  ;Germany
+-
+   2.2.2  The :a_site Tag  (in SITE entries)
++  2.2.2  The :a_site Tag  (in SITE entries)
++  2.2.2  The :a_site Tag  (in SITE entries)
++  2.2.2  The :a_site Tag  (in SITE entries)
++  _________________________________________
+0
+   This  is the full postal address of the site, including name, street, city,
+   zip-code, country and other things required to send normal mail  to  people
+   at this site.
+ 
+   Note: For  further  information  on  address  tags  see  the description of
++  Note:
++  Note:
++  Note:
+   :a_locid in the chapter "Tags for People-related Information".
+ 
+   Format  :a_site.addrline1;addrline2; . . . addrline5
++  Format
++  Format
++  Format
+0
+   Description of the TAGs                                                  16
+1
+-
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :site tag is present then
+              TAG is OPTIONAL
+              default(A_SITE) = :a_member in member entry
+              count(ADDRLINEs) = 1..5
+              length(ADDRLINEn) = 1..30
+           else
+              TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :a_site.Gesellschaft fuer
+                 ;  Schwerionenforschung mbH
+                 ;Planckstrasse 1
+                 ;D-6100 Darmstadt
+                 ;Germany
+-
+   2.2.3  The :cks Tag  (in all entries)
++  2.2.3  The :cks Tag  (in all entries)
++  2.2.3  The :cks Tag  (in all entries)
++  2.2.3  The :cks Tag  (in all entries)
++  _____________________________________
+0
+   This  tag contains the checksum of the entry. It is used to verify that the
+   entry has not been illegally modified between two update processes  of  the
+   nodes  file.    (A  description of the checksumming process can be found in
+   UPDNODES DESCRIPT and in the comments in CHKSUM ASSEMBLE).
+ 
+   Format  :cks.n
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED
+           TAG is GENERATED
+           length(N) = 1..5
+           value(N) = 0..65535
+ 
+   Example
++  Example
++  Example
++  Example
+           :cks.43782
+-
+   2.2.4  The :connect Tag  (in NJE entries)
++  2.2.4  The :connect Tag  (in NJE entries)
++  2.2.4  The :connect Tag  (in NJE entries)
++  2.2.4  The :connect Tag  (in NJE entries)
++  _________________________________________
+0
+   This tag shows the connection date of the  node  in  the  format  yyyymmdd.
+   This information may be provided by the node administrator (admin role), by
+   the network coordination or will be automatically assigned (in that order).
+ 
+   Format  :connect.yyyymmdd
++  Format
++  Format
++  Format
+ 
+ | Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+ |         if :type.NJE then
+              TAG is REQUIRED
+              TAG is PROVIDED by
+                 :admin (real connect date), or
+0
+   Description of the TAGs                                                  17
+1
+-
+                 network coordination (estimated date), or
+                 registration software (registration date)
+ |         else TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :connect.19880531
+-
+   2.2.5  The :country Tag  (in all entries)
++  2.2.5  The :country Tag  (in all entries)
++  2.2.5  The :country Tag  (in all entries)
++  2.2.5  The :country Tag  (in all entries)
++  _________________________________________
+0
+   The country tag is specified in each entry in order to allow the entries to
+   be  sorted  or separated by country. The country tag specifies the 2-letter
+   ISO country code of the country in which the node is installed.
+ 
+      State, region or province identifiers may be  appended  to  the  country
+   code using a dot (.) as separator.  If such "province"-codes are used for a
+   country  then  a  list  of  the  used codes with description should be made
+   available by the responsible administration.
+ 
+   Format  :country.cc<.province>
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED
+           TAG is PROVIDED by network coordination
+           length(CC) = 2
+           value(CC) = one of list of 2-letter ISO country codes
+           length(PROVINCE) = 1..8
+           value(PROVINCE) = one of a list of PROVINCEs for CC
+ 
+   Example
++  Example
++  Example
++  Example
+           :country.US.NY
+           :country.DK
+-
+   2.2.6  The :fax Tag  (in all entries)
++  2.2.6  The :fax Tag  (in all entries)
++  2.2.6  The :fax Tag  (in all entries)
++  2.2.6  The :fax Tag  (in all entries)
++  _____________________________________
+0
+   This tag may be used to provide a FAX number.
+ 
+   Format  :fax.+cc <area-code> number
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+           value(CC) = numeric
+           value(AREA-CODE) = numeric | omitted
+           value(NUMBER) = numeric | num.num<.num...>
+ 
+   Examples
++  Examples
++  Examples
++  Examples
+           :fax.+1 212 903.3656
+           :fax.+49 6221 404450
+0
+   Description of the TAGs                                                  18
+1
+-
+-
+ 
+   2.2.7  The :fclass Tag  (in NJE entries)
++  2.2.7  The :fclass Tag  (in NJE entries)
++  2.2.7  The :fclass Tag  (in NJE entries)
++  2.2.7  The :fclass Tag  (in NJE entries)
++  ________________________________________
+0
+   Specifies  the  preferred file class in which files should be sent to users
+   at this node.  Multiple classes may be specified in  order  of  preference.
+   If  nothing is specified then it is assumed that any class can be accepted.
+   This is equivalent to :fclass.*.
+ 
+   Format  :fclass.classes
++  Format
++  Format
++  Format
+           classes ::= class | classes class | *
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :type.NJE then
+              TAG is OPTIONAL
+              length(CLASSES) = 1..69
+              value(CLASS) = A..Z | 0..9
+              default(CLASSES) = *
+           else TAG is NOTALLOWED
+ 
+          Note: The default value for CLASSES can also be
++         Note:
++         Note:
++         Note:
+          found in the :fclass tag of the VERSnnnn
+          entry.
+ 
+   Example
++  Example
++  Example
++  Example
+           :fclass.B C N
+-
+   2.2.8  The :fformat Tag  (in NJE entries)
++  2.2.8  The :fformat Tag  (in NJE entries)
++  2.2.8  The :fformat Tag  (in NJE entries)
++  2.2.8  The :fformat Tag  (in NJE entries)
++  _________________________________________
+0
+   This tag specifies the file format that users at  this  node  can  receive.
+   Multiple  formats  are allowed in order of preference. Following values may
+   be specified:
+ 
+     ND  =  NETDATA
+     DD  =  DISK DUMP
+     PU  =  PUNCH
+     PR  =  PRINT
+     LP  =  LISTSERV PUNCH format
+     CD  =  CARD DUMP
+     VD  =  VMS DUMP
+ 
+   Format  :fformat.formats
++  Format
++  Format
++  Format
+           formats ::= fmt | formats fmt
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :type.NJE then
+              TAG is OPTIONAL
+0
+   Description of the TAGs                                                  19
+1
+-
+              default(FORMATS) = ND PU
+              length(FORMATS) = 2..20
+              value(FMT) = ND | DD | PU | PR | LP | CD | VD
+           else TAG is NOTALLOWED
+ 
+          Note: The default value for FORMATS can also be
++         Note:
++         Note:
++         Note:
+          found in the :fformat tag of the VERSnnnn
+          entry.
+ 
+   Example
++  Example
++  Example
++  Example
+           :fformat.ND DD PU
+-
+   2.2.9  The :hegis Tag  (in BITNET MEMBER entries)
++  2.2.9  The :hegis Tag  (in BITNET MEMBER entries)
++  2.2.9  The :hegis Tag  (in BITNET MEMBER entries)
++  2.2.9  The :hegis Tag  (in BITNET MEMBER entries)
++  _________________________________________________
+0
+   This  tag  holds the 'hegis'-code of the institution. The 'hegis'-code is a
+   unique descriptor of US educational institutions. It is required for  admi-
+   nistrative purposes in BITNET only.
+ 
+   Format  :hegis.hegis-code
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :member tag is present AND :net.BITNET then
+              TAG is REQUIRED
+              TAG is PROVIDED by network coordination
+              value(HEGIS-CODE) = any character string
+           else TAG is NOT ALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :hegis.002686
+-
+   2.2.10  The :internet Tag  (in NJE entries)
++  2.2.10  The :internet Tag  (in NJE entries)
++  2.2.10  The :internet Tag  (in NJE entries)
++  2.2.10  The :internet Tag  (in NJE entries)
++  ___________________________________________
+0
+   The  ":internet"  tag  contains  a list of the full domain-style host names
+   associated with this NJE-node. These host names may be used by gateways and
+   servers for translation between the NJE node name and the domain-style host
+   name (i.e. by replacing "userid@nodeid" with "userid@host.domain_name"  and
+   vice versa).
+ 
+      This  tag  may  be  used  to  specify one or more fully-qualified domain
+   name(s) (meant here as "syntactically fully-qualified", accordingly to  the
+   syntax  rules  described  in  the RFC822 document), each separated from the
+   previous one by at least one blank, which is/are equivalent to the NJE node
+   name belonging to the current entry in the NODES file.
+ 
+      Note that local mapping of the local-part  may  lead  to  problems  with
+   servers unless measures are taken to ensure that correspondence by identity
+-
+   Description of the TAGs                                                  20
+1
+-
+   is  supported as a minimum, and that measures are taken to ensure that only
+   a local-part identical with the userid is presented to any server.
+ 
+      In  particular  for  any  valid  local-part  "FOO" for which delivery to
+   "FOO@NODEID.da.db" is supported, one of the following clauses must be true:
+ 
+   *   "FOO" is a valid NJE userid, and mail sent to "FOO@NODEID" reaches  the
+       same mailbox.
+ 
+   *   Sending  mail  to "FOO@NODEID" via NJE does not operate, either because
+       "FOO" is not a syntactically valid NJE userid, or because there  is  no
+       such userid on the host.
+ 
+      Use of this tag except as described above is discouraged.
+ 
+      The  value  specified  for  this tag is not verified (In particular this
+   means that the validity of the domains is not checked).
+ 
+      Note that the domain-style host names should be given whenever they  are
+   available,  even  if  the  host  is not actually connected to the Internet.
+   Such a case might occur for a host in a domain that is  connected  only  to
+   BITNET, EARN or NETNORTH.
+ 
+      If multiple host names are defined for a node then only the first one is
+   to  be  used  for  translation  from  the  NJE-address  to the domain-style
+   address.  The other host names may be used to match  multiple  domain-style
+   addresses with this NJE node.
+ * It  is  however  strictly  forbidden  to  use the same domain-style address
+ * defined in this tag for multiple NJE node names. (i.e. duplicate  the  same
+ * value  of the :internet tag in more than one :type.NJE entry).  The result,
+ * in fact, would be to ambiguously  associate  one  domain-style  address  to
+ * several  NJE-addresses,  compromising  the possibility of an easy automatic
+ * address mapping.
+ 
+   Format  :internet.domain-style-host-names
++  Format
++  Format
++  Format
+           domain-style-host-names ::= host.domain | ...
+                ... domain-style-host-names host.domain
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :type.NJE then
+             TAG is OPTIONAL
+             length(DOMAIN-STYLE-HOST-NAMES) = 1..maxtagdatalength
+             struct(HOST.DOMAIN) = host.domainN.<domainN-1.<...>>domain0
+             chars(HOST) = A..Z | a..z | 0..9 | - (dash!)
+             chars(DOMAINn) = A..Z | a..z | 0..9 | - (dash!)
+           else TAG is NOT ALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :node.HASBAR
+               :internet.HASBAR.UVA.NL bar.uva.nl
+-
+0
+   Description of the TAGs                                                  21
+1
+-
+   2.2.11  The :lastup Tag  (in all entries)
++  2.2.11  The :lastup Tag  (in all entries)
++  2.2.11  The :lastup Tag  (in all entries)
++  2.2.11  The :lastup Tag  (in all entries)
++  _________________________________________
+0
+   The value of this tag shows when the  entry  was  updated  last,  plus  the
+   update  action and the network address of the person who requested the last
+   update.
+ 
+   Format  :lastup.action yyyymmdd requestor's-id
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED
+           TAG is provided by the requestor or generated by the
+               update procedure being used.
+           value(ACTION) = ADD | REP | DEL
+           value(REQUESTOR'S-ID) = network address of requestor
+ 
+   Example
++  Example
++  Example
++  Example
+           :lastup.REP 19880701 MEYER@DDAGSI1
+-
+   2.2.12  The :linksN Tags  (in NJE entries)
++  2.2.12  The :linksN Tags  (in NJE entries)
++  2.2.12  The :linksN Tags  (in NJE entries)
++  2.2.12  The :linksN Tags  (in NJE entries)
++  __________________________________________
+0
+   The ":linksN" tags specify the links (teleprocessing lines) with which this
+   node  is connected to other nodes of the network.  The linkid that is to be
+   specified in these tags is the nodename of the neighbor node to  which  the
+   link is connected.
+ 
+      At  least  one  ":linksN"  tag with at least one link definition must be
+   specified if this is an NJE-node.
+ 
+      The format of the ":linksN" tagnames follows  the  rules  for  "numbered
+   tagnames" as described in section "Contents of the Nodes File".
+ 
+      Each  ":linksN" tag may contain as many link definitions as fit into the
+ | allowed maximum length of a tag. Each link definition must be separated  by
+ | a blank, e.g.:
+ 
+     :links7.linkdef1 linkdef2 linkdef3 . . . etc.
+ 
+      The syntax of a single link definiton is:
+ 
+     linkid<(<type><,<speed><,<resistance><,options>>>)>
+ 
+   Items enclosed in brackets < ... > may be omitted. This means that at least
+   the  linkid  is  required.  For  "type",  "speed", and "resistance" certain
+   default values apply if they are omitted.
+ 
+      In order to allow easy parsing of the :linksN tags,  a  link  definition
+   must  not  contain  blanks.  This  allows  to scan for blanks as separators
+   between link definitions.
+-
+   Description of the TAGs                                                  22
+1
+-
+   linkid    is the nodeid of the logically adjacent node to which  this  link
++  linkid
++  linkid
++  linkid
+             establishes  the connection. A corresponding link definition must
+             exist at this logically adjacent node.   The link  attributes  of
+             the opposite definition must match the attributes specified here,
+             unless  the  Asymmetric  option is specified.   In the case of an
+             asymmetric link, the parameters must specify  the  characteristic
+             for traffic outbound from the node being described.
+ 
+   type      specifies the type of the link.  If "type" is omitted then a per-
++  type
++  type
++  type
+             manent link (type P) is assumed. Specify:
+ 
+             D    for  dial-up  connections.   Routing table generators should
++            D
++            D
++            D
+                  avoid routing via dial-up connections if other  paths  exist
+                  over permanent or virtual connections.
+ 
+             P    for permanent connections like leased lines or CTC (Channel-
++            P
++            P
++            P
+                  To-Channel)  connections which use the full bandwidth of the
+                  real link. If the bandwidth is shared with  other  links  or
+                  applications  then  it  is  considered  a  virtual link (see
+                  below).
+ 
+             Vn   for virtual links, e.g. via SNA or TCP/IP.  Virtual links in
++            Vn
++            Vn
++            Vn
+                  the sense of this definition are connections which share the
+                  bandwidth of real links with other virtual links or applica-
+                  tions.
+                  The value "n" defines the number of network switches between
+                  the two nodes or, in other words, the number of  real  lines
+                  minus  one.  Thus a virtual link to a direct neighbor is V0.
+                  V3 shows that there are 3 switches or 4 lines in the path to
+                  the other node. If  not  explicitly  requested  for  certain
+                  links the linktype V1 can be used for all values of n > 0.
+                  This type specifier is intended for better routing selection
+                  between  servers.  For  normal  routing purposes any virtual
+                  link can be treated like a permanent connection. For certain
+                  types  of   servers   with   forwarding   and   distribution
+                  capabilities  however,  it  is important to know which links
+                  are virtual links and which of the virtual links are  direct
+                  (V0) or indirect (V1) connections.
+ 
+   speed     the   real   line  speed  of  a  permanent  or  dial-up  link  in
++  speed
++  speed
++  speed
+             bits/second.  (for virtual connections it is  hard  to  tell  how
+             much of the bandwidth of a real line is used and how to calculate
+             the  total  speed of a series of lines for indirect virtual links
+             (Vn with n > 0).  However, for V0 links the speed  parameter  may
+             be  specified  to  inform  about  the speed of the real link. For
+             routing path control of virtual links it is strongly  recommended
+             to specify the resistance value).
+             Registration  of  line speed serves mainly two purposes:  network
+             topology  planning  and  calculation  of   line   resistance   if
+             resistance  is not explicitly specified.  Use of "K" for Kilo and
+             "M" for Mega is possible.  Examples:
+ 
+               9600, 64k, 1.5M
+0
+   Description of the TAGs                                                  23
+1
+-
+             Allowed maximum speed is 1000000000 or 1000000k or 1000M.
+             If  speed  is  omitted  then  a line speed of 9600 bits/second is
+             assumed.
+ 
+             Note: A speed of 0 (zero) may be specified for any type  of  link
++            Note:
++            Note:
++            Note:
+             (D,  P,  Vn) if the link is not to be used for traffic but has to
+             be defined for certain reasons (e.g. asymmetric connections).
+ 
+   resistance the resistance that a line imposes on  network  traffic.    Slow
++  resistance
++  resistance
++  resistance
+             lines  have  a higher resistance than high speed lines.  The link
+             resistance values are used together with the node resistance  va-
+             lues  (see  :noderesist)  to choose the optimum path if 2 or more
+             paths exist to a destination.
+ 
+                Specification of the resistance is usually not required  since
+             it has no meaning if a link is not involved in a ring connection.
+             The default value for resistance is:
++                default value
++                default value
++                default value
+             1,000,000 / speed
+             If speed is not specified then its default value of 9600 yields a
+             default  resistance  of  about  104.    With  link speed zero the
+             resistance becomes infinite.  However, this can not be calculated
+             (1/0   is illegal in mathematics).   So  programmers,  beware  of
+             speed 0.
+ 
+                For dial-up and permanent links in a ring the resistance value
++                   dial-up and permanent links in a ring
++                   dial-up and permanent links in a ring
++                   dial-up and permanent links in a ring
+             should only be specified if the default resistance (as calculated
+             from  the  line  speed)  is to be overridden to force a different
+             routing.
+ 
+                Since the line speed of virtual links is either not  specified
++                                       virtual links
++                                       virtual links
++                                       virtual links
+             or  is  most  probably  incorrect it is strongly recommended that
+             routing path selection for these  links  be  controlled  via  the
+             resistance value (the default resistance is probably not what you
+             want).
+ 
+                Allowed values for resistance are:
++               Allowed values for resistance are:
++               Allowed values for resistance are:
++               Allowed values for resistance are:
+                 0.001 - 99999.999  in increments of  0.001
+                 Zero values are not allowed.
+             With  the  given  relation of 1,000,000 for speed/resistance (see
+             default value above) this range allows to  simulate  line  speeds
++            _____________
+             between  100  bit/s  and 1000 Mbit/s, wide enough even for future
+             high speed lines plus a reserve for adjusting the resistance  va-
+             lue up/down for special routing purposes.
+             The  sum of up to 10 of the highest possible resistances does not
+             exceed 999,999.990, i.e. contains not  more  than  9  significant
+             digits.    We  don't  expect  that  the  total  resistance of any
+             reasonable network path will ever reach this limit.
+             The  maximum  of  9  digits   makes   it   possible   for   every
+             hardware/software  we  know  of,  to  handle  the  full  range of
+             expected resistances.  For simplified programming the  resistance
+             value may be changed internally by a program to an integer number
+             by multiplying it with 1000.
+-
+   Description of the TAGs                                                  24
+1
+-
+             Path calculation: The link resistances of all links in a path are
++            Path calculation:
++            Path calculation:
++            Path calculation:
+             added  to  the  node  resistances  of the sending node and of all
+             intermediate nodes (except the target node) in order to calculate
+             the total resistance of a path.
+ 
+   options   may specify additional characteristics of the link:
++  options
++  options
++  options
+ 
+             A    defines  this as an asymmetric connection. The corresponding
++            A
++            A
++            A
+                  link definition in the other node entry is required but does
+                  not have to have the same  speed  or  resistance.  It  must,
+                  however,  be  of the same link type and must also be flagged
+                  with the asymmetric option.
+ 
+      Processing notes: When links are added or removed, or  parameters  of  a
++     Processing notes:
++     Processing notes:
++     Processing notes:
+   link  are  changed  then  the corresponding link definition on the opposite
+   site must also be added, removed or  changed.  To  ensure  this  concurrent
+   update  certain  procedures  must  be  set up by network coordination (e.g.
+   alarm coordinator, postpone update or update opposite  side  automatically,
+   etc.).
+ 
+      ---------------------------------
+ 
+   Format  :linksN.linkdefinitions
++  Format
++  Format
++  Format
+           linkdefinitions ::= linkdef | linkdefinitions linkdef
+           linkdef ::= linkid<(<type><,<speed><,<resistance><,options>>>)>
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :type.NJE then
+              TAG is REQUIRED
+              length(LINKDEFINITIONS) = 1..maxtagdatalength
+              LINKDEF must not contain a blank
+ |            multiple LINKDEF must be separated by at least one blank
+              length(LINKID) = 1..8
+              :node.linkid must exist
+              :node.linkid must be :type.NJE
+              :node.linkid must have :linksN with linkid = this nodeid
+              value(TYPE) = P | D | Vn | omitted
+                 value(N in Vn) = 0 | real positive integer
+              default(TYPE) = P
+              value(SPEED) = omitted | 0 |
+                     real positive number (with k or M suffix)
+              default(SPEED) = 9600
+              value(RESISTANCE) = omitted |
+                     real positive number (range 0.001 - 99999.999)
+              default(RESISTANCE) = 1,000,000 / SPEED
+              value(OPTIONS) = A | omitted
+           else TAG is NOTALLOWED
+ 
+          Note: The default values for TYPE and SPEED can
++         Note:
++         Note:
++         Note:
+          also be found in the :links1 tag of the
+          VERSnnnn entry.
+-
+ 
+   Description of the TAGs                                                  25
+1
+-
+   Examples
++  Examples
++  Examples
++  Examples
+           :links1.FRMOP11(P,2.15M) CEARN(P,64k,20)
+           :links2.ICNUCEVM TREARN TAUNIVM
+           :links4.EB0UB011 CUNYVMV2(,,22.5)
+ 
+   Note: This   :linksN  tag  replaces  all  the  following  old  tags:  :via,
++  Note:
++  Note:
++  Note:
+   :linkspeed, :linktype, :adjnodesNN, :adjtypesNN.
+-
+ 
+   2.2.13  The :machine Tag  (in NJE entries)
++  2.2.13  The :machine Tag  (in NJE entries)
++  2.2.13  The :machine Tag  (in NJE entries)
++  2.2.13  The :machine Tag  (in NJE entries)
++  __________________________________________
+0
+   This tag describes the machine (hardware) of the node. It may  contain  ma-
+   nufacturer,  type  and model of the CPU(s) that make up this node. Multiple
+   CPUs may be specified, separated by semicolons (;).
+ 
+   Format  :machine.descriptors
++  Format
++  Format
++  Format
+           descriptors ::= descript | descriptors; descript
+ 
+ | Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+ |         if :type.NJE then
+              TAG is OPTIONAL
+              length(DESCRIPTORS) = 1..maxtagdatalength
+              value(DESCRIPT) = any character string
+ |         else TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :machine.IBM 4331 K11
+-
+   2.2.14  The :member Tag  (in MEMBER entries)
++  2.2.14  The :member Tag  (in MEMBER entries)
++  2.2.14  The :member Tag  (in MEMBER entries)
++  2.2.14  The :member Tag  (in MEMBER entries)
++  ____________________________________________
+0
+   This tag contains a short description of the member, e.g.  name,  city  and
+   country.  English description is preferred.
+ 
+   Format  :member.member-descriptor
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if this is to be a member entry then
+              TAG is REQUIRED
+              length(MEMBER-DESCRIPTOR) = 1..maxtagdatalength
+           else
+              TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :member.ESA, Darmstadt, Germany
+ 
+   Note: The  :member  tag  is  not  intended to be used as part of the member
++  Note:
++  Note:
++  Note:
+   address. The :a_member tag should contain the complete address.
+0
+   Description of the TAGs                                                  26
+1
+-
+-
+ 
+   2.2.15  The :memclass Tag  (in MEMBER entries)
++  2.2.15  The :memclass Tag  (in MEMBER entries)
++  2.2.15  The :memclass Tag  (in MEMBER entries)
++  2.2.15  The :memclass Tag  (in MEMBER entries)
++  ______________________________________________
+0
+   This  tag  contains  the class of membership. There are several classes and
+   the meaning of the classes differs between the networks. This is a list  of
+   classes in each network and a short class descriptor:
+ 
+   BITNET    BITNET  classes  are  in  transition at the time this is written.
++  BITNET
++  BITNET
++  BITNET
+             New classes will be defined, and they will  be  supplied  by  the
+             BITNET   Network  Information  Center.    Until  that  time,  the
+             following old classes will continue to apply:
+ 
+             Class A   certain   degree-granting   institutions   of    higher
++            Class A
++            Class A
++            Class A
+                       education
+ 
+             Class B   certain  consortia  and  affiliates  of institutions of
++            Class B
++            Class B
++            Class B
+                       higher education
+ 
+             Class C   certain  non-profit  and   governmental   organizations
++            Class C
++            Class C
++            Class C
+                       serving higher education
+ 
+             Class D   certain  governmental,  commercial,  industrial or non-
++            Class D
++            Class D
++            Class D
+                       profit  organizations  with  substantial  research   or
+                       educational links into institutions of higher education
+ 
+             Class E   same  as class D except they have no computer node, but
++            Class E
++            Class E
++            Class E
+                       are authorized to use  BITNET  through  accounts  on  a
+                       class A or B member's computer
+ 
+                       Note: Class E cannot show up in real node entries.
++                      Note:
++                      Note:
++                      Note:
+ 
+   EARN
++  EARN
++  EARN
++  EARN
+ 
+             Class A   non-profit research and educational organizations
++            Class A
++            Class A
++            Class A
+ 
+             Class B   profit  organizations  which  cooperate  with  class  A
++            Class B
++            Class B
++            Class B
+                       members
+ 
+   NetNorth
++  NetNorth
++  NetNorth
++  NetNorth
+ 
+             Class A   a  university  or  college  that  is   a   full-voting-
++            Class A
++            Class A
++            Class A
+                       privileges member of AUCC or ACCC
+ 
+             Class B   any  other  non-profit research or educational institu-
++            Class B
++            Class B
++            Class B
+                       tion
+ 
+             Class C   governmental agency or research-funding agency or other
++            Class C
++            Class C
++            Class C
+                       non-profit institution supporting class A members
+-
+   Description of the TAGs                                                  27
+1
+-
+             Class D   industrial  or  commercial  organizations  with   joint
++            Class D
++            Class D
++            Class D
+                       research or educational activities with class A members
+ 
+             Class E   any other institution of interest to class A members
++            Class E
++            Class E
++            Class E
+ 
+   ------------------------------
+ 
+   Format  :memclass.class
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :member tag is NOT present then
+              TAG is NOTALLOWED
+           else
+              TAG is OPTIONAL
+              length(CLASS) = 1
+              if :net.BITNET
+                 value(CLASS) = A | B | C | D
+              if :net.EARN
+                 value(CLASS) = A | B
+              if :net.NETNORTH
+                 value(CLASS) = A | B | C | D | E
+              default(CLASS) = A
+              if member-class > A
+                 TAG is PROVIDED by network coordination
+ 
+   Example
++  Example
++  Example
++  Example
+           :memclass.B
+-
+   2.2.16  The :memdate Tag  (in BITNET MEMBER entries)
++  2.2.16  The :memdate Tag  (in BITNET MEMBER entries)
++  2.2.16  The :memdate Tag  (in BITNET MEMBER entries)
++  2.2.16  The :memdate Tag  (in BITNET MEMBER entries)
++  ____________________________________________________
+0
+   The  date when this member joined the network. At present this data is only
+   required in BITNET.
+ 
+   Format  :memdate.yyyymmdd
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :member tag is present then
+              if :net.BITNET then
+                 TAG is REQUIRED
+                 TAG is PROVIDED by network coordination
+              else TAG is OPTIONAL
+           else
+              TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :memdate.19880914
+-
+-
+   Description of the TAGs                                                  28
+1
+-
+   2.2.17  The :msgs Tag  (in NJE entries)
++  2.2.17  The :msgs Tag  (in NJE entries)
++  2.2.17  The :msgs Tag  (in NJE entries)
++  2.2.17  The :msgs Tag  (in NJE entries)
++  _______________________________________
+0
+   Specify Y or N depending on whether users at this node are able to  receive
+   interactive messages.
+ 
+   Format  :msgs.yesno
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :type.NJE then
+              TAG is OPTIONAL
+              length(YESNO) = 1
+              value(YESNO) = Y | N
+              default(YESNO) = Y
+           else TAG is NOTALLOWED
+ 
+          Note: The default value for YESNO can also be found
++         Note:
++         Note:
++         Note:
+          in the :msgs tag of the VERSnnnn entry.
+ 
+   Example
++  Example
++  Example
++  Example
+           :msgs.N
+-
+   2.2.18  The :net Tag  (in all entries)
++  2.2.18  The :net Tag  (in all entries)
++  2.2.18  The :net Tag  (in all entries)
++  2.2.18  The :net Tag  (in all entries)
++  ______________________________________
+0
+   This  tag  specifies  the  network  to  which  this  entry belongs.   It is
+   specified in each entry in  order  to  allow  easy  separation  of  entries
+   according to the network.
+ 
+   Format  :net.network-id
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED
+           TAG is PROVIDED by network coordination
+           length(NETWORK-ID) = 1..8
+           value(NETWORK-ID) = one of a list of valid network-ids
+ 
+   Example
++  Example
++  Example
++  Example
+           :net.BITNET
+ 
+   Network-ids
++  Network-ids
++  Network-ids
++  Network-ids
+          The following list of valid network-ids may become incomplete as new
+          networks  join.  A  complete  and  up-to-date  list  is  provided in
+          NETCNTRY NAMES.
+ 
+             Valid network-ids at time of last update of this document are:
+          BITNET, EARN, NETNORTH, ANSP,  GULFNET,  RUNCOL,  ECUANET,  SCARNET,
+          CAREN
+-
+0
+   Description of the TAGs                                                  29
+1
+-
+   2.2.19  The :netsoft Tag  (in NJE entries)
++  2.2.19  The :netsoft Tag  (in NJE entries)
++  2.2.19  The :netsoft Tag  (in NJE entries)
++  2.2.19  The :netsoft Tag  (in NJE entries)
++  __________________________________________
+0
+   Describes  the  networking software used for the connection to other nodes.
+   The program name and version can be defined.
+ 
+   Format  :netsoft.program-name < version >
++  Format
++  Format
++  Format
+ 
+ | Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+ |         if :type.NJE then
+              TAG is OPTIONAL
+              length(tagdata) = 1..maxtagdatalength
+              value(PROG-NAME and VERSION) = any character string
+ |         else TAG is NOTALLOWED
+ 
+   Examples
++  Examples
++  Examples
++  Examples
+           :netsoft.RSCS V2R2
+           :netsoft.JNET 2.1
+-
+   2.2.20  The :newnode and :oldnode Tags (in NJE entries)
++  2.2.20  The :newnode and :oldnode Tags (in NJE entries)
++  2.2.20  The :newnode and :oldnode Tags (in NJE entries)
++  2.2.20  The :newnode and :oldnode Tags (in NJE entries)
++  _______________________________________________________
+0
+ | The  :newnode  tag  is  to be used when a node, or a group of nodes, either
++       :newnode  tag
++       :newnode  tag
++       :newnode  tag
+ | change the NJE node-id or leave(s) the NJE network to  join  the  Internet.
+ | It  is  intended  to  inform people and network servers of the change.  For
+ | example a server may use the :newnode information to  automatically  change
+ | the node-id in user subscriptions.
+ 
+ |    A  :newnode tag may contain either one valid NJE node-id or one Internet
+ | full domain-style host  name.  Please  refer  to  the  description  of  the
+ | :internet  tag  in  this  document  for  the definition of what an Internet
+ | domain-style address is meant in this context.
+ 
+ |    If the new nodename is still an NJE name:
+ 
+ | *   the old node and the new node must coexist in the network  and  in  the
+ |     nodes  file  for  a  certain  time  (at  least  1  routing table cycle,
+ |     preferably several months) in order to guarantee that mail to  the  old
+ |     address  can  still  be  delivered while users and network servers have
+ |     time to switch to the new address.
+ 
+ |        How old and new node can coexist together in a single  system  is  a
+ |     technical  issue  that  must be solved depending on the capabilities of
+ |     the networking software at the changing node. (alias node-id, secondary
+ |     node in same system, re-routing of traffic, etc.).
+ 
+ | *   Complementary to the :newnode tag in the old entry an :oldnode tag must
++                                                            :oldnode tag
++                                                            :oldnode tag
++                                                            :oldnode tag
+ |     be specified in the new entry.
+ 
+ | *   An :oldnode tag may contain more than one node-id, in  order  to  allow
+ |     the  merger  of  several  old  nodes  into  a single new one. Given the
+0
+   Description of the TAGs                                                  30
+1
+-
+ |     purpose of this tag, in this context, the  :oldnode  tag  must  contain
+ |     only  valid  NJE node-ids.   Furthermore, for each such nodeid which is
+ |     still present in BITEARN NODES,  a  reciprocal  :newnode  tag  must  be
+ |     present.
+ 
+ | *   In  contrast to the :newnode tag which must not be specified before the
+ |     new node entry is created, the :oldnode tag may remain  longer  in  the
+ |     new  entry  than the old entry exists. This allows late-comers to still
+ |     recognize the node-id change even if the old entry  has  been  removed.
+ |     The  :oldnode  tag should be removed about 6 months after the old entry
+ |     has been removed.
+ 
+ |    If the nodename specified in the :newnode  tag  is  an  Internet  domain
+ | name:
+ 
+ | *   the  corresponding  NJE node entry will be deleted by the person listed
+ |     as responsible in that  entry  when  the  node  eventually  leaves  the
+ |     network.
+ 
+ | *   there will not be, in the same cycle or afterwards, a node entry with a
+ |     corresponding  :oldnode tag, since the node which is to replace the old
+ |     node is not a BITNET node.
+ 
+ | Note: It follows, from the above definitions, that  the  :oldnode  and  the
++  Note:
++  Note:
++  Note:
+ | :newnode cannot appear in the same entry.
+ 
+ |    Special care must be taken when the old node had a :internet tag
++                                                        :internet tag
++                                                        :internet tag
++                                                        :internet tag
+ 
+ | *   If the new node is a NJE nodeid, the :internet tag of the old node must
+ |     be moved to the entry of the new node in the same cycle that introduces
+ |     the  :newnode tag.   This allows  servers to correctly map the Internet
+ |     address  to  the  new  nodeid without  having  to  perform  complicated
+ |     transitive lookups.
+ 
+ | *   If the new node is an  Internet hostname, the first (preferred) address
+ |     in  the :internet. tag  must  be  the same  as   the   value   of   the
+ |     :newnode.  tag. This way, servers which support the :internet.  tag but
+ |     not :newnode. will   still allow users    to  manually    change  their
+ |     subscriptions to the Internet address, while servers which support both
+ |     tags will  behave predictably  regardless of  which tag  their internal
+ |     logic gives precedence to.
+ 
+ | Format  :newnode.newnode-id
++  Format
++  Format
++  Format
+ |         :oldnode.oldnode-ids
+ |         oldnode-ids::=oldnode-id | oldnode-ids oldnode-id
+ 
+ | Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+ |         if :type.NJE then
+ |            TAGs are OPTIONAL
+ |            value(NEWNODE-ID) = Internet domain-style host
+ |               or
+ |            value(NEWNODE-ID) = valid NJE node-id
+ |               if newnode-id is valid NJE node-id then
+0
+   Description of the TAGs                                                  31
+1
+-
+ |                  :node.newnode-id must exist
+ |                  :node.newnode-id must have a reciprocal :oldnode tag
+ |                  length(OLDNODE-IDS) = 1..maxdatalength
+ |                  value(OLDNODE-ID) = valid NJE node-id
+ |                  multiple NJE node-id must be separated
+ |                  by at least one blank
+ |                  :node.oldnode-id must have a reciprocal :newnode tag
+ |               else TAG :oldnode does not apply
+ |         else TAG are NOTALLOWED
+ 
+ | Examples
++  Examples
++  Examples
++  Examples
+ |         :node.FRORS13 :newnode.FRORS12
+ |         :node.FRORS14 :newnode.FRORS12
+ |         :node.FRORS12 :oldnode.FRORS13 FRORS14
+ 
+ |         :node.ETBYENJE :newnode.now.we.regr.et
+-
+   2.2.21  The :node Tag  (first tag of any entry)
++  2.2.21  The :node Tag  (first tag of any entry)
++  2.2.21  The :node Tag  (first tag of any entry)
++  2.2.21  The :node Tag  (first tag of any entry)
++  _______________________________________________
+0
+   The  ":node" tag is always the first tag of an entry.  It contains the name
+   (entry identifier) assigned to an entry. The name must be unique within the
+   nodes file.
+ 
+      In case of NJE-nodes (i.e. nodes which use the NJE protocols like  JESx,
+   RSCS,  JNET, etc.)  this name must not be longer than 8 characters. It must
+   begin with an alphabetic character and consist of  alphabetic  and  numeric
+   characters  only  since  several  software  products have problems handling
+   special characters in a nodename.   NJE-nodes are  identified  by  the  tag
+   ":type.NJE".
+ 
+      For  entries of :type.SITE and of :type.MEMBER the entry identifier must
+   be composed of at least 2 tokens connected by an "_"  (underscore),  blanks
+   are  not  allowed.    The  tokens must be uppercase alphanumeric, the first
+   token must be at least 2 character long  with  the  first  character  being
+   alpha.  Maximum length of the entry-identifier is 64.
+ 
+      In  case  of  other  non-NJE-node  entries  the identifier may be of any
+   length (max. determined by max tag length) and contain any  character  that
+   is allowed in tagdata.
+ 
+      Entry  identifiers  must be chosen by the node administrator (:admin) in
++                                                                   :admin
++                                                                   :admin
++                                                                   :admin
+   accordance with the network coordinators in order to avoid multiple use  of
+   the same nodename for different entries.
+ 
+   Format  :node.entryid
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED
+           ENTRYID must be unique
+           if :type.NJE then  /* is NJE node */
+0
+   Description of the TAGs                                                  32
+1
+-
+              length(ENTRYID) = 1..8
+              char1(ENTRYID) = A..Z
+              char2-8(ENTRYID) = A..Z | 0..9
+           else if :type.SITE or :type.MEMBER then /*is SITE or MEMBER */
+              length(ENTRYID) = 4..64
+              value(ENTRYID) = token1_token2
+              length(TOKEN1) = 2..(63-length(TOKEN2))
+              length(TOKEN2) = 1..(63-length(TOKEN1))
+              char1(TOKEN1) = A..Z
+              char2..62(TOKEN1) = A..Z | 0..9
+              char1(TOKEN2) = A..Z | 0..9
+              char2..61(TOKEN2) = A..Z | 0..9 | _ (underscore)
+ 
+   Examples
++  Examples
++  Examples
++  Examples
+           :node.DHDIBM1 :type.NJE
+           :node.PRINCETON_UNIVERSITY :type.MEMBER
+           :node.PRINCETON_MIS_A1 :type.SITE
+-
+   2.2.22  The :nodedesc Tag  (in NJE entries)
++  2.2.22  The :nodedesc Tag  (in NJE entries)
++  2.2.22  The :nodedesc Tag  (in NJE entries)
++  2.2.22  The :nodedesc Tag  (in NJE entries)
++  ___________________________________________
+0
+   May  be used to describe the differences between multiple nodes of the same
+   site. The :nodedesc tag may include a  short  member  and  site  identifier
+   besides  the  node  descriptor in order to avoid looking up member and site
+   entries.
+ 
+   Format  :nodedesc.short node descriptor
++  Format
++  Format
++  Format
+ 
+ | Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+ |         if :type.NJE then
+              TAG is OPTIONAL
+              length(tagdata) = 1..maxtagdatalength
+ |         else TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :nodedesc.WWF, Guernsey, Butterfly Project
+-
+   2.2.23  The :nodenum Tag  (in NJE entries)
++  2.2.23  The :nodenum Tag  (in NJE entries)
++  2.2.23  The :nodenum Tag  (in NJE entries)
++  2.2.23  The :nodenum Tag  (in NJE entries)
++  __________________________________________
+0
+   This tag contains the unique nodenumber  assigned  to  an  NJE-node.    The
+   number  is  required for all NJE-nodes and is used by IBM MVS/JES2 systems.
+   In case of non-NJE nodes the ":nodenum" tag must not be used.
+ 
+      The number must be in the range from 0001 to  4000.  The  standard  JES2
+   limit  is  1000.  To allow the use of higher numbers a modification to JES2
+   software is available. However, the absolute  maximum  value  with  current
+   JES2 design is 4000.
+-
+   Description of the TAGs                                                  33
+1
+-
+ |    This   number  will  be  assigned  and  inserted  into  the  nodes  file
+ | automatically by the Network Master Coordinator and will never  be  changed
+ | afterwards.  However,  a nodenumber previously assigned to a node which has
+ | been removed may be re-assigned to a new node either during the same or the
+ | following cycles.  A registration entry for a new NJE-node does not need to
+ | contain this tag.
+ 
+   Format  :nodenum.number
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :type.NJE then
+              TAG is REQUIRED
+              TAG is GENERATED by NMC
+              length(NUMBER) = 4
+              value(NUMBER) = 0001..4000
+              NUMBER must be unique in all :nodenum
+           else TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :nodenum.2455
+-
+   2.2.24  The :noderesist Tag  (in NJE entries)
++  2.2.24  The :noderesist Tag  (in NJE entries)
++  2.2.24  The :noderesist Tag  (in NJE entries)
++  2.2.24  The :noderesist Tag  (in NJE entries)
++  _____________________________________________
+0
+   This  tag specifies a real, positive number that is to be used in path cal-
+   culations together with the link  resistance  specified  in  the  ":linksN"
+   tags.    The  node  resistance  will be added to the link resistance for an
+   outgoing connection in order to obtain the complete resistance of node plus
+   link.  :noderesist is only required for nodes which participate in  a  ring
+   connection.  The  value  to be specified here must represent the resistance
+   that a node imposes on network traffic.  It must take into account the  CPU
+   speed,  amount  of real storage, speed of paging and spooling devices and a
+   lot of other factors.   Its magnitude must  be  in  relation  to  the  link
+   resistance.  Since it is nearly impossible to know all the relevant factors
+   for node resistance and since these may also change during the day or week,
+   it  seems  best to provide a table with suitable values for the most common
+   systems and to update this table as experience grows.
+0
+   Note: If this tag is changed by an ":admin" then a notification        will
++  Note:
++  Note:
++  Note:
+   be  sent  to  the network coordination for verification of possible routing
+   conflicts.
+ 
+   Format  :noderesist.n
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :type.NJE then
+              TAG is OPTIONAL
+              length(N) = 1..7
+              value(N) = real positive number
+                         (range 0.001 - 99999.999)
+0
+   Description of the TAGs                                                  34
+1
+-
+              default(N) = 0.001
+           else TAG is NOTALLOWED
+ 
+          Note: The default value for node resistance can
++         Note:
++         Note:
++         Note:
+          also be found in the :noderesist tag of
+          the VERSnnnn entry.
+ 
+   Example
++  Example
++  Example
++  Example
+           :noderesist.15.9
+-
+   2.2.25  The :nsv Tag  (in NJE entries)
++  2.2.25  The :nsv Tag  (in NJE entries)
++  2.2.25  The :nsv Tag  (in NJE entries)
++  2.2.25  The :nsv Tag  (in NJE entries)
++  ______________________________________
+0
+ | This  tag  identifies  the  NETSERV  server which provides services to this
+ | node. The identifier can be used as a pointer into the NETCNTRY NAMES  file
+ | to locate more information about the nodes served by this NETSERV.
+ 
+      The  :nsv  tag  will be maintained by the person who defines the NETSERV
+   subnet areas.
+ 
+   Format  :nsv.subnet-id
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :type.NJE then
+              TAG is REQUIRED
+              TAG is provided by the Network Master Coordinator
+              length(SUBNET-ID) = 2..8
+              value(SUBNET-ID) = from a list of established subnets
+ |         else TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :nsv.US06
+-
+   2.2.26  The :oldnode Tag  (in NJE entries)
++  2.2.26  The :oldnode Tag  (in NJE entries)
++  2.2.26  The :oldnode Tag  (in NJE entries)
++  2.2.26  The :oldnode Tag  (in NJE entries)
++  __________________________________________
+0
+   See "The :newnode and :oldnode Tags"
+-
+ 
+   2.2.27  The :phone Tag  (in all entries)
++  2.2.27  The :phone Tag  (in all entries)
++  2.2.27  The :phone Tag  (in all entries)
++  2.2.27  The :phone Tag  (in all entries)
++  ________________________________________
+0
+   This  tag  should  provide  a  phone  number  for  general  contact,   e.g.
+   switchboard, secretary, etc.
+ 
+   Format  :phone.+cc <area-code> number <extension>
++  Format
++  Format
++  Format
+-
+   Description of the TAGs                                                  35
+1
+-
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+           value(CC) = numeric
+           value(AREA-CODE) = numeric | omitted
+           value(NUMBER) = numeric | num.num<.num...>
+           value(EXTENSION) = -numeric | Xnumeric | xnumeric | omitted
+ 
+   Examples
++  Examples
++  Examples
++  Examples
+           :phone.+1 212 903.3656
+           :phone.+33 1 47.28.33.44
+           :phone.+49 6221 404 -242
+ 
+   Note: The phone extension should be preceded by a dash (-) if it is a dial-
++  Note:
++  Note:
++  Note:
+   through  extension. In case of operator assisted connection it is suggested
+   to indicate this by a preceding "x".
+-
+ 
+   2.2.28  The :ref Tag  (in all entries)
++  2.2.28  The :ref Tag  (in all entries)
++  2.2.28  The :ref Tag  (in all entries)
++  2.2.28  The :ref Tag  (in all entries)
++  ______________________________________
+0
+   This tag contains the entry-id of the entry which is parent to this  entry,
+   i.e.   it points either to the site entry or to the member entry.  If there
+   is no parent entry because this is already the member entry then the ":ref"
+   tag points to its own entry.
+ 
+   Format  :ref.entryid
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED
+           length(ENTRYID) = 1..maxtagdatalength
+           :node.ENTRYID must exist
+           if :member tag in current entry then
+              :ref must point to current entry
+           else
+              if :site tag in current entry then
+                 :ref must point to entry with :member
+                 tag
+              else  :ref must point to entry with :site
+                    or :member tag.
+-
+   2.2.29  The :remarkN Tag  (in all entries)
++  2.2.29  The :remarkN Tag  (in all entries)
++  2.2.29  The :remarkN Tag  (in all entries)
++  2.2.29  The :remarkN Tag  (in all entries)
++  __________________________________________
+0
+   The ":remarkN" tags allow to provide some remarks with the entry.
+ 
+   Format  :remarkN.text
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+0
+   Description of the TAGs                                                  36
+1
+-
+           length(TEXT) = 1..60
+ 
+   Example
++  Example
++  Example
++  Example
+           :remark1.Node will be renamed to XYZ in April 99.
+-
+   2.2.30  The :routtab Tag  (in NJE entries)
++  2.2.30  The :routtab Tag  (in NJE entries)
++  2.2.30  The :routtab Tag  (in NJE entries)
++  2.2.30  The :routtab Tag  (in NJE entries)
++  __________________________________________
+0
+   This tag specifies the format of the routing table being used by that node.
+   The  table  generating  program  (e.g.  GRIBM and PAROUTE) will generate an
+   appropriate routing table according to this information.
+ 
+      If the :routtab tag is not specified, specifies an invalid table format,
+   or specifies tableformat NONE then  it  depends  on  the  table  generating
+   program whether and how it generates a table for this node.
+ 
+      The  :routtab tag may also specify provider and recipient of the routing
+   table if the table is to be generated by a server or by a friendly neighbor
+   institution.  For the provider you may either specify:
+ 
+       NETSERV          (for the nearest NETSERV server)
+       NETSERV@nodeid   (for a specific NETSERV)
+       userid@nodeid    (for any other server or individual)
+ 
+   The recipient must be specified in the NJE address format (userid@nodeid).
+ 
+   Format  :routtab.table-format <(provider,recipient)>
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           If :type.NJE then
+             TAG is REQUIRED
+             values(TABLE-FORMAT) = "NONE" |
+                                defined by table generating program
+             value(PROVIDER) = "NETSERV" |
+                               NJE-type address (userid@nodeid)
+             value(RECIPIENT) = NJE-type address (userid@nodeid)
+           Else TAG is NOTALLOWED
+ 
+   RTG table formats
++  RTG table formats
++  RTG table formats
++  RTG table formats
+          The following table formats should be provided by the known existing
+          Routing Table Generators programs,  however  it  is  recommended  to
+          verify  the  RTGs  documentation for possible missing/added items of
+          this list as well as for peculiar behaviors in case neither of these
+          values is found in the :routtab or :netsoft tag.
+ 
+          *    RSCS
+          *    JES2 < V1 | V2 | V3 > < O=nn >
+                   "V1" requests the assembler-style syntax of
+                        pre-sp 1.3.6/2.1.5 systems
+                   "V2" requests the pli-style syntax of
+                        pre-sp 3.x.x systems
+0
+   Description of the TAGs                                                  37
+1
+-
+                   "V3" requests the sp 3.x.x syntax
+                   "O=nn" is the nodenumber offset, default is 0.
+                   The offset "nn" is added to the node number,
+                   thus the first node will get the number nn+1.
+          *    JES3
+          *    JNET
+          *    NJEF < node1=lid1 < node2=lid2 ... > >
+                    "node=lid" associates a 3-character logical
+                               link-id with a physical link/node.
+          *    UREP
+ 
+   Examples
++  Examples
++  Examples
++  Examples
+           :netsoft.JES2 3.1.2
+           :routtab.JES2 V2 O=25
+ 
+           :netsoft.Homebrew
+           :routtab.JNET (NETSERV,USER1@NODE1)
+ 
+   Scenarios
++  Scenarios
++  Scenarios
++  Scenarios
+ 
+   No :routtab tag
++  No :routtab tag
++  No :routtab tag
++  No :routtab tag
+          This  is  invalid. The :routtab tag is required and must be supplied
+          by the administrator of the node. If no routing  table  is  required
+          for the node then :routtab.NONE must be specified.
+ 
+   :routtab.NONE
++  :routtab.NONE
++  :routtab.NONE
++  :routtab.NONE
+          This  indicates that the :routtab tag was not forgotten but there is
+          no routing table required for this node.
+ 
+   :routtab.tableformat
++  :routtab.tableformat
++  :routtab.tableformat
++  :routtab.tableformat
+          With  "tableformat"  alone  the   :routtab   tag   indicates   which
+          tableformat  is  required for this node but no tables should be sent
+          from anywhere else because there are local procedures for generating
+          the tables.
+ 
+   :routtab.tableformat (provider,recipient)
++  :routtab.tableformat (provider,recipient)
++  :routtab.tableformat (provider,recipient)
++  :routtab.tableformat (provider,recipient)
+0
+             Here the tag specifies that the  table  is  to  be  generated  by
+          "provider"  and  to be sent to "recipient".  "provider" is usually a
+          remote person or a server who is to be informed via this way of  his
+          "duty".
+          The table format must be acceptable for the tool that is used by the
+          "provider". If "provider" is a NETSERV then the table format must be
+          one of GRIBM's since NETSERV uses GRIBM to generate the tables.
+ 
+   Additional  information  about "provider":  If "provider" is "NETSERV" then
++  Additional  information  about "provider":
++  Additional  information  about "provider":
++  Additional  information  about "provider":
+   the table will be generated by the server which  supports  the  country  or
+   network region in which the node is located.
+ 
+      If   "provider"  is  "NETSERV@nodeid"  then  that  specific  NETSERV  is
+   responsible for the table. The form "NETSERV@nodeid" should not  be  chosen
+   by  node administrators unless authorized to by the network administration.
+0
+   Description of the TAGs                                                  38
+1
+-
+   It is mainly intended for load balancing between different servers and  can
+   thus  be  used  by  the  network administration to replace "NETSERV" in the
+   :routtab tag.
+-
+ 
+   2.2.31  The :serversN Tag  (in NJE entries)
++  2.2.31  The :serversN Tag  (in NJE entries)
++  2.2.31  The :serversN Tag  (in NJE entries)
++  2.2.31  The :serversN Tag  (in NJE entries)
++  ___________________________________________
+0
+   The  ":serversN" tag describes network services provided by servers at this
+   node. Such services may be mailer, directory server, file server, database,
+   etc.
+ 
+   Format  :serversN.serverdefs
++  Format
++  Format
++  Format
+           serverdefs ::= serverdef | serverdefs serverdef
+           serverdef ::= servid(servertype<,type_dependent_fields>)
+           servid ::= userid@nodeid
+           servertype ::= MAIL | .... | ....
+           type_dependent_fields_for_MAIL ::= ...
+                ... <formats><,<classes><,<attributes><,contacts>>>
+              formats ::= fmt | formats fmt
+              classes ::= class | classes class | *
+              contacts ::= contact | contacts contact
+              contact ::= tagname_of_contact_person_tag
+ 
+ | Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+ |         if :type.NJE then
+              TAG is OPTIONAL
+              length(SERVERDEFS) = 1..maxtagdatalength
+              length(USERID) = 1..8
+              length(NODEID) = 1..8
+              :node.NODEID must exist and be :type.NJE
+              SERVERTYPE must not contain parentheses
+ |            multiple SERVERDEF must be separated by at least one blank
+              TYPE_DEPENDENT_FIELDS must not contain parentheses
+              if SERVERTYPE is MAIL then
+                 value(FMT) = ND | DD | PU | PR | LP | CD | VD
+                 default(FORMATS) = PU
+                 value(CLASS) = A..Z | 0..9
+                 default(CLASSES) = M
+                 value(ATTRIBUTES) = BSMTP | RFC822 | OUTONLY
+                     or
+                 value(ATTRIBUTES) = BSMTP RFC822
+ |                   or
+ |               value(ATTRIBUTES) = BSMTP OUTONLY
+                 default(ATTRIBUTES) = BSMTP
+ |         else TAG is NOTALLOWED
+ 
+ | Example
++  Example
++  Example
++  Example
+ |         :servers1.MAILER@DEARN(MAIL,PU,M,BSMTP,P_gruben)
+ |         :servers2.SMTP@DEARN(MAIL,PU,M,BSMTP OUTONLY,P_horch)
+-
+   Description of the TAGs                                                  39
+1
+-
+      Restriction for designing new "servertypes" and "type_dependent_fields":
++     Restriction
++     Restriction
++     Restriction
+   In order to allow easy parsing of the :serversN tag, the  "servertype"  and
+   the  "type_dependent_fields"  must  not contain parentheses. This allows to
+   determine the end of a "serverdef" by scanning for the ending parenthesis.
+-
+   2.2.31.1  MAIL type_dependent_fields:
++  2.2.31.1  MAIL type_dependent_fields:
++  2.2.31.1  MAIL type_dependent_fields:
++  2.2.31.1  MAIL type_dependent_fields:
+0
+   FORMATS  and  CLASSES  should  be  specified in order of preference.   They
++  FORMATS  and  CLASSES
++  FORMATS  and  CLASSES
++  FORMATS  and  CLASSES
+   describe the NJE file formats and classes accepted by this  server.    This
+   does  not  limit  what  the server may send. The server may send any format
+   accepted by the destination's services entry.   For a  description  of  the
+   formats refer to the :fformat tag.
+ 
+      ATTRIBUTES:  The  attributes  for  a  mail  server  are  the  MTA to MTA
++     ATTRIBUTES:
++     ATTRIBUTES:
++     ATTRIBUTES:
+   protocols accepted by this mail server (this  MTA).  These  will  refer  to
+   defined protocols and not to specific MTA implementations:
+ 
+   BSMTP     (the former BSMTP 3)
++  BSMTP
++  BSMTP
++  BSMTP
+             This mail server accepts mail in Batch SMTP format.
+ 
+   RFC822    (the former BITNET 2)
++  RFC822
++  RFC822
++  RFC822
+             This mail server accepts mail containing RFC822 headers without a
+             BSMTP or other type of envelope.
+ 
+   OUTONLY   (the former DEFRT 1 TRUNCATE)
++  OUTONLY
++  OUTONLY
++  OUTONLY
+             This  mail  server  is  only  used  for  outgoing mail, and never
+             receives mail.   The  specification  of  an  outgoing  mailer  is
+             required  to  tell  other mailers that this is a "trusted" mailer
+             and mail from it can be received and forwarded.
+ 
+   Note: Mail may not be sent to servers that specify OUTONLY.
++  Note:
++  Note:
++  Note:
+ * Restriction: It is forbidden to define multiple inbound mailer servers (i.e
++  Restriction
++  Restriction
++  Restriction
+ * if more than  one  mailer  is  defined,  all  but  one  must  have  OUTONLY
+ * specified).
+ 
+      CONTACT:  The  tagname (P_nickname) of the person tag for the person who
++     CONTACT:
++     CONTACT:
++     CONTACT:
+   is to be contacted in case of mailer  problems.  The  contact  field  is  a
+   "role"-pointer  as  described in the section Tags for People-Related Infor-
++                                               Tags for People-Related Infor-
++                                               Tags for People-Related Infor-
++                                               Tags for People-Related Infor-
+   mation.
++  mation
++  mation
++  mation
+-
+ 
+   2.2.32  The :site Tag  (in SITE entries)
++  2.2.32  The :site Tag  (in SITE entries)
++  2.2.32  The :site Tag  (in SITE entries)
++  2.2.32  The :site Tag  (in SITE entries)
++  ________________________________________
+0
+   This tag contains a short description of the site of a member,  e.g.  site-
+   name  (department),  city  (,  country)).    It  is suggested to include an
+   abbreviated member-id in order  to  avoid  looking  up  the  member  entry.
+   English description is preferred.
+0
+   Description of the TAGs                                                  40
+1
+-
+   Format  :site.site-descriptor
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if this is to be a site entry then
+              TAG is REQUIRED
+              length(SITE-DESCRIPTOR) = 1..maxtagdatalength
+           else
+              TAG is NOTALLOWED
+ 
+   Example
++  Example
++  Example
++  Example
+           :site.GMD, Supercomputing, Bonn, Germany
+ 
+   Note: The :site tag is not intended to be used as part of the site address.
++  Note:
++  Note:
++  Note:
+   The :a_site tag should contain the complete address.
+-
+ 
+   2.2.33  The :system Tag  (in NJE entries)
++  2.2.33  The :system Tag  (in NJE entries)
++  2.2.33  The :system Tag  (in NJE entries)
++  2.2.33  The :system Tag  (in NJE entries)
++  _________________________________________
+0
+   Describes the operating system running at this node. May contain manufactu-
+   rer, operating system name and version/release number of the software.
+ 
+   Format  :system.descriptor
++  Format
++  Format
++  Format
+ 
+ | Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+ |         if :type.NJE then
+              TAG is OPTIONAL
+              length(DESCRIPTOR) = 1..maxtagdatalength
+              value(DESCRIPTOR) = any character string
+ |         else TAG is NOTALLOWED
+ 
+   Examples
++  Examples
++  Examples
++  Examples
+           :system.IBM VM/SP 5.1
+           :system.DEC VMS 3.7
+-
+   2.2.34  The :type Tag  (in all entries)
++  2.2.34  The :type Tag  (in all entries)
++  2.2.34  The :type Tag  (in all entries)
++  2.2.34  The :type Tag  (in all entries)
++  _______________________________________
+0
+   The  ":type"  tag  specifies  the type of the entry.   There may be several
+   different entry types in the same nodes file.   Currently only  NJE  nodes,
++                                                                  NJE
++                                                                  NJE
++                                                                  NJE
+   SITE entries and MEMBER entries are defined.
++  SITE             MEMBER
++  SITE             MEMBER
++  SITE             MEMBER
+ 
+   Format  :type.entrytype
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED
+           length(ENTRYTYPE) = 1..10
+           value(ENTRYTYPE) = NJE | SITE | MEMBER
+-
+   Description of the TAGs                                                  41
+1
+-
+   Example
++  Example
++  Example
++  Example
+           :type.SITE
+-
+   2.2.35  The :x400 tag  (in NJE entries)
++  2.2.35  The :x400 tag  (in NJE entries)
++  2.2.35  The :x400 tag  (in NJE entries)
++  2.2.35  The :x400 tag  (in NJE entries)
++  _______________________________________
+0
+   The ":x400" tag specifies the X.400 address of this node.  This address may
+   be  used  by  gateways  between  EARN/BITNET/NETNORTH  to the OSI world for
+   address translation.
+ 
+      This tag may be used to specify one or  more  partial  set(s)  of  X.400
+   attributes  which  is  equivalent  to  the  NJE  node name belonging to the
+   current entry in the NODES file.
+   By "equivalent" is meant that any valid set of X.400 attributes  formed  by
+   combining  a surname attribute (and optionally also a given-name attribute)
+   with the specified partial set of attributes corresponds  unambiguously  to
+   the  same  valid  userid  on the node described by the current entry in the
+   NODES file.  This correspondence may be either by identity of  the  surname
+   and  the userid, or by a mapping performed locally on the node described by
+   the current entry in the NODES file.
+ 
+      Use of this tag except as described above is discouraged.
+ 
+   Format  :x400.x400_address
++  Format
++  Format
++  Format
+           x400_address ::= <orgunits;><O=org;><P=prmd;>A=admd;C=country
+           orgunits ::= <<<OU=ou4;>OU=ou3;>OU=ou2;>OU=ou1
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :type.NJE then
+              TAG is OPTIONAL
+              length(X400_ADDRESS) = 1..maxtagdatalength
+           else TAG is NOT ALLOWED
+ 
+   Examples
++  Examples
++  Examples
++  Examples
+           :x400.OU=Bonn;P=gmd;A=dbp;C=de
+           :x400.OU=ROCQUENCOURT;O=INRIA;P=ARISTOTE;A=ATLAS;C=FR
+ 
+   Note: Since the character sequence " :" (blank-colon) has a special meaning
++  Note:
++  Note:
++  Note:
+   in this nodes file format, it cannot be used in X.400 addresses  which  are
+   to be represented here.
+-
+-
+-
+-
+ 
+   Description of the TAGs                                                  42
+1
+-
+   2.3  TAGS FOR PEOPLE-RELATED INFORMATION
++  2.3  TAGS FOR PEOPLE-RELATED INFORMATION
++  2.3  TAGS FOR PEOPLE-RELATED INFORMATION
++  2.3  TAGS FOR PEOPLE-RELATED INFORMATION
++  ________________________________________
+0
+   There are three types of tags for people-related information:
+ 
+   Role tags     for the roles (functions) performed by people,
++  Role tags
++  Role tags
++  Role tags
+ 
+   Person tags   to describe people by name, phone, E-mail address, and
++  Person tags
++  Person tags
++  Person tags
+ 
+   Address tags  to  be  used  if the address of a person differs from :a_site
++  Address tags
++  Address tags
++  Address tags
+                 (or :a_member).
+ 
+   The distinction between "role" and "person"  has  been  made  to  allow  to
+   define  one person for more than one role or to assign several persons to a
+   single role without the need of repeating each person's data in  each  role
+   tag.
+ 
+      The  role  tag describes by its tagname which role it stands for and its
++          role  tag
++          role  tag
++          role  tag
+   tagdata consists of pointers to the person tags of those people who perform
+   the given role.  These pointers are the tagnames of the  associated  person
+   tags.
+ 
+      Person  tags contain the personal information about people.  The tagname
++     Person  tags
++     Person  tags
++     Person  tags
+   of a person tag is :P_nickname in which "nickname" can  be  chosen  by  the
++                     :P_nickname
++                     :P_nickname
++                     :P_nickname
+   responsible administrator of the entry.
+ 
+      Address  tags  may be used to provide addresses which are different from
++     Address  tags
++     Address  tags
++     Address  tags
+   the site or member address for single persons or groups of  people by using
+   the :A_locid tag and  referring  to  it  by  specifying  "A_locid"  in  the
++      :A_locid
++      :A_locid
++      :A_locid
+   :p_nickname  tag(s).  If no such reference is made in a person tag then the
+   corresponding :a_site tag (or :a_member tag if no  site  address)  contains
+   the  appropriate  address.    Note  that  locid  SITE  and locid MEMBER are
+   reserved for the site, respectively member addresses.
+ 
+      The nicknames and locids are assigned by the administrator who maintains
+   the node, site or member information in  which  these  roles,  persons  and
+   addresses are defined. It is not necessary to have a network wide coordina-
+   tion  of  the  nicknames/locids  since they are only valid within the entry
+   where they are specified and in subordinate entries.
+ 
+      Range of validity of nicknames/locids:
++     Range of validity of nicknames/locids:
++     Range of validity of nicknames/locids:
++     Range of validity of nicknames/locids:
+ 
+   *   The nickname or locid of a tag in a  member  entry  is  known  in  this
+       member's  entry,  in  all subordinate site entries and subordinate node
+       entries of these sites.
+ 
+   *   The nickname or locid of a tag in a site entry is known in this  site's
+       entry and in all subordinate node entries.
+ 
+   *   The  nickname  or  locid of a tag in a node-only entry is only known in
+       this entry.
+ 
+      Search order for locating person tags:
++     Search order              person tags
++     Search order              person tags
++     Search order              person tags
+0
+   Description of the TAGs                                                  43
+1
+-
+   1.  look in current entry
+ 
+   2.  if not found:
+ 
+       a.  get :ref tag
+ 
+       b.  if :ref tag points to current entry then: person not defined
+ 
+       c.  else make :ref-entry the current entry and repeat steps 1 and 2.
+ 
+      Search order for locating address tags:
++     Search order              address tags
++     Search order              address tags
++     Search order              address tags
+ 
+   1.  look in current entry
+ 
+   2.  if not found:
+ 
+       a.  get :ref tag
+ 
+       b.  if  :ref tag points to current entry then: address not defined, use
+           appropriate :a_site or :a_member.
+ 
+       c.  else make :ref-entry the current entry and repeat steps 1 and 2.
+-
+   2.3.1  The :p_nickname Tags
++  2.3.1  The :p_nickname Tags
++  2.3.1  The :p_nickname Tags
++  2.3.1  The :p_nickname Tags
++  ___________________________
+0
+   Each of these tags contains information about one person. The tagdata  must
+   be  specified  in a certain format that allows to scan and separate the in-
+   formation items stored in this tag (semicolons are used as separators).
+ 
+      The address field may contain the tagname of an address tag (A_locid) to
+   indicate that for this person another address (tag :A_locid) is to be  used
+   rather than :a_site (or :a_member if no site address given).
+ * Any  NJE-style  network  address  specified  in  the  tag  must  be a valid
+ * (existing) NJE node name.
+ 
+ *    To be valid the tag must be referenced by a role tag at  least  once  in
+ * its range of validity (see paragraph 2.3).
+ 
+   Format  :p_nickname.name<;<network-addr><;<phone><;address>>>
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+           len(NICKNAME) = 1..8
+           chars(NICKNAME) = A..Z | 0..9
+           length(tagdata) = 1..maxtagdatalength
+           length(NAME) = 1..30  /* must fit in 1 address line */
+           value(NAME) = < first < middle > > lastname |
+                         descriptive name
+           value(NETWORK-ADDR) = E-mail address of user
+ *            if value(NETWORK-ADDR) = NJE nodename then
+0
+   Description of the TAGs                                                  44
+1
+-
+ *            a :type.NJE entry must exist with this nodename
+           struct(PHONE) = +cc <area-code> number <extension>
+           value(CC) = numeric
+           value(AREA-CODE) = numeric | omitted
+           value(NUMBER) = numeric | num.num<.num...>
+           value(EXTENSION) = -numeric | Xnumeric | xnumeric | omitted
+           length(ADDRESS) = 3..10
+           char1-2(ADDRESS) = A_
+           char3-10(ADDRESS) = A..Z | 0..9
+ 
+   Examples
++  Examples
++  Examples
++  Examples
+           :p_mary.Mary Poppins;MARY@CHIMNEY1;+44 1 747 -3546
+           :p_oper.System Operators;;+44 1 747 -3333
+           :p_paul.P. Martin;PAUL@NICE;+33 65.78.66.18 x3324;A_PHYS
+           :a_phys.Institut Physique;61 rue Pierre;Nice;France
+ 
+   Note: The phone extension should be preceded by a dash (-) if it is a dial-
++  Note:
++  Note:
++  Note:
+   through  extension. In case of operator assisted connection it is suggested
+   to indicate this by a preceding "x".
+ 
+ * Note: Tags not  referenced  in  their  range  of  validity  are  considered
++  Note:
++  Note:
++  Note:
+ * obsolete and might be deleted by the network administrators without notice.
+-
+   2.3.2  The :a_locid Tags
++  2.3.2  The :a_locid Tags
++  2.3.2  The :a_locid Tags
++  2.3.2  The :a_locid Tags
++  ________________________
+0
+   Besides  the standard :a_site and :a_member address tags other address tags
+   may be specified in a node-only, site or member entry which can be used  to
+   override the site or member address for a certain person.  The address tags
+   are  distinguished by the "locid" appended to the tagname stem :A_.  A_SITE
++                                                                 :A_
++                                                                 :A_
++                                                                 :A_
+   and A_MEMBER are reserved for the site, resp.   member address but  may  be
+   used  as reference in person tags (e.g. to choose :a_member tag rather than
+   the :a_site tag).
+ 
+      The address tags must contain  the  full  postal  address  (institution,
+   street,  city,  zip-code,  country  etc.)  which is required to send normal
+   mail.  The :a_locid tag may hold up to 5 address lines, each with a maximum
+   length of 30 characters.  The last address line should contain the  country
+   name in English.  The address lines are separated by semicolons (;).
+ 
+      The  complete  address  to  be used can be composed of the person's name
+   plus the address specified in :a_locid.
+ 
+      This results in a total of max. 6 lines with  30  characters  per  line.
+   This limit is imposed because many envelopes with windows and many adhesive
+   labels  do  not  provide  space for more than 6 lines of 30 characters when
+   printing with 10 characters/inch and 6 lines/inch.  And it makes  no  sense
+   to specify an address that cannot be printed. (This is also the X.520 stan-
+   dard.)
+ 
+   Format  :a_locid.addrline1;addrline2; . . . addrline5
++  Format
++  Format
++  Format
+0
+   Description of the TAGs                                                  45
+1
+-
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+           count(ADDRLINEs) = 1..5
+           length(ADDRLINEn) = 1..30
+ 
+   Example
++  Example
++  Example
++  Example
+           :a_physik.Universitaet Heidelberg
+                  ;Institut fuer angewandte Physik
+                  ;Im Neuenheimer Feld
+                  ;D-6900 Heidelberg
+                  ;Germany
+           :p_mueller.Heinz Mueller;MUE@DHDURZ1;;A_PHYSIK
+-
+   2.3.3  The ROLE Tags
++  2.3.3  The ROLE Tags
++  2.3.3  The ROLE Tags
++  2.3.3  The ROLE Tags
++  ____________________
+0
+   Role  tags  describe  by  their  tagname the "role" they stand for and with
+   their tagdata they point to the people who perform these roles (tagnames of
+   people tags). Most roles can be specified with any  type  of  entry  (node,
+   site  or  member). For networks other than BITNET, there are only two roles
+   which must be specified:
+ 
+   *   the :dir
+ 
+   *   the :admin
+ 
+   They must be specified together with the member information.  BITNET parti-
+   cipants (CREN members) must also specify  the  :techrep  and  the  :inforep
+   roles  in the MEMBER entry.  All other role tags in the member entry and in
+   all subordinate entries are optional.   They are substituted  according  to
+   the following rules:
+ 
+   1.  search the wanted role tag in the current node entry.
+ 
+   2.  if not found: look for :admin in current entry, take it as substitute.
+ 
+   3.  if neither wanted role tag nor :admin found:
+ 
+       a.  if  :ref  points to current node then this must be the member entry
+           and must contain a :admin tag. Since it didn't we  have  a  problem
+           here.
+ 
+       b.  make  the  entry current the one to which :ref points. Repeat steps
+           1, 2 and 3.
+ 
+      The format of role tags is always the same:
+ 
+             :tagname.P_nickname < P_nickname < ... > >
+-
+0
+   Description of the TAGs                                                  46
+1
+-
+   The number of nicknames allowed depends on the role and on  the  directives
+   of  the  network administration. The length of a nickname must not exceed 8
+   characters.
+ 
+      For  an  overview on defined role tags see "Overview on defined TAGs" at
+   the beginning of this chapter.
+-
+   2.3.4  Role tags unique to Member entries
++  2.3.4  Role tags unique to Member entries
++  2.3.4  Role tags unique to Member entries
++  2.3.4  Role tags unique to Member entries
++  _________________________________________
+-
+   2.3.4.1  The :dir Tag
++  2.3.4.1  The :dir Tag
++  2.3.4.1  The :dir Tag
++  2.3.4.1  The :dir Tag
+0
+   Points to the director of the member. This is the person in a member's ins-
++                director of the member
++                director of the member
++                director of the member
+   titution who has signed (or has the right to sign) the membership contract.
+   For BITNET participants (CREN members) the  dir  corresponds  to  the  CREN
++                                              ___                        CREN
++                                                                         CREN
++                                                                         CREN
+   Member Representative.  The :dir tag must be specified in the member entry.
++  Member Representative
++  Member Representative
++  Member Representative
+ 
+   Format  :dir.P_nickname
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :member tag is present then
+              TAG is REQUIRED
+              NAME in referred person tag is REQUIRED
+           else
+              TAG is NOTALLOWED
+-
+   2.3.4.2  The :inforep Tag
++  2.3.4.2  The :inforep Tag
++  2.3.4.2  The :inforep Tag
++  2.3.4.2  The :inforep Tag
+0
+   This  tag  is  used and required for BITNET members only.  It points to the
+   BITNET Information Services Representative of the member.  Part or  all  of
++  BITNET Information Services Representative
++  BITNET Information Services Representative
++  BITNET Information Services Representative
+   the  inforep  task  may  overlap with the task of the userinfo (see below).
++       _______                                          ________
+   Therefore, in most cases :inforep and  :userinfo  may  point  to  the  same
+   person.  However,  :userinfo  allows  more  than one person to be specified
+   while inforep by definition must be a single  person  for  BITNET  members.
++        _______
+   :inforep  is  used  for  BITNET's administrative purposes, information from
+   :userinfo is mainly used by servers and  programs  to  identify  authorized
+   people.
+ 
+   Format  :inforep.P_nickname
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :member tag is present AND :net.BITNET then
+              TAG is REQUIRED
+              NJE or domain-style address is REQUIRED in referred person tag
+           else
+              if :member tag is present then
+0
+   Description of the TAGs                                                  47
+1
+-
+                 TAG is OPTIONAL
+                 NJE or domain-style address is REQUIRED
+                                  in referred person tag
+              else
+                 TAG is NOTALLOWED
+-
+   2.3.4.3  The :techrep Tag
++  2.3.4.3  The :techrep Tag
++  2.3.4.3  The :techrep Tag
++  2.3.4.3  The :techrep Tag
+0
+   This  tag  is  used and required for BITNET members only.  It points to the
+   BITNET Technical Representative of the member.  Part or all of the  techrep
++  BITNET Technical Representative                                     _______
++  BITNET Technical Representative
++  BITNET Technical Representative
+   task  may  overlap  with  the  tasks of the admin and techinfo (see below).
++                                              _____     ________
+   Therefore, in most cases :techrep may point to the same person as :admin or
+   :techinfo.  However, :admin and :techinfo allow more than one person to  be
+   specified  while  techrep  by definition must be a single person for BITNET
++                    _______
+   members. :techrep is used for BITNET's administrative purposes, information
+   from :admin and :techinfo  is  mainly  used  by  servers  and  programs  to
+   identify authorized people.
+ 
+   Format  :techrep.P_nickname
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :member tag is present AND :net.BITNET then
+              TAG is REQUIRED
+              NJE or domain-style address is REQUIRED in referred person tag
+           else
+              if :member tag is present then
+                 TAG is OPTIONAL
+                 NJE or domain-style address is REQUIRED
+                                  in referred person tag
+              else
+                 TAG is NOTALLOWED
+-
+   2.3.5  Role tags unique to Site entries   (only for 3-level hierarchy)
++  2.3.5  Role tags unique to Site entries   (only for 3-level hierarchy)
++  2.3.5  Role tags unique to Site entries   (only for 3-level hierarchy)
++  2.3.5  Role tags unique to Site entries   (only for 3-level hierarchy)
++  ______________________________________________________________________
+-
+   2.3.5.1  The :sitedir Tag
++  2.3.5.1  The :sitedir Tag
++  2.3.5.1  The :sitedir Tag
++  2.3.5.1  The :sitedir Tag
+0
+   Points  to the director of the site.  This is usually the head of the staff
++                 director of the site
++                 director of the site
++                 director of the site
+   of people who operate the nodes of a site.
+ 
+   Format  :sitedir.P_nickname
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :site tag is present then
+              TAG is OPTIONAL
+              default(SITEDIR) = :dir of member
+0
+   Description of the TAGs                                                  48
+1
+-
+              NAME in referred person tag is REQUIRED
+           else
+              TAG is NOTALLOWED
+-
+   2.3.6  Role tags in Node or Site or Member entries
++  2.3.6  Role tags in Node or Site or Member entries
++  2.3.6  Role tags in Node or Site or Member entries
++  2.3.6  Role tags in Node or Site or Member entries
++  __________________________________________________
+0
+   These tags may appear in entries at any level of the hierarchy depending on
+   where  they  are allowed by the network organization. It might be that, for
+   administrative reasons, role tags are only allowed at the  site  or  member
+   level.  If  no  restrictions are applied then the following rules should be
+   observed:
+ 
+   1.  If a certain role is to be performed by the same people who are defined
+       as :admin for this entry then it is not necessary to specify this  role
+       tag since the :admin is always the substitute for a role not specified.
+ 
+   2.  If  there are several node entries of the same site which need the same
+       role tag, pointing to the  same  persons,  then  it  is  sufficient  to
+       specify this role tag only once in the site entry, provided there is no
+       :admin in the node entry which would take precedence (see item 1).
+ 
+   3.  If  there  are  several  site entries of the same member which need the
+       same role tag, pointing to the same persons, then it is  sufficient  to
+       specify  this role tag only once in the member entry, provided there is
+       no :admin in the site entry which would take precedence (see item 1).
+-
+   2.3.6.1  The :admin Tag
++  2.3.6.1  The :admin Tag
++  2.3.6.1  The :admin Tag
++  2.3.6.1  The :admin Tag
+0
+   Points to the person who is responsible for the update (administration)  of
+   this  entry  and  possibly  all subordinate entries. The :admin is also the
+   substitute  for  any  otherwise  unspecified  role  at  this  node  or   at
+   subordinate  nodes.  The :admin tag is required for the member entry. It is
+   optional in subordinate entries.
+ 
+   Format  :admin.P_nickname < P_nickname < ... > >
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           if :member tag is present then
+              TAG is REQUIRED
+           else
+              TAG is OPTIONAL
+              default = :admin of next higher entry
+ 
+           NAME, PHONE and NETWORK-ADDRESS (in NJE-format)
+                 are REQUIRED in referred person tags
+-
+ 
+   Description of the TAGs                                                  49
+1
+-
+   2.3.6.2  The :netop Tag
++  2.3.6.2  The :netop Tag
++  2.3.6.2  The :netop Tag
++  2.3.6.2  The :netop Tag
+0
+   Points to the person(s) who is (are) in charge of network operations.    It
++                                                    network operations
++                                                    network operations
++                                                    network operations
+   may  point to the entries of one or more persons or to an artificial person
+   entry for the whole operations staff.
+ 
+   Format  :netop.P_nickname < P_nickname < ... > >
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+           default = 1) :admin or 2) :netop at higher level
+           PHONE is REQUIRED in referred person tag
+-
+   2.3.6.3  The :techinfo Tag
++  2.3.6.3  The :techinfo Tag
++  2.3.6.3  The :techinfo Tag
++  2.3.6.3  The :techinfo Tag
+0
+   Points to the person who is to be contacted for technical queries about the
++                                                  technical queries
++                                                  technical queries
++                                                  technical queries
+   node, the links, etc.
+ 
+   Format  :techinfo.P_nickname < P_nickname < ... > >
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+           default = 1) :admin or 2) :techinfo at higher level
+           NJE-FORMAT ADDRESS is REQUIRED in referred person tag
+-
+   2.3.6.4  The :userinfo Tag
++  2.3.6.4  The :userinfo Tag
++  2.3.6.4  The :userinfo Tag
++  2.3.6.4  The :userinfo Tag
+0
+   Points  to the person who is to be contacted for information about users at
++                                                   information about users at
++                                                   information about users at
++                                                   information about users at
+   his site and who provides network information to his users.
++  his site                  network information to his users
++  his site                  network information to his users
++  his site                  network information to his users
+ 
+   Format  :userinfo.P_nickname < P_nickname < ... > >
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+           default = 1) :admin or 2) :userinfo at higher level
+           NJE-FORMAT ADDRESS is REQUIRED in referred person tag
+-
+   2.3.6.5  The :useradm Tag
++  2.3.6.5  The :useradm Tag
++  2.3.6.5  The :useradm Tag
++  2.3.6.5  The :useradm Tag
+0
+   Points to the person who is entrusted with user administration at the node,
++                                             user administration
++                                             user administration
++                                             user administration
+   site or member level. This person will also get authorization  to  register
+   users  in public directories, pass certain server privileges to other users
+   etc. For more information on the authorizations provided to  the  "useradm"
+0
+   Description of the TAGs                                                  50
+1
+-
+   see    e  the  documentation  of  the  corresponding servers (e.g. NETSERV,
+   LISTSERV, etc.).
+ 
+   Format  :useradm.P_nickname < P_nickname < ... > >
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+           default = 1) :admin or 2) :useradm at higher level
+           NJE-FORMAT ADDRESS is REQUIRED in referred person tag
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+ 
+   Description of the TAGs                                                  51
+1
+-
+   3.0  THE SPECIAL VERSION ENTRY
++  3.0  THE SPECIAL VERSION ENTRY
++  3.0  THE SPECIAL VERSION ENTRY
++  3.0  THE SPECIAL VERSION ENTRY
++  ______________________________
+-
+   The version entry is used to give the nodes file a version number. The ver-
++      version
++      version
++      version
+   sion number is part of the nodeid of the entry:
+ 
+     VERSnnnn.
++    VERSnnnn
++    VERSnnnn
++    VERSnnnn
+ 
+   "nnnn"  must  be  a positive integer. It must increase with subsequent ver-
+   sions of the nodes file. Structure and value of the number are  subject  to
+   update  requirements  of  the network administration. For the nodes file of
+   BITNET, EARN, NETNORTH, and other Cooperating Networks, the structure  will
+   be yynn in which yy is the year and nn is the sequence number of updates in
++     yynn          yy                 nn
++     yynn          yy                 nn
++     yynn          yy                 nn
+   this year.  The version entry serves mainly three purposes:
+ 
+   *   It  allows an update program to check whether the update(s) are applied
+       to the correct version of the file.
+ 
+   *   A dummy entry is built into routing tables for the "version node"  that
+       allows  querying  the  version of the installed routing table by simple
+       network query commands.
+ 
+   *   The version entry holds default values  for  some  tags  which  may  be
+       omitted in other entries.
+ 
+   Although  the  sort order in the distributed nodes file is the alphanumeric
+   order of the entry-ids, the version entry is an exception. It is always the
+   first entry in the distributed file. This provides for  better  performance
+   of the update program and does also allow a quick visual check for the ver-
+   sion.
+ 
+      These are the tags provided in a version entry:
+-
+-
+-
+-
+-
+-
+-
+ 
+   The special VERSION entry                                                52
+1
+-
+     --- technical (required) ---
+     :node.VERSyynn :type.NJE
+     :nodenum.highest_number
+     :links1.node_at_which_generated(P,9600)
+     :ref.site/member_at_which_generated
+     --- technical (optional) ---
+     :noderesist.0.001
+     :fclass.* :fformat.ND PU :msgs.Y
+     :netsoft.RSCS :routtab.RSCS
+     --- administrative ---
+     :net.where_generated
+     :country.where_generated :connect.yyyymmdd
+     :lastup.ADD yyyymmdd generating_userid@nodeid
+     :cks.entry-checksum
+     --- special "version" tags ---
+     :appl1.appl-id(version)
+     :genrouts.version-id :updnodes.version-id
+     :remark1.BASE(yynn) date time <comment>
+     :remark2.VERSION(yynn) PRE(yynn) date time <comment>
+     :remarknn.VERSION(yynn) PRE(yynn) date time <comment>
+     :totcks.file-checksum
+0
+   Note: The terms "node_at_which_generated", "generating_userid@nodeid", etc.
++  Note:
++  Note:
++  Note:
+   in  some  of  the tags refer to the place where the current version of this
+   nodes file has been created (Netserv Master Controller) and NOT  to  places
+   where an old version has been updated by applying an update file.
+ 
+      The  following tags in the version entry describe default values for the
++                                                       default values
++                                                       default values
++                                                       default values
+   optional parameters in other entries.
+ 
+   *   :links1.    (P,9600)
+ 
+   *   :fclass.*
+ 
+   *   :fformat.ND PU
+ 
+   *   :msgs.Y
+ 
+   *   :noderesist.0.001
+ 
+   Note: Programs may extract the default values from the version entry rather
++  Note: Programs may extract the default values from the version entry rather
++  Note: Programs may extract the default values from the version entry rather
++  Note: Programs may extract the default values from the version entry rather
+   than using hardcoded values.
++  than using hardcoded values.
++  than using hardcoded values.
++  than using hardcoded values.
+ 
+      For a description of the tags refer to the following chapter.
+-
+   3.1  OVERVIEW ON THE TAGS FOR THE VERSION ENTRY
++  3.1  OVERVIEW ON THE TAGS FOR THE VERSION ENTRY
++  3.1  OVERVIEW ON THE TAGS FOR THE VERSION ENTRY
++  3.1  OVERVIEW ON THE TAGS FOR THE VERSION ENTRY
++  _______________________________________________
+0
+   These are used in addition to the tags described for an NJE-node.
+-
+   The special VERSION entry                                                53
+1
+-
+     +----- Optional/Required
+     |  +-- Provided by:  G = generated
+     |  |
+     |  |   tagname    description
+     |  |   ---------  ----------------------
+ 
+     O  C   applN      minimum required version of related applications
+     R  G   genrouts   minimum required version of the GRIBM program
+     R  G   remarkN    keeps history of updates
+     R  G   totcks     total checksum of the nodes file
+     R  G   updnodes   minimum required version of the UPDNODES program
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+0
+   The special VERSION entry                                                54
+1
+-
+   3.2  DESCRIPTION OF THE TAGS IN VERSNNNN ENTRY
++  3.2  DESCRIPTION OF THE TAGS IN VERSNNNN ENTRY
++  3.2  DESCRIPTION OF THE TAGS IN VERSNNNN ENTRY
++  3.2  DESCRIPTION OF THE TAGS IN VERSNNNN ENTRY
++  ______________________________________________
+-
+   3.2.1  The :applN Tag
++  3.2.1  The :applN Tag
++  3.2.1  The :applN Tag
++  3.2.1  The :applN Tag
++  _____________________
+0
+   The ":applN" tag describes a program that uses this node file as input.
+   This tag will eventually phase out the :updnodes. and :genrouts. tags.
+ 
+   Format  :applN.appldefs
++  Format
++  Format
++  Format
+           appldefs ::= appldef | appldefs appldef
+           appldef ::= applid(applicationdata)
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is OPTIONAL
+           length(APPLDEFS) = 1..maxtagdatalength
+           applicationdata must not contain parentheses
+ 
+   Examples
++  Examples
++  Examples
++  Examples
+           :appl1.UPDNODES(1.3) GR(91-11-91) PAROUTE(2000-A)
+           :appl2.VERNODES(12;PLEASE-GET-A-NEW-ONE) MAKEINFO(47.11)
+           :appl3.NODETREE(2)
+-
+   3.2.2  The :genrouts Tag
++  3.2.2  The :genrouts Tag
++  3.2.2  The :genrouts Tag
++  3.2.2  The :genrouts Tag
++  ________________________
+0
+   This tag is provided to ensure that the correct version of GRIBM is used to
+   build routing tables.
+   This tag will be phased out by the :applN. tag in the future.
+ 
+   Format  :genrouts.version
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED in VERSnnnn entry
+           TAG is GENERATED
+           length(VERSION) = 1..8
+ 
+   Example
++  Example
++  Example
++  Example
+           :genrouts.88/07/12
+-
+   3.2.3  The :remarkN Tags
++  3.2.3  The :remarkN Tags
++  3.2.3  The :remarkN Tags
++  3.2.3  The :remarkN Tags
++  ________________________
+0
+   These tags are used in the version entry to store the update history of the
+   nodes  file and to ensure that further updates are applied in sequence. For
+   further information on this update procedure refer to a description of  the
+   UPDNODES  process.  (See  also the :remarkN tag description under "TAGs for
+   node-related information".)
+0
+   The special VERSION entry                                                55
+1
+-
+   Format  :remarkN.text
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED in VERSnnnn entry
+           TAG is GENERATED
+           length(TEXT) = 1..60
+           value(TEXT) = defined by UPDNODES
+ 
+   Example
++  Example
++  Example
++  Example
+           :remark1.BASE(8807) 88/07/12 12:42:57
+           :remark2.VERSION(8808) PRE(8807) 88/08/14 11:28:12
+-
+   3.2.4  The :totcks Tag
++  3.2.4  The :totcks Tag
++  3.2.4  The :totcks Tag
++  3.2.4  The :totcks Tag
++  ______________________
+0
+   This  tag  holds a checksum which ensures that no entries in the nodes file
+   have been deleted or added illegally between two update processes.   Calcu-
+   lation of the total checksum is described in file UPDNODES DESCRIPT.
+ 
+   Format  :totcks.n
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED in VERSnnnn entry
+           TAG is GENERATED
+           length(N) = 1..5
+           value(N) = 0..65535
+ 
+   Example
++  Example
++  Example
++  Example
+           :totcks.275
+-
+   3.2.5  The :updnodes Tag
++  3.2.5  The :updnodes Tag
++  3.2.5  The :updnodes Tag
++  3.2.5  The :updnodes Tag
++  ________________________
+0
+   This  tag  specifies  the  version  of  the UPDNODES program to be used for
+   applying the update file to the old nodes file.
+   This tag will be phased out by the :applN. tag in the future.
+ 
+   Format  :updnodes.version
++  Format
++  Format
++  Format
+ 
+   Verification rules
++  Verification rules
++  Verification rules
++  Verification rules
+           TAG is REQUIRED if VERSnnnn entry
+           TAG is GENERATED
+           length(VERSION) = 1..8
+ 
+   Example
++  Example
++  Example
++  Example
+           :updnodes.1.3
+-
+0
+   The special VERSION entry                                                56
+1
+-
+   4.0  APPENDICES
++  4.0  APPENDICES
++  4.0  APPENDICES
++  4.0  APPENDICES
++  _______________
+-
+   4.1  APPENDIX A
++  4.1  APPENDIX A
++  4.1  APPENDIX A
++  4.1  APPENDIX A
++  _______________
+0
+   The  following  example shows the node entries for a 3-level structure with
+   site and member data included in the  node  entries.    The  organizational
+   structure in the example is as follows:
+ 
+     member: DFVLROP1
+             |
+             +-----------------------------+
+             |                             |
+     sites : DFVLROP1                      DFVLRST1
+             |                             |
+             +---------+---------+         |
+             |         |         |         |
+     nodes : DFVLROP1  DFVLROP2  DFVLROPE  DFVLRST1
+ 
+   --------------------------
+ 
+     :node.DFVLROPE :type.NJE :ref.DFVLROP1
+          :nodenum.0420 :connect.19860124
+          :machine.IBM 4381 :system.IBM MVS/SP :netsoft.JES2
+          :links1.DFVLROP1(,1.5M) DFVLROP2(,64k) DFVLRST1
+          :userinfo.P_GLAS
+          :net.EARN :country.DE.BAY
+          :lastup.ADD 19871217 RZ1B@DFVLROP1 :cks.45671
+ 
+     :node.DFVLROP1 :type.NJE :ref.DFVLROP1
+          :nodenum.0256 :connect.19841127
+          :machine.IBM 4381 :system.IBM VM/SP HPO R4.2
+          :netsoft.RSCS V2R1
+          :links1.DS0RUS1P(,4800) DM0MPI11(,4800) DFVLRST1
+          :links2.DFVLROP2(,1.5M) DFVLROPE(,1.5M)
+          :netop.P_OPER
+          :userinfo.P_BERNHARD P_GLAS
+          :site.DFVLR Oberpfaffenhofen, Germany
+            :a_site.DFVLR;Rechenzentrum;D-8031 Oberpfaffenhofen;Germany
+            :sitedir.P_BERNHARD
+          :member.DFVLR Oberpfaffenhofen, Germany
+            :a_member.DFVLR;Hauptverwaltung;D-8031 Oberpfaffenhofen;Germany
+            :dir.P_WACKER :admin.P_EINERT
+          :p_wacker.Dr. Hans-Martin Wacker;RZ01@DFVLROP1;;A_MEMBER
+          :p_bernhard.Klaus Bernhardt;RZ80@DFVLROP1;
+          :p_einert.Dagmar Einert;RZ1B@DFVLROP1;+49 8153 28 -920;A_MEMBER
+          :p_glas.Gerhard Glas;RZ14@DFVLROP1
+          :p_oper.Operators;OPERATOR@DFVLROP1;+49 8153 28 -942
+          :net.EARN :country.DE.BAY
+          :lastup.REP 19880229 MABOGEN@DEARN :cks.6213
+-
+   Appendices                                                               57
+1
+-
+     :node.DFVLROP2 :type.NJE :ref.DFVLROP1
+          :nodenum.0429 :connect.19860124
+          :machine.IBM 3090 :system.IBM MVS/XA :netsoft.JES2
+          :links1.DFVLROP1(,1.5M) DFVLROPE(,64k) DFVLRST1
+          :routtab.JES2 O=25
+          :net.EARN :country.DE.BAY
+          :lastup.REP 19880220 RZ1B@DFVLROP1 :cks.35736
+ 
+     :node.DFVLRST1 :type.NJE :ref.DFVLROP1
+          :nodenum.0464 :connect.19860124
+          :machine.Siemens 7.865 :system.IBM VM/SP-HPO R4.2
+          :netsoft.RSCS V2R1
+          :routtab.RSCS (RZ1B@DFVLROP1,RZ22@DFVLRST1)
+          :links1.DFVLROP1 DFVLROP2 DFVLROPE
+          :netop.P_OPER :userinfo.P_KOEPPE
+          :useradm.P_KOEPPE
+          :site.DFVLR Stuttgart, Germany
+            :a_site.DFVLR;Pfaffenwaldring 38-40
+                   ;D-7000 Stuttgart 80;Germany
+            :sitedir.P_KOEPPE
+          :p_koeppe.Helga Koeppe;RZ22@DFVLRST1
+          :p_oper.Operators;OPERATOR@DFVLRST1
+          :net.EARN :country.DE.BW
+          :lastup.REP 19880229 RZ1B@DFVLROP1 :cks.53590
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+ 
+   Appendices                                                               58
+1
+-
+   4.2  APPENDIX B
++  4.2  APPENDIX B
++  4.2  APPENDIX B
++  4.2  APPENDIX B
++  _______________
+0
+   The  following  example shows the node entries for a 2-level structure with
+   node and member data included. The organizational structure in the  example
+   is as follows:
+ 
+     member: PUCC
+             |
+             +---------+---------+
+             |         |         |
+     nodes : PUFORBES  PUMIS     PUNFS
+ 
+   --------------------------
+ 
+     :node.PUCC :type.NJE :ref.PUCC
+          :nodenum.0073 :connect.19820330
+          :machine.IBM 3081 :system.IBM VM/SP :netsoft.RSCS
+          :links1.CUNYVM PSUVM(,14400) PUMIS PUNFS
+          :servers1.VMMAIL@PUCC(MAIL,ND DD PU,N,BSMTP,P_JOHN)
+          :techinfo.P_JOHN :userinfo.P_LEE
+          :netop.P_OPER
+          :member.Princeton University
+            :a_member.Princeton University
+                     ;87 Prospect Avenue;Princeton, NJ 08544;USA
+            :dir.P_IRA :admin.P_RITA
+            :inforep.P_RITA :techrep.P_JOHN
+            :hegis.Princeton University
+            :memdate.19820131
+          :p_john.John Wagner;MAINTCMS@PUCC;+1 609 452 -6043
+          :p_ira.Ira Fuchs;FUCHS@PUCC;+1 609 452 -5601
+          :p_lee.Lee Varian;B7560@PUCC
+          :p_oper.Operators;;+1 609 452 -6025
+          :p_peter.Peter Olenick;Q0239@PUCC;+1 609 452 -6024
+          :p_rita.Rita Saltz;RITA@PUCC
+          :net.BITNET :country.US.NJ
+          :lastup.REP 19871123 RITA@PUCC :cks.36116
+ 
+     :node.PUFORBES :type.NJE :ref.PUCC
+          :nodenum.0682 :connect.85/07/12
+          :machine.IBM 4321 :system.IBM VM/SP :netsoft.RSCS
+          :links1.PUNFS
+          :servers1.VMMAIL@PUCC(MAIL,ND DD PU,N,BSMTP,P_JOHN)
+          :p_martin.Martin Becker;MARTIN@PUFORBES;;A_FORBES
+          :a_forbes.Princeton University;FORBES
+                   ;87 Prospect Avenue;Princeton, NJ 08544;USA
+          :net.BITNET :country.US.NJ
+          :lastup.ADD 19871109 RITA@PUCC :cks.36092
+-
+-
+ 
+   Appendices                                                               59
+1
+-
+     :node.PUMIS :type.NJE :ref.PUCC
+          :nodenum.2032 :connect.19870901
+          :machine.IBM 4361 :system.IBM VM/SP :netsoft.RSCS
+          :links1.PUCC
+          :servers1.VMMAIL@PUMIS(MAIL,ND DD PU,N,BSMTP,P_JOHN)
+          :net.BITNET :country.US.NJ
+          :lastup.REP 19871109 UPDATE@BITNIC :cks.48611
+ 
+     :node.PUNFS :type.NJE :ref.PUCC
+          :nodenum.0683 :connect.19850712
+          :machine.IBM 4361 :system.IBM VM/SP :netsoft.RSCS
+          :links1.PUCC PUFORBES
+          :servers1.VMMAIL@PUCC(MAIL,ND DD PU,N,BSMTP,P_JOHN)
+          :userinfo.P_PETER
+          :net.BITNET :country.US.NJ
+          :lastup.REP 19871109 RITA@PUCC :cks.24028
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+   Appendices                                                               60
+1
+-
+   4.3  APPENDIX C
++  4.3  APPENDIX C
++  4.3  APPENDIX C
++  4.3  APPENDIX C
++  _______________
+0
+   The  following  example shows entries for a 3-level structure with site and
+   member data specified in separate entries.  The organizational structure in
+   the example is the same as in Appendix A:
+ 
+     member: DFVLR_DE
+             |
+             +-----------------------------+
+             |                             |
+     sites : DFVLR_OP                      DFVLR_ST
+             |                             |
+             +---------+---------+         |
+             |         |         |         |
+     nodes : DFVLROP1  DFVLROP2  DFVLROPE  DFVLRST1
+ 
+   --------------------------
+ 
+     :node.DFVLR_DE :type.MEMBER :ref.DFVLR_DE
+          :member.DFVLR Oberpfaffenhofen, Germany
+          :a_member.DFVLR;Hauptverwaltung;D-8031 Oberpfaffenhofen;Germany
+          :dir.P_WACKER :admin.P_EINERT
+          :p_wacker.Dr. Hans-Martin Wacker;RZ01@DFVLROP1
+          :p_einert.Dagmar Einert;RZ1B@DFVLROP1;+49 8153 28 -920;A_RZ_OP
+          :a_RZ_OP.DFVLR;Rechenzentrum;D-8031 Oberpfaffenhofen;Germany
+          :net.EARN :country.DE
+          :lastup.REP 19880229 MABOGEN@DEARN :cks.6213
+ 
+     :node.DFVLR_OP :type.SITE :ref.DFVLR_DE
+          :site.DFVLR Oberpfaffenhofen, Germany
+          :a_site.DFVLR;Rechenzentrum;D-8031 Oberpfaffenhofen;Germany
+          :sitedir.P_BERNHARD
+          :netop.P_OPER
+          :userinfo.P_BERNHARD P_GLAS
+          :p_bernhard.Klaus Bernhardt;RZ80@DFVLROP1;
+          :p_glas.Gerhard Glas;RZ14@DFVLROP1
+          :p_oper.Operators;OPERATOR@DFVLROP1;+49 8153 28 -942
+          :net.EARN :country.DE.BAY
+          :lastup.REP 19880229 MABOGEN@DEARN :cks.6213
+ 
+     :node.DFVLROP1 :type.NJE :ref.DFVLR_OP
+          :nodenum.0256 :connect.19841127
+          :machine.IBM 4381 :system.IBM VM/SP HPO R4.2
+          :netsoft.RSCS V2R1
+          :links1.DS0RUS1P(,4800) DM0MPI11(,4800) DFVLRST1
+          :links2.DFVLROP2(,1.5M) DFVLROPE(,1.5M)
+          :net.EARN :country.DE.BAY
+          :lastup.REP 19880229 MABOGEN@DEARN :cks.6213
+-
+-
+   Appendices                                                               61
+1
+-
+     :node.DFVLROP2 :type.NJE :ref.DFVLR_OP
+          :nodenum.0429 :connect.19860124
+          :machine.IBM 3090 :system.IBM MVS/XA :netsoft.JES2
+          :links1.DFVLROP1(,1.5M) DFVLROPE(,64k) DFVLRST1
+          :routtab.JES2 O=25
+          :net.EARN :country.DE.BAY
+          :lastup.REP 19880220 RZ1B@DFVLROP1 :cks.35736
+ 
+     :node.DFVLROPE :type.NJE :ref.DFVLR_OP
+          :nodenum.0420 :connect.19860124
+          :machine.IBM 4381 :system.IBM MVS/SP :netsoft.JES2
+          :links1.DFVLROP1(,1.5M) DFVLROP2(,64k) DFVLRST1
+          :userinfo.P_GLAS
+          :net.EARN :country.DE.BAY
+          :lastup.REP 19871217 RZ1B@DFVLROP1 :cks.45671
+ 
+     :node.DFVLR_ST :type.SITE :ref.DFVLR_DE
+          :site.DFVLR Stuttgart, Germany
+          :a_site.DFVLR;Pfaffenwaldring 38-40;D-7000 Stuttgart 80;Germany
+          :sitedir.P_KOEPPE
+          :netop.P_OPER
+          :userinfo.P_KOEPPE
+          :useradm.P_KOEPPE
+          :p_koeppe.Helga Koeppe;RZ22@DFVLRST1
+          :p_oper.Operators;OPERATOR@DFVLRST1
+          :net.EARN :country.DE.BW
+          :lastup.REP 19880229 RZ1B@DFVLROP1 :cks.53590
+ 
+     :node.DFVLRST1 :type.NJE :ref.DFVLR_ST
+          :nodenum.0464 :connect.19860124
+          :machine.Siemens 7.865 :system.IBM VM/SP-HPO R4.2
+          :netsoft.RSCS V2R1
+          :routtab.RSCS (RZ1B@DFVLROP1,RZ22@DFVLRST1)
+          :links1.DFVLROP1 DFVLROP2 DFVLROPE
+          :net.EARN :country.DE.BW
+          :lastup.REP 19880229 RZ1B@DFVLROP1 :cks.53590
+-
+-
+-
+-
+-
+-
+ 
+   Appendices                                                               62

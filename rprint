@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+# A first-order approximation of remote printing in FUNET's NJE
+#
+# Add following into  file-exit.cf (prefix it with PRT file matching)
+#	RUN /path/rprint $SPOOL lpname $FRUSER $FRNODE $TOUSER $FID
+#
+# Written by  Wilfried Maschtera  <maschti@alijku64>
+# and somewhat edited (commented) by Matti Aarnio <mea@finfiles>
+#
+HUJIBIN=/root/hujisrc-931116
+LPRBIN=/usr/bin/lpr
+pgname=`basename $0`
+locspid=`basename $1`
+$HUJIBIN/receive  -o /tmp/$pgname.$$ $1 2> /dev/tty8
+$LPRBIN -P$2 -J $3 /tmp/$pgname.$$ 2> /dev/tty8
+rc=$?
+if [ $rc -eq 0 ]
+   then
+   $HUJIBIN/send $3@$4 "Sent file $locspid($6) on link $5 to $2(SYSTEM)"
+fi
+rm /tmp/$pgname.$$ 2> /dev/tty8

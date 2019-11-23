@@ -1,0 +1,149 @@
+.\" $Header$
+.\"
+.\"  Man page for HUJI-NJE/FUNET-NJE on UNIX system.
+.\"
+.\"  Written by  Matti Aarnio <mea@finfiles.bitnet> <mea@nic.funet.fi>
+.\"
+.\"  Date: 27-Dec-1990, 18-Sep-1993
+.\"
+.ds ]W Funet-Nje 1 UNIX 3.0
+.TH BMAIL 8
+.SH NAME
+`NJELIB'/bmail \- bitnet mail send tool
+.SH SYNOPSIS
+.IP bmail 0.6i 0
+.RB [ " \-nd Gateway-address " ]
+.RB [ " \-b(smtp) Gateway-address " ]
+.RB [ " \-tag RSCS-TAG " ]
+.RB [ " \-u origuser " ]
+.if n .br
+.I FromUser@FromNode
+.I ToUser@ToNode
+.RI [ " ToUser@ToNode... " ]
+.SH DESCRIPTION
+.IX "bitnet"
+.IX "funetnje"
+.IX "bmail"
+.LP
+.I bmail
+command is actually a special purpose \fIsendfile\fR
+(Historically: code of \fIsendfile\fR reused a lot of \fIbmail\fR code)
+for mail transport, and thus is not a general user program.
+Its input is a ready-made mail file, and it generates a BSMTP envelope,
+when so requested.
+.LP
+Options for
+.I bmail
+are:
+.IP "\fB\-b(smtp) gateway@host\fR" 1.8i 0
+informing that the feed in mail shall be wrapped into a BSMTP/PUNCH envelope
+with "MAIL FROM:<>" getting the first argument, and "RCPT TO:<>" getting
+the rest (1 to many..)
+This option has two alternate names: "\fB-b\fR", and "\fB-bsmtp\fR".
+.I Line length is limited to 80 chars on this mode!  Wrapping of longer lines
+.I is attempted, but it might not always be successfull.
+.IP "\fB\-nd gateway@host\fR" 1.8i 0
+informing that the feed in mail shall be wrapped into a BSMTP/NETDATA envelope
+with "MAIL FROM:<>" getting the first argument, and "RCPT TO:<>" getting
+the rest (1 to many..)
+.I This accept indefinite length lines, minimum being 80 chars, true value
+.I is calculated while preparing the BSMTP envelope into a temporary file.
+.IP "\fB\-tag RSCS-TAG\fR" 1.8i 0
+defines the 136 bytes (padded/truncated to that length) RSCS TAG data.
+Usually not needed with
+.IR bmail .
+.IP "\fB\-u origuser\fR" 1.8i 0
+Can be used to define local mail-sender pseudo-id.
+For
+.SM BSMTP
+modes the default value is
+.BR MAILER .
+For others it is local user.
+.LP
+When
+.IR bmail's
+`From' argument contains a `.' in it, the file sender is changed to
+be "MAILER@localname", however possible BSMTP will contain entered
+`From' information.
+.SH INTERFACING TO SYSTEM MAILER
+In case of
+.BR zmailer (8z)
+by Rayan Zachariassen, interface goes as follows:
+.LP
+.nf
+.ft CW
+   $MAILSHARE/db/routes.bitnet contains:
+	academic         bsmtp3!mailer!academic
+	acmvm            bsmtp3!mailer!acmvm
+	acusd            defrt1!acusd
+	finhutc          bsmtp3nd!mailer!finhutc
+
+   $MAILSHARE/sm.conf  contains:
+	#
+	# bitnet stuff F=hu not set
+	#
+	bsmtp3   snmSX /usr/local/lib/huji/bmail  bmail -b $h -u MAILER $g $u
+	bsmtp3nd snmSX /usr/local/lib/huji/bmail  bmail -nd $h -u MAILER $g $u
+	defrt1   snS   /usr/local/lib/huji/bmail  bmail $g $u
+	bitnet2  snS   /usr/local/lib/huji/bmail  bmail $g $u
+
+   $MAILSHARE/scheduler.cf  contains:
+	defrt1/*
+                command="sm -c $channel defrt1"
+	bsmtp3/*
+                command="sm -c $channel bsmtp3"
+	bsmtp3nd/*
+                command="sm -c $channel bsmtp3nd"
+.ft R
+.fi
+.LP
+Getting this installed into a BSD
+.BR sendmail (8)
+should not be very difficult, but definitely different..
+Propably `mailer' definitions resemble  `sm.conf'  above.
+.LP
+.SH ENVIRONMENT
+With environment variable
+.B EBCDICTBL
+user can select alternate EBCDIC <\-> ASCII translation
+tables.  For more info, see
+.BR ebcdictbl (5).
+.LP
+.SH FILES
+.I /etc/funetnje.cf
+.br
+.I /etc/name.bitnet
+(For system mailer)
+.SH SEE ALSO
+.BR bitspool (5),
+.BR ebcdictbl (5),
+.BR funetnje (8),
+.BR mailify (1),
+.BR qrdr (8),
+.BR receive (1),
+.BR sendfile (1),
+.BR transfer (1)
+.SH BUGS
+.LP
+None that we know.
+.LP
+.SH DIAGNOSTICS
+These programs show their usage summary, when there is something
+wrong with input parameters.  Subtle usage bugs might not be detected!
+.SH WARNINGS
+When BSMTP envelope address overflows to longer than 80-characters,
+and NETDATA is not used, there is no check at it, nor folding...
+(There is a deliberate TRUNCATE at 80 cols, though..)
+With the NETDATA the input can be of arbitary long lines (up to 64000
+characters each).
+.LP
+.SH AUTHORS
+.LP
+Yehavi Bourvine, Hebrew University of Yerusalem, Israel
+.I <yehavi@hujivms.bitnet>.
+.LP
+Matti Aarnio, Finnish University and Research Network \- FUNET, Finland
+.I <mea@nic.funet.fi> <mea@finfiles.bitnet>.
+.LP
+Original (VMS oriented package) software by Yehavi Bourvine,
+UNIX features, plenty of modifications, man-pages by Matti Aarnio.
