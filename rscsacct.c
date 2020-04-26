@@ -6,6 +6,7 @@
 
  */
 
+#include <time.h>
 #include "consts.h"
 #include "ebcdic.h"
 #include "prototypes.h"

@@ -405,7 +405,7 @@ Revised September 21, 1990
  continue to  have limitations.    That is,   if a  host with
  traditional leased lines is down, no other path may exist to
  the sites supported by that leased line.
-@sp 0
+@sp 1
 @dots{}
 @sp 1
 @center Benefits of the restructuring
@@ -2047,7 +2047,7 @@ should be ignored. (Received network transport layer headers are there, etc.)
 @c      - implemented NETDATA features
 
 The @emph{parser} understands following NETDATA keys:
-@table @bullet
+@table @strong
 @item INMDSORG
         Only SEQUENTIAL is understood (others generate complaint, but
         do not abort.)
@@ -2089,7 +2089,7 @@ NETDATA producing systems (@file{sendfile}-command mainly) create
 following datas:
 @table @strong
 @item On INMR01 -record:
-@table @bullet
+@table @strong
 @item INMFUID
         Sending user's username is stored into the file.
         Actually this @emph{should} be the owner name of the
@@ -2114,7 +2114,7 @@ following datas:
 @end table
 
 @item On INMR02 -record:
-@table @bullet
+@table @strong
 @item INMUTILN
         A fixed value of "INMCOPY" (7 chars) is stored.
 @item INMDSORG

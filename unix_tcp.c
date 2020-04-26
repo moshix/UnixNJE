@@ -27,12 +27,10 @@
 #include "consts.h"
 #include "headers.h"
 #include "prototypes.h"
-/*
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-*/
 #include <netdb.h>
 
 extern struct ENQUIRE Enquire;
@@ -49,7 +47,7 @@ int		PassiveSocketChannel = -1,	/* On which we listen */
 static u_int32	get_host_ip_address();
 
 extern int	sys_nerr;	/* Maximum error number recognised */
-extern const char *const sys_errlist[];/* List of error messages */
+/* extern char	*sys_errlist[];	*/ /* List of error messages */
 #define	PRINT_ERRNO	(errno > sys_nerr ? "***" : sys_errlist[errno])
 
 

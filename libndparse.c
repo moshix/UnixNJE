@@ -20,7 +20,7 @@
 
  */
 
-
+#include <time.h>
 #include "ebcdic.h"
 #include "prototypes.h"
 #include "clientutils.h"

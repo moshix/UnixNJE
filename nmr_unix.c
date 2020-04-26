@@ -23,6 +23,7 @@
 #include "consts.h"
 #include "prototypes.h"
 #include <utmp.h>
+#include <time.h>
 
 #ifndef UTMP_FILE
 #define UTMP_FILE  "/etc/utmp"

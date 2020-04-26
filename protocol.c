@@ -1456,6 +1456,7 @@ const int	Index, flag;
 	  /* Create an empty password (all blanks) */
 	  memcpy(InitialSignon.NCCILPAS, EightSpaces, 8);
 	  memcpy(InitialSignon.NCCINPAS, EightSpaces, 8);
+logger(1, "PROTOCOL: Size of SIGNON is %d.\n", sizeof(struct SIGNON));
 	  send_data(Index, &InitialSignon, sizeof(struct SIGNON),
 		    ADD_BCB_CRC);
 
@@ -1476,6 +1477,7 @@ const int	Index, flag;
 
 	  logger(3, "PROTOCOL: Line %s, Sending response signon with bufsize %d\n",
 		 IoLines[Index].HostName, IoLines[Index].MaxXmitSize);
+logger(1, "PROTOCOL: Size of SIGNON is %d.\n", sizeof(struct SIGNON));
 	  send_data(Index, &ResponseSignon, (sizeof(struct SIGNON)),
 		    ADD_BCB_CRC);
 	}

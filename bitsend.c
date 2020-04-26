@@ -8,7 +8,7 @@
 
 #define SENDFILECMD "/usr/local/bin/sendfile"
 
-
+#include <time.h>
 #include "consts.h"
 #include "prototypes.h"
 #include "clientutils.h"

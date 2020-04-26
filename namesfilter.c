@@ -9,6 +9,8 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "sysexits.h"
 
 extern char **namesparse(/*FILE *namesfile, char **picktags, char *selector*/);
@@ -33,8 +35,8 @@ usage(msg)
 	exit(EX_USAGE);
 }
 
-extern char *strchr(), *strrchr();
-extern int strncmp();
+/* extern char *strchr(), *strrchr();
+extern int strncmp(); */
 
 #define FMT_ZMAILER  1
 #define FMT_SENDMAIL 2

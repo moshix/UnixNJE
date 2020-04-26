@@ -18,7 +18,7 @@
 
 #ifndef DEF_SPOOL_DIR_RULE
 # ifdef	UNIX
-#  define DEF_SPOOL_DIR_RULE "/usr/spool/bitspool/"
+#  define DEF_SPOOL_DIR_RULE "/var/spool/bitnet/"
 # else
 #  define DEF_SPOOL_DIR_RULE ???
 # endif
@@ -26,7 +26,7 @@
 
 #ifndef DEF_POSTMAST_SPOOL_DIR
 # ifdef UNIX
-#  define DEF_POSTMAST_SPOOL_DIR "/usr/spool/bitspool/POSTMAST"
+#  define DEF_POSTMAST_SPOOL_DIR "/var/spool/bitnet/POSTMAST"
 # else
 #  define DEF_POSTMAST_SPOOL_DIR ???
 # endif

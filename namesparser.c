@@ -16,10 +16,12 @@
    By Matti Aarnio <mea@nic.funet.fi>  14-Feb-1994 */
 
 #include <stdio.h>
-extern char *malloc();
+#include <stdlib.h>
+#include <string.h>
+/* extern char *malloc();
 extern char *realloc();
 extern void  free();
-extern char *strchr();
+extern char *strchr(); */
 
 char *MEMFAIL[] = { ":failure.MALLOC FAILED",NULL };
 

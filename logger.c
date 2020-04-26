@@ -5,11 +5,12 @@
  | after writing, so we can look in it at any time.
  */
 
+#include <stdio.h>
 #include "consts.h"
 #include "prototypes.h"
 #include "ebcdic.h"
-// #include <varargs.h>
 #include <stdarg.h>
+#include <time.h>
 
 extern int LogLevel;	/* In main() source module of each program */
 extern FILE *LogFd;	/* In main() source module of each program */
@@ -20,36 +21,44 @@ extern FILE *LogFd;	/* In main() source module of each program */
  | after writing, so we can look in it at any time.
  */
 void
-logger(int lvl, char *fmt, ...)
+logger(int lvl, ...)
 {
- 	char	*local_time();
- 	va_list pvar;
- 
- 	/* Do we have to log it at all ? */
- 	if (lvl > LogLevel) {
- 	  return;
- 	}
- 
- 	/* Open the log file */
- 	if (LogFd == 0) {	/* Not opened before */
- 	  if (strcmp(LOG_FILE,"-")==0)  LogFd = stderr;
- 	  else if ((LogFd = fopen(LOG_FILE, "a")) == NULL) {
- 	    LogFd = 0;
- 	    return;
- 	  }
- 	}
- 
- 	va_start(pvar, lvl);
- 	fprintf(LogFd, "%s, ", local_time());
- 	vfprintf(LogFd, fmt, pvar);
- 	va_end(pvar);
- 	fflush(LogFd);
- 
- 	if (LogLevel == 1) {	/* Normal run - close file after loging */
- 	  if (LogFd != stdout)
- 	    fclose(LogFd);
- 	  LogFd = 0;
- 	}
+	char	*local_time();
+	char *fmt;
+	va_list pvar;
+
+	va_start(pvar, lvl);
+/*	lvl = va_arg(pvar,int); */
+	va_end(pvar);
+	
+	/* Do we have to log it at all ? */
+	if (lvl > LogLevel) {
+	  return;
+	}
+
+	/* Open the log file */
+	if (LogFd == 0) {	/* Not opened before */
+	  if (strcmp(LOG_FILE,"-")==0)  LogFd = stderr;
+	  else if ((LogFd = fopen(LOG_FILE, "a")) == NULL) {
+	    LogFd = NULL;
+	    return;
+	  }
+	}
+
+	va_start(pvar, lvl);
+/*	lvl = va_arg(pvar,int); */
+	fmt = va_arg(pvar,char*);
+
+	fprintf(LogFd, "%s, ", local_time());
+	vfprintf(LogFd, fmt, pvar);
+	va_end(pvar);
+	fflush(LogFd);
+
+	if (LogLevel == 1) {	/* Normal run - close file after loging */
+	  if (LogFd != stdout)
+	    fclose(LogFd);
+	  LogFd = 0;
+	}
 }
 
 
@@ -65,8 +74,8 @@ local_time()
 
 	time(&clock);		/* Get the current time */
 	tm = localtime(&clock);
-	sprintf(TimeBuff, "%02d/%02d/%02d %02d:%02d:%02d",
-		tm->tm_mday, (tm->tm_mon + 1), tm->tm_year,
+	sprintf(TimeBuff, "%04d-%02d-%02d %02d:%02d:%02d",
+		tm->tm_year+1900, (tm->tm_mon + 1), tm->tm_mday,
 		tm->tm_hour, tm->tm_min, tm->tm_sec);
 	return TimeBuff;
 }
@@ -94,7 +103,9 @@ local_time()
 }
 
 void
-trace(const void *p, const int n, const int lvl)
+trace(p, n, lvl)
+const void *p;
+const int	n, lvl;
 {
 	register int	count, i;
 	char	line[LINESIZE];

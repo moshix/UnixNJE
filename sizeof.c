@@ -1,38 +1,18 @@
-/* FUNET-NJE developement test tools -- sizeof.c */
-
 #include <stdio.h>
-#include "consts.h"
-#include "headers.h"
 
-main()
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+int main(int argc, char *argv[])
+
 {
-/* struct SIGNON
-struct ENQUIRE
-struct NEGATIVE_ACK
-struct SIGN_OFF
-struct PERMIT_FILE
-struct NMR_MESSAGE */
+	printf("short is %d chars\n", sizeof(short));
+	printf("int is %d chars\n", sizeof(int));
+	printf("unsigned int is %d chars\n", sizeof(unsigned int));
+	printf("long is %d chars\n", sizeof(long));
+	printf("float is %d chars\n", sizeof(float));
+	printf("double is %d chars\n", sizeof(double));
 
-
-
-  printf("sizeof(struct TTB) = %d, claimed size=%d\n",
-	 sizeof(struct TTB), TTB_SIZE);
-  printf("sizeof(struct TTR) = %d, claimed size=%d\n",
-	 sizeof(struct TTR), TTR_SIZE);
-  printf("sizeof(struct VMctl) = %d, claimed size=%d\n",
-	 sizeof(struct VMctl), VMctl_SIZE);
-
-  printf("sizeof(struct JOB_HEADER) = %d\n",
-	 sizeof(struct JOB_HEADER));
-  
-  printf("sizeof(struct DATASET_HEADER) = %d\n",
-	 sizeof(struct DATASET_HEADER));
-  
-  printf("sizeof(struct JOB_TRAILER) = %d\n",
-	 sizeof(struct JOB_TRAILER));
-  
-  printf("sizeof(struct ROUTE_DATA) = %d\n",
-	 sizeof(struct ROUTE_DATA));
-  
-  return 0;
+	printf("in_addr_t is %d chars\n", sizeof(in_addr_t));
 }

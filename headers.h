@@ -253,7 +253,7 @@ struct	SIGNON {		/* Initial and response */
 /* M */				NCCINPAS[8],	/* Node password	     */
 				NCCIFLG;	/* Feature flags (X'80')     */
 		u_int32		NCCIFEAT;
-	};
+	} __attribute__ ((packed));
 
 
 /* Nodal messages records: */

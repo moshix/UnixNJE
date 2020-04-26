@@ -16,6 +16,7 @@
  | adapted in `our' manner..  There is not much left of the original..
 
  */
+#include <time.h>
 #include "consts.h"
 #include "headers.h"
 #include "prototypes.h"

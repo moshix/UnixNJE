@@ -19,6 +19,12 @@
  |
  |
  */
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <linux/stat.h>
+#include <fcntl.h>
+#include <strings.h>
+
 #include "consts.h"
 #include "headers.h"
 #include "prototypes.h"
@@ -64,7 +70,7 @@ static void  parse_op_command __(( int *fd ));
 static void  parse_file_queue __(( const int fd ));
 
 extern int	sys_nerr;	/* Maximum error number recognised */
-extern const char *const sys_errlist[]; /* List of error messages */
+/* extern char	*sys_errlist[];	*/ /* List of error messages */
 #define	PRINT_ERRNO	(errno > sys_nerr ? "***" : sys_errlist[errno])
 
 u_int32 socket_access_key;

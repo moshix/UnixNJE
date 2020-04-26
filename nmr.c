@@ -486,7 +486,7 @@ struct MESSAGE *Msg;
 	      Message->next = NULL;
 #ifdef DEBUG
 	      logger(3, "NMR, queued message to address %s, size=%d.\n",
-		     Taddress, size);
+		     Msg->node, Msg->length);
 #endif
 	      break;
 	}

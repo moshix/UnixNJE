@@ -15,8 +15,7 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <sys/wait.h>
-// #include <sys/time.h>
-#include <time.h>
+#include <sys/time.h>
 #include <sys/resource.h>
 #include <fcntl.h>
 #include <sys/file.h>
@@ -38,7 +37,6 @@
 #include <errno.h>
 #include <pwd.h>
 #include <utmp.h>
-#include <stdarg.h>
 
 #ifdef	DEBUG_FOPEN
 #define fopen _nje_fopen
@@ -81,7 +79,7 @@
 
 extern int	errno;
 extern int	sys_nerr;	/* Maximum error number recognised */
-extern const char *const sys_errlist[]; /* List of error messages */
+/* extern char	*sys_errlist[];	*/ /* List of error messages */
 #define	PRINT_ERRNO	(errno > sys_nerr ? "***" : sys_errlist[errno])
 
 
@@ -243,7 +241,7 @@ extern struct passwd *getpwnam __(( const char *name ));
 extern void	can_shut_down __(( void ));
 
 /* logger.c - shrunk */
-extern void	logger    __((int lvl, char *fmt, ...));
+extern void	logger    __((int lvl, ...));
 extern void	trace __(( const void *ptr, const int n, const int lvl ));
 extern char    *local_time __(( void ));
 extern volatile void  bug_check __(( const char *text ));

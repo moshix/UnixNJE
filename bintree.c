@@ -37,20 +37,22 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/fcntl.h>
+#include <string.h>
 
 #ifndef __STDC__
 #define const
 #define void char
 #endif
 
-extern void *malloc();
+/* extern void *malloc();
 extern void *realloc();
 extern void free();
 extern void *memset();
-extern char *strrchr();
+extern char *strrchr(); */
 
 struct Bintree {
 	FILE *treefile;

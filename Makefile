@@ -1,7 +1,13 @@
 #
-#	Makefile for LinuxNJE
+#	Makefile for FUNET-NJE package.
 #
+#	This file is made by  mea@nic.funet.fi  while compiling
+#	HUJI-NJE/FUNET-NJE on Sun4/330 SunOS4.0.3 (and later versions
+#	of FINFILES machine)
+#	This also contains a few other target systems accumulated over
+#	the years..
 #
+
 #       -DHAS_PUTENV    The system has putenv() instead of setenv().
 #                       This should be valid for most of the SysV based
 #                       systems while the BSD based systems usually have
@@ -67,25 +73,39 @@
 #			can fit your system, and your system does not have
 #			ANSI headers of its own, then use this...
 
-
-
-# DEC AxpOSF/1 3.2 -- GCC-2.6.3
-#CC=gcc -Wall -O6 #-fno-builtin
-CC=cc -migrate -D__alpha__ -O5 -inline speed
-#CC=cc -D__alpha__
-CPP=gcc -E
-CDEFS=  -DBSD_SIGCHLDS -DHAS_LSTAT -DHAS_PUTENV #-DDEBUG
-CFLAGS= -g3 $(CDEFS)
+# Convex OS V10.2 -- very POSIX.1 beast indeed..
+#CC     = gcc -fno-builtin -fpcc-struct-return
+#CPP    = gcc -E
+#CDEFS  = -O -D_POSIX_SOURCE  -DHAS_LSTAT
+#CFLAGS = -g $(CDEFS)
 # Have MAILIFY compiled by uncommenting following ones:
 #MAILIFY=mailify
-#MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/l/include
-#LIBMAILIFY= -lzmailer
+##MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/usr/local/include
+##LIBMAILIFY= -lzmailer
 ##MAILIFYCFLAGS= $(CFLAGS)
 ##LIBMAILIFY=
-NETW=
-LIBS=$(NETW)
-RANLIB=ranlib
-INSTALL=installbsd
+#NETW   = -L/usr/local/lib -lresolv # -lulsock
+#LIBS=$(NETW)
+#RANLIB = ranlib
+#INSTALL=install
+
+# # DEC AxpOSF/1 3.2 -- GCC-2.6.3
+# #CC=gcc -Wall -O6 #-fno-builtin
+# CC=cc -migrate -D__alpha__ -O5 -inline speed
+# #CC=cc -D__alpha__
+# CPP=gcc -E
+# CDEFS=  -DBSD_SIGCHLDS -DHAS_LSTAT -DHAS_PUTENV #-DDEBUG
+# CFLAGS= -g3 $(CDEFS)
+# # Have MAILIFY compiled by uncommenting following ones:
+# MAILIFY=mailify
+# MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/l/include
+# LIBMAILIFY= -lzmailer
+# ##MAILIFYCFLAGS= $(CFLAGS)
+# ##LIBMAILIFY=
+# NETW=
+# LIBS=$(NETW)
+# RANLIB=ranlib
+# INSTALL=installbsd
 
 # SunOS 5.3 (Solaris 2.3) -- GNU-CC 2.4.6 on SPARC
 #   Your PATH  MUST contain  /usr/ccs/bin:/opt/gnu/bin:/usr/ucb
@@ -106,23 +126,74 @@ INSTALL=installbsd
 #INSTALL=/usr/ucb/install
 
 
-
-
-# Linux with any modern distro (as of Nov 2019)
-CDEFS= -O6 -DHAS_LSTAT -DHAS_PUTENV
-CC=gcc
-CPP=gcc -E
-CFLAGS= -g $(CDEFS)
-NETW=
+# SunOS --  GNU-CC 2.4.5 on SPARC SunOS 4.1.3
+#CC=gcc -Wall #-fno-builtin
+#CPP=gcc -E
+#CDEFS=  -O -DBSD_SIGCHLDS -DHAS_LSTAT -DHAS_PUTENV
+#CFLAGS= -g $(CDEFS)
 # Have MAILIFY compiled by uncommenting following ones:
 #MAILIFY=mailify
 #MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/usr/local/include
 #LIBMAILIFY= -lzmailer
-#MAILIFYCFLAGS= $(CFLAGS)
-#LIBMAILIFY=
-LIBS=$(NETW)
+###MAILIFYCFLAGS= $(CFLAGS)
+###LIBMAILIFY=
+#NETW=
+#LIBS=$(NETW)
+#RANLIB=ranlib
+#INSTALL=install
+
+# SunOS -- SunOS 4.1.3 bundled cc
+#CC=cc
+#CPP=/lib/cpp
+#CDEFS=  -O -DBSD_SIGCHLDS -DHAS_LSTAT -DHAS_PUTENV
+#CFLAGS=  $(CDEFS)
+# Have MAILIFY compiled by uncommenting following ones:
+MAILIFY=mailify
+##MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/usr/local/include
+##LIBMAILIFY= -lzmailer
+##MAILIFYCFLAGS= $(CFLAGS)
+##LIBMAILIFY=
+#NETW=
+#LIBS=$(NETW)
+#RANLIB=ranlib
+#INSTALL=install
+
+# Linux 1.2.x  (w/o using -D_POSIX_SOURCE)
+#CDEFS= -O6 -DHAS_LSTAT -DHAS_PUTENV
+#CC=gcc
+#CPP=gcc -E
+#CFLAGS= -g $(CDEFS)
+#NETW=
+# Have MAILIFY compiled by uncommenting following ones:
+#MAILIFY=mailify
+##MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/usr/local/include
+##LIBMAILIFY= -lzmailer
+##MAILIFYCFLAGS= $(CFLAGS)
+##LIBMAILIFY=
+#LIBS=$(NETW)
+#RANLIB=ranlib
+#INSTALL=install
+
+# Linux drb version
+CDEFS=-DUSG -DNBCONNECT -DNBSTREAM -DUSE_XMIT_QUEUE \
+	-DUSE_SOCKOPT -DSOCKBUFSIZE=8192 -DUSE_ENUM_TYPES -DDEBUG \
+	-DCONFIG_FILE='"/etc/funetnje/funetnje.cf"' \
+	-DPID_FILE='"/run/funetnje.pid"'
+CC=gcc
+CPP=gcc -E
+CFLAGS= -g -O2 -Wpacked -Wpadded $(CDEFS)
+#NETW=
+# Have MAILIFY compiled by uncommenting following ones:
+#MAILIFY=mailify
+##MAILIFYCFLAGS= $(CFLAGS) -DUSE_ZMAILER -I/usr/local/include
+##LIBMAILIFY= -lzmailer
+##MAILIFYCFLAGS= $(CFLAGS)
+##LIBMAILIFY=
+#LIBS=$(NETW)
 RANLIB=ranlib
 INSTALL=install
+
+# IBM AIX ?
 
 
 
@@ -133,13 +204,13 @@ INSTALL=install
 # to successfully use  UCP  program.
 NJEGRP=funetnje
 # On some machines there may exist `send' already, choose another name.
-SEND=send
-PRINT=print
+SEND=tell
+PRINT=njeprint
 # Assign directories
-MANDIR= /l/man
-LIBDIR= /l/funetnje
-BINDIR= /l/bin
-ETCDIR= /l/etc
+MANDIR= /usr/local/man
+LIBDIR= /usr/local/funetnje
+BINDIR= /usr/local/bin
+ETCDIR= /usr/local/etc
 
 # If you have a malloc library with GOOD debugging facilities..
 #DEBUG_LIBMALLOC=-L.. -lmalloc_dgcc
@@ -215,6 +286,7 @@ all:	$(PROGRAMS)
 # Following need GNU TeXinfo package (3.1 or later)
 info:	funetnje.info
 dvi:	funetnje.dvi
+html:	funetnje.html
 
 .PRECIOUS:	clientlib.a
 
@@ -273,7 +345,7 @@ man-ps:
 nje.route:	finfiles.header finfiles.netinit
 	@echo "THIS IS FOR NIC.FUNET.FI!"
 	-rm nje.route*
-	njeroutes  finfiles.header finfiles.netinit nje.route
+	$(LIBDIR)/njeroutes  finfiles.header finfiles.netinit nje.route
 
 route2:	nje.route2
 
@@ -317,16 +389,17 @@ install:
 	ln ${BINDIR}/sendfile ${BINDIR}/bitprt
 	ln ${BINDIR}/sendfile ${BINDIR}/punch
 	ln ${BINDIR}/sendfile ${BINDIR}/submit
-	$(INSTALL) -s -g ${NJEGRP} -m 755 send ${BINDIR}/${SEND}
+	$(INSTALL) -s -g ${NJEGRP} -m 755 tell ${BINDIR}/${SEND}
 	# If you want to call 'send' with name 'tell'
 	# rm -f ${BINDIR}/tell
 	# ln ${BINDIR}/${SEND} ${BINDIR}/tell
 	$(INSTALL) -s -g ${NJEGRP} -m 755 ygone ${BINDIR}
 	$(INSTALL) -s -g ${NJEGRP} -m 755 receive ${BINDIR}
 	$(INSTALL) -s -g ${NJEGRP} -m 750 bmail    ${LIBDIR}
-	chgrp ${NJEGRP} /usr/spool/bitnet
-	chmod g+w  /usr/spool/bitnet
-	chmod g+s ${BINDIR}/sendfile ${BINDIR}/send ${BINDIR}/ygone \
+	mkdir -p /var/spool/bitnet
+	chgrp ${NJEGRP} /var/spool/bitnet
+	chmod g+w  /var/spool/bitnet
+	chmod g+s ${BINDIR}/sendfile ${BINDIR}/tell ${BINDIR}/ygone \
 		 ${LIBDIR}/bmail
 	$(INSTALL) -s -m 755 transfer ${LIBDIR}/transfer
 	$(INSTALL) -s -m 755 njeroutes ${LIBDIR}/njeroutes
@@ -480,6 +553,8 @@ funetnje.info:	funetnje.texinfo
 funetnje.dvi:	funetnje.texinfo
 	tex funetnje.texinfo
 
+funetnje.html:	funetnje.texinfo
+	texi2html funetnje.texinfo
 
 lint:	lintlib
 	lint -hc $(CDEFS) llib-lhuji.ln $(SRC)

@@ -13,7 +13,7 @@
 #include "prototypes.h"
 #include "bintree.h"
 
-extern const char *const sys_errlist[];
+/* extern char *sys_errlist[]; */
 extern int errno;
 
 char *pname;

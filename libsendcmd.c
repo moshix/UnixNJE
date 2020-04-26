@@ -9,6 +9,8 @@
 
 /* Slightly edited copy of this is inside the   file_queue.c! */
 
+#include <sys/types.h>
+#include <sys/socket.h>
 #include "consts.h"
 #include "prototypes.h"
 #include "clientutils.h"
@@ -173,7 +175,7 @@ const int cmdlen, offlineok;
 	
 	  rc = 0;
 	  if (sendto(Socket, buf, buflen, 0,
-		     &SocketName,sizeof(SocketName)) == -1) {
+		     (struct sockaddr *)&SocketName,sizeof(SocketName)) == -1) {
 	    perror("Can't send command");
 	    if (!offlineok)
 	      rc = EX_IOERR;

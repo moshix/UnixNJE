@@ -92,7 +92,7 @@ extern int	parse_header __(( FILE *fd, char *Frm, char *Toa, char *Fnm,
 				  int *Fmt, char *Tag, int *Fid ));
 extern	char   *ExpandHomeDir __((const char *PathOrDir, const char *HomeDir,
 				  const char *ToUser, char *path));
-extern void	logger    __((int n, char *fmt, ... ));
+extern void	logger    __((int lvl, ...));
 extern void	trace __(( const void *ptr, const int n, const int lvl ));
 extern char	*local_time __(( void ));
 extern volatile void  bug_check __(( const char *text ));

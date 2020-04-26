@@ -15,6 +15,7 @@
  |									|
  *----------------------------------------------------------------------*/
 
+#include <time.h>
 #include "consts.h" /* DIR & DIRENTTYPE definitions.. */
 #include "prototypes.h"
 #include <ctype.h>

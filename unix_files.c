@@ -5,6 +5,7 @@
 
 */
 
+#include <time.h>
 #include "consts.h"
 #include "prototypes.h"
 
@@ -50,7 +51,7 @@ struct FILE_EXIT_CONFIG {
 
 #ifndef	DEF_MAILIFY_PROGRAM /* SITE_CONSTS.H can override */
 # ifdef	UNIX
-#  define DEF_MAILIFY_PROGRAM "/usr/lib/huji/mailify"
+#  define DEF_MAILIFY_PROGRAM "/usr/local/funetnje/mailify"
 # else /* for VMS ? */
 #  define DEF_MAILIFY_PROGRAM ???
 # endif
@@ -58,7 +59,7 @@ struct FILE_EXIT_CONFIG {
 
 #ifndef	DEF_SYSIN_PROGRAM /* SITE_CONSTS.H can override */
 # ifdef	UNIX
-#  define DEF_SYSIN_PROGRAM "/usr/lib/huji/sysin"
+#  define DEF_SYSIN_PROGRAM "/usr/local/funetnje/sysin"
 # else /* for VMS ? */
 #  define DEF_SYSIN_PROGRAM ???
 # endif
@@ -66,7 +67,7 @@ struct FILE_EXIT_CONFIG {
 
 #ifndef	DEF_TRANSFER_PROGRAM /* SITE_CONSTS.H can override */
 # ifdef	UNIX
-#  define DEF_TRANSFER_PROGRAM "/usr/lib/huji/transfer"
+#  define DEF_TRANSFER_PROGRAM "/usr/local/funetnje/transfer"
 # else /* for VMS ? */
 #  define DEF_TRANSFER_PROGRAM ???
 # endif
@@ -74,7 +75,7 @@ struct FILE_EXIT_CONFIG {
 
 #ifndef DEF_SPOOL_DIR_RULE
 # ifdef	UNIX
-#  define DEF_SPOOL_DIR_RULE "/usr/spool/bitspool/"
+#  define DEF_SPOOL_DIR_RULE "/var/spool/bitnet/"
 # else
 #  define DEF_SPOOL_DIR_RULE ???
 # endif
@@ -82,7 +83,7 @@ struct FILE_EXIT_CONFIG {
 
 #ifndef DEF_POSTMAST_SPOOL_DIR
 # ifdef UNIX
-#  define DEF_POSTMAST_SPOOL_DIR "/usr/spool/bitspool/POSTMAST"
+#  define DEF_POSTMAST_SPOOL_DIR "/var/spool/bitnet/POSTMAST"
 # else
 #  define DEF_POSTMAST_SPOOL_DIR ???
 # endif
