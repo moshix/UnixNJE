@@ -76,7 +76,12 @@ static void  auto_restart_lines __(( void ));
 static void  parse_op_command __(( int *fd ));
 static void  parse_file_queue __(( const int fd ));
 
+extern int	errno;
+#ifdef __DARWIN_UNIX03
 extern const int	sys_nerr;	/* Maximum error number recognised */
+#else
+extern int	sys_nerr;	/* Maximum error number recognised */
+#endif
 /* extern char	*sys_errlist[];	*/ /* List of error messages */
 #define	PRINT_ERRNO	(errno > sys_nerr ? "***" : sys_errlist[errno])
 
