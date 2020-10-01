@@ -89,7 +89,7 @@ const char	*UserName;
  | write it, ok - return -1 as number of users received the message so the
  | caller of us will know to return a Gone message. If not, return 0.
  */
-#ifdef unix
+#ifdef UNIX
 int
 send_gone(UserName, string)
 const char	*UserName;
