@@ -16,10 +16,14 @@ char *from;
 	      (uid == 0 || uid == pw->pw_uid)) {
 	    strcpy(from,USER);
 	  } else {
+#ifndef UNIX
 	    cuserid(from);
+#endif
 	  }
 	} else {
+#ifndef UNIX
 	  cuserid(from);
+#endif
 	}
 	return from;
 }

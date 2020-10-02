@@ -21,7 +21,9 @@
  */
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef UNIX
 #include <linux/stat.h>
+#endif
 #include <fcntl.h>
 #include <strings.h>
 
@@ -65,11 +67,21 @@ struct	TIMER	{			/* The timer queue		*/
 typedef enum {CMD_SOCKET, CMD_UDP, CMD_FIFO, CMD_FIFO0, CMD_UNKNOWN} cmdbox_t;
 static cmdbox_t cmdbox = CMD_UNKNOWN;
 
+#ifdef USE_XMIT_QUEUE
+int dequeue_xmit_queue(const int Index);
+#endif
+void fileid_db_close();
+
 static void  auto_restart_lines __(( void ));
 static void  parse_op_command __(( int *fd ));
 static void  parse_file_queue __(( const int fd ));
 
+extern int	errno;
+#ifdef __DARWIN_UNIX03
+extern const int	sys_nerr;	/* Maximum error number recognised */
+#else
 extern int	sys_nerr;	/* Maximum error number recognised */
+#endif
 /* extern char	*sys_errlist[];	*/ /* List of error messages */
 #define	PRINT_ERRNO	(errno > sys_nerr ? "***" : sys_errlist[errno])
 

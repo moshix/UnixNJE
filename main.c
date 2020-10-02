@@ -224,7 +224,7 @@ int cc;
 	signal(SIGCLD,handle_childs);
 # endif
 #else
-	signal(SIGCLD,SIG_IGN);
+	signal(SIGCHLD,SIG_IGN);
 #endif
 
 	/* Do   kill -1 `cat /etc/huji.pid`	to raise its attention... */

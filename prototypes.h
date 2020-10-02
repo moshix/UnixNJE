@@ -4,10 +4,6 @@
 
 /* NOTE::  FOR UNIX - ESPECIALLY SunOS 4.1 */
 
-#if	defined(unix) && !defined(UNIX)
-# define UNIX
-#endif
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -78,7 +74,12 @@
    not to surprise here! */
 
 extern int	errno;
+#ifdef __DARWIN_UNIX03
+extern const int	sys_nerr;	/* Maximum error number recognised */
+#else
 extern int	sys_nerr;	/* Maximum error number recognised */
+#endif
+
 /* extern char	*sys_errlist[];	*/ /* List of error messages */
 #define	PRINT_ERRNO	(errno > sys_nerr ? "***" : sys_errlist[errno])
 

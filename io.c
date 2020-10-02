@@ -30,6 +30,10 @@
 #include "headers.h"
 #include "prototypes.h"
 
+#ifdef USE_XMIT_QUEUE
+void queue_timer_reset(int expiration, int Index, TimerType WhatToDo);
+#endif
+
 static int   add_VMnet_block __(( struct LINE *Line, const int flag, const void *buffer, const int size, void *NewLine, const int BCBcount ));
 static void  debug_dump_buffers __(( const char *UserName ));
 
