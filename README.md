@@ -33,4 +33,4 @@ More detals to follow here soon
 Enjoy
 
 moshix<br>
-October 2, 2020
+Scopello, Italy - October 2, 2020
