@@ -193,12 +193,6 @@ CFLAGS= -g -O2 -Wpacked -Wpadded $(CDEFS)
 RANLIB=ranlib
 INSTALL=install
 
-# IBM AIX ?
-
-
-
-
-
 # Name of the group on which all communication using programs are
 # SGIDed to..  Also the system manager must have that bit available
 # to successfully use  UCP  program.
