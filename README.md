@@ -3,7 +3,7 @@ NJE for *nix
 
 
 
-This NJE repo is is the third incarnation of the Hebrew University of Jersualem NJE protocol for UNIX and VMS. 
+This NJE repo is is the third incarnation of the Hebrew University of Jersualem NJE protocol for UNIX and VMS. The origianl VMS repo is here: https://github.com/moshix/HUJInje
 
 In this new version, it's been made to compile cleanly on Linux, BSD (including latest Macos!) 
 
