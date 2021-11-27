@@ -1,6 +1,5 @@
 <a href=" https://github.com/moshix/mvs/blob/master/codenotary.com"><img src="https://raw.githubusercontent.com/moshix/mvs/master/secured-by-immudb.svg" width="109px;"/></a>
-<a href="https://github.com/codenotary/cas"><img src="https://raw.githubusercontent.com/codenotary/cas/master/extra/badge/secured-by-cas.svg" width="91px;"/></a>
-<br>
+<a href="https://cas.codenotary.com"><img src="https://raw.githubusercontent.com/codenotary/cas/master/extra/badge/secured-by-cas.svg" width="119px;"/></a>
 NJE for *nix
 =============
 
