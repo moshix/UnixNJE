@@ -36,4 +36,4 @@ More detals to follow here soon
 Enjoy
 
 moshix<br>
-New York, December 2022
+New York, June 2023  
