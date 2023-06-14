@@ -10,7 +10,7 @@ This NJE repo is is the third incarnation of the Hebrew University of Jersualem 
 
 In this new version, it's been made to compile cleanly on Linux, BSD (including latest Macos!) 
 
-You will need to ask to peer with somebody on HNET to use this protocol. Contact me if you have a 24/7 Linux server and you want to peer with my HNET main node MOSHIX running VM/370 RSCS. 
+You will need to ask to peer with somebody on HNET to use this protocol. Contact me if you have a 24/7 Linux server and you want to peer with my HNET main node RELAY (which is also based on UNIXNJE). See more: www.moshix.tech 
 
 All the main commands work with NJE
 
