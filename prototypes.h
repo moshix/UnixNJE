@@ -72,8 +72,13 @@
 
 /* There are systems with proper library prototypes available, let them
    not to surprise here! */
-
+/* glibc's errno manpage says not to declare errno explicitly and that
+ * it can cause problems if we do */
+#if __GLIBC__ >= 2
+#else
 extern int	errno;
+#endif
+
 #ifdef __DARWIN_UNIX03
 extern const int	sys_nerr;	/* Maximum error number recognised */
 #else
