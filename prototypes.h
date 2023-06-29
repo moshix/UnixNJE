@@ -72,17 +72,27 @@
 
 /* There are systems with proper library prototypes available, let them
    not to surprise here! */
-
+/* glibc's errno manpage says not to declare errno explicitly and that
+ * it can cause problems if we do */
+#if __GLIBC__ >= 2
+#else
 extern int	errno;
+#endif
+
 #ifdef __DARWIN_UNIX03
 extern const int	sys_nerr;	/* Maximum error number recognised */
 #else
 extern int	sys_nerr;	/* Maximum error number recognised */
 #endif
-
+/* On systems with glibc >= 2.32 sys_nerr and sys_errlist are no longer
+ * exposed. use strerror instead 
+ */
+#if __GLIBC__ == 2 && __GLIBC_MINOR__ >= 32
+#define PRINT_ERRNO (strerror(errno))
+#else
 /* extern char	*sys_errlist[];	*/ /* List of error messages */
 #define	PRINT_ERRNO	(errno > sys_nerr ? "***" : sys_errlist[errno])
-
+#endif
 
 #if	defined(__POSIX_SOURCE) || defined(__POSIX_C_SOURCE) || defined(__svr4__)
 #define GETDTABLESIZE(x) sysconf(_SC_OPEN_MAX)

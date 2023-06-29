@@ -133,8 +133,8 @@ extern int	errno;
 #define	EXTERNAL	extern
 #endif
 
-INTERNAL int	MAX_LINES;		/* Dynamic! [mea]		*/
 #ifdef MAIN
+INTERNAL int	MAX_LINES;		/* Dynamic! [mea]		*/
 INTERNAL char	BITNET_QUEUE[80];	/* The BITnet queue directory	*/
 INTERNAL char   COMMAND_MAILBOX[80];	/* The command channel		*/
 INTERNAL char	LOCAL_NAME[10];		/* Our BITnet name (In ASCII)	*/
@@ -156,6 +156,7 @@ INTERNAL char	ClusterNode[16];	/* DECnet name of the cluster's
 					   node conncted with NJE to the
 					   outer world			*/
 #else
+EXTERNAL int	MAX_LINES;		/* Dynamic! [mea]		*/
 EXTERNAL char	BITNET_QUEUE[80];
 EXTERNAL char	COMMAND_MAILBOX[80];
 EXTERNAL char	LOCAL_NAME[10];
