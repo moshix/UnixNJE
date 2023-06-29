@@ -12,7 +12,7 @@ In this new version, it's been made to compile cleanly on Linux, BSD (including 
 
 You will need to ask to peer with somebody on HNET to use this protocol. Contact me if you have a 24/7 Linux server and you want to peer with my HNET main node RELAY (which is also based on UNIXNJE). See more: www.moshix.tech 
 
-All the main commands work with NJE
+UnixNJE is fully compatible with the NJE protocol and connects effortlessly to VM/SP or z/VM RSCS, NJE38 for MVS 3.8, SineNomine NJE, JNET for openVMS, NJE for Windows. 
 
 
 
