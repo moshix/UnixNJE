@@ -6,9 +6,9 @@ NJE for *nix
 
 
 
-This NJE repo is is the third incarnation of the Hebrew University of Jersualem NJE protocol for UNIX and VMS. The origianl VMS repo is here: https://github.com/moshix/HUJInje
+This NJE repo is is the third incarnation of the Hebrew University of Jersualem NJE protocol for UNIX and VMS. The original VMS repo is here: https://github.com/moshix/HUJInje
 
-In this new version, it's been made to compile cleanly on Linux, BSD (including latest Macos!) 
+In this new version, it's been made to compile cleanly on Linux, BSD (including latest Macos!), as well as with the latest gcc and glibc systems present in Ubuntu 22.04 [thanks wschaub!]
 
 You will need to ask to peer with somebody on HNET to use this protocol. Contact me if you have a 24/7 Linux server and you want to peer with my HNET main node RELAY (which is also based on UNIXNJE). See more: www.moshix.tech 
 
@@ -28,9 +28,7 @@ Running It
 
 To execute it you need sudo privileges, or need to be root. 
 
-More detals to follow here soon
-
-
+Watch this video to see how to get this to works: https://youtu.be/1iHrNNH7plY
 
 
 Enjoy
