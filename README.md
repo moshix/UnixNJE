@@ -27,6 +27,7 @@ Configuration
 -------------
 
 In /etc/funetnje create a file called funetnje.cf like this (just an example):
+<pre>
 #       Configuration file for FUNET-NJE program
 #
 NAME            SELXM1
@@ -50,9 +51,10 @@ LINE 0          NODE1
  TCPNAME        222.222.222.30
  TCP-SIZE       8192
  MAX-STREAMS     7
-
+</pre>
 
 in file /usr/local/funetnje/header.txt:
+<pre>
 ROUTE SELXM1 LOCAL ASCII
 
 In file /usr/local/funetnje/routes.txt:
@@ -61,7 +63,7 @@ ROUTE MOSHIX4       NODE1 ETHNET   CH
 ROUTE MOSHIX3       NODE1 ETHNET   CH
 ROUTE MOSHIX5       NODE1 ETHNET   CH
 ROUTE MOSHIX        NODE1 ETHNET   CH
-
+</pre>
 
 
 
