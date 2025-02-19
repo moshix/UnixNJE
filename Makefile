@@ -326,6 +326,10 @@ clean:
 route:	nje.route
 
 install-man:
+	#Make missing /usr/local/man? folders so manpages will install
+	-mkdir -p $(MANDIR)/man1
+	-mkdir -p $(MANDIR)/man5
+	-mkdir -p $(MANDIR)/man8
 	-cd $(MANDIR)/cat1 && (for x in $(MAN1); do rm -f `basename $$x`;done)
 	-cd $(MANDIR)/cat5 && (for x in $(MAN5); do rm -f `basename $$x`;done)
 	-cd $(MANDIR)/cat8 && (for x in $(MAN8); do rm -f `basename $$x`;done)
@@ -364,7 +368,7 @@ makeuuetar: maketar
 	uuencode huji.tar.Z huji.tar.Z >huji.tar.Z.uue
 	rm huji.tar.Z
 
-install:
+install: install-man
 	echo "To install actual control/config files do 'make install1' or 'make install2'"
 	@echo "Must propably be root for this also."
 	-mkdir ${LIBDIR}
