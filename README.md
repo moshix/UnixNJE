@@ -38,7 +38,7 @@ IPADDRESS       111.111.111.195  #my IP address
 QUEUE           /var/spool/bitnet # where my work spool is
 CMDMAILBOX      U 127.0.0.1 175   #my port 175
 LOG             /var/log/bitnet.log #log location
-TABLE           /usr/local/funetnje/binroutes  #location of routes information (see below)
+TABLE           /usr/local/funetnje/funetnje.route  #location of routes information (see below)
 INFORM          MAINT@NODE1    # who will be informed of issues
 USEREXITS       /usr/local/funetnje/file-exit.cf  #see my video (link below)
 MSGEXITS        /usr/local/funetnje/msg-exit.cf   # see y video (link below)
@@ -78,7 +78,7 @@ Running It
 
 To execute it you need sudo privileges, or need to be root. 
 
-Run the binroutes command to create /usr/local/funetnje/binroutes, then start funetnje as a daemon
+Run the njeroutes command described in the previous section to create /usr/local/funetnje/funetnje.route.routes, then start funetnje as a daemon
 
 Enable "mesg yes" for your shell session to receive messages from other nodes. 
 

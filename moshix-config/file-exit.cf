@@ -40,15 +40,15 @@ Exit-Table:
 #
 # Several special handlings (tests/illustriations)
 #
-NOBODY	 CZHETH3C *	   *	    *	*     *	       *	*	default				DISCARD
-FOOBAT	 CZHETH3C *	   *	    *	*     *	       *	*	default				RUN   /usr/local/funetnje/transfer MEA@$TONODE $SPOOL
-ECHO     CZHETH3C *        *        *   *     *        *        *       default                         RUN   /usr/local/funetnje/transfer NOBODY@$FRNODE $SPOOL
-LPR      CZHETH3C *        *        *   *     *        *        *       default                         RUN   /usr/local/funetnje/rprint $SPOOL lpr $FRUSER $FRNODE $TOUSER $FID
-HERC01   CZHETH3C *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
-HERC02   CZHETH3C *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
-HERC03   CZHETH3C *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
-HERC04   CZHETH3C *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
-*        CZHETH3C *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
+NOBODY	 SELXM1 *	   *	    *	*     *	       *	*	default				DISCARD
+FOOBAT	 SELXM1 *	   *	    *	*     *	       *	*	default				RUN   /usr/local/funetnje/transfer MEA@$TONODE $SPOOL
+ECHO     SELXM1 *        *        *   *     *        *        *       default                         RUN   /usr/local/funetnje/transfer NOBODY@$FRNODE $SPOOL
+LPR      SELXM1 *        *        *   *     *        *        *       default                         RUN   /usr/local/funetnje/rprint $SPOOL lpr $FRUSER $FRNODE $TOUSER $FID
+HERC01   SELXM1 *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
+HERC02   SELXM1 *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
+HERC03   SELXM1 *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
+HERC04   SELXM1 *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
+*        SELXM1 *        *        *   B     *        *        *       default                         RUN   /usr/local/funetnje/mvs38_send $SPOOL $FRUSER $FRNODE $TOUSER $FID
 #
 #  Define what we do with the SYSINs
 #
@@ -57,13 +57,13 @@ HERC04   CZHETH3C *        *        *   B     *        *        *       default 
 #  Define a MAILER for our node!
 #  And also handle directly sent mail from nodes without mailers...
 #
-MAILER	 CTHETH3C *	   *	    PUN M   *	     *	      *		default				RUN   /usr/local/funetnje/mailify $SPOOL
+MAILER	 SELXM1 *	   *	    PUN M   *	     *	      *		default				RUN   /usr/local/funetnje/mailify $SPOOL
 *	 *	  *	   MAIL	    PUN M   *	     *	      *		default				RUN   /usr/local/funetnje/mailify $SPOOL
 #
 # NETINIT is pseudo id for automatically re-generating routing tables
 # This is done with  netinit.sh	 which must be configured by hand.
 #
-NETINIT	 CZHETH3C *	   *	    *	*   *	     *	      *		default				KEEP
+NETINIT	 SELXM1 *	   *	    *	*   *	     *	      *		default				KEEP
 #
 # Finally  a `catch them all' default handling case.
 #
