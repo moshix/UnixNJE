@@ -22,8 +22,12 @@ get repo to your Linux/BSD/Macos (anything from the last 6-7 years should work)
 
 then type "make" and watch it compile
 
+type sudo make install
+
 Configuration
 -------------
+
+To install an example configuration type sudo make install1
 
 In /etc/funetnje create a file called funetnje.cf like this (just an example):
 <pre>
@@ -52,11 +56,11 @@ LINE 0          NODE1
  MAX-STREAMS     7
 </pre>
 
-in file /usr/local/funetnje/header.txt:
+in file /usr/local/funetnje/funetnje.route.header:
 <pre>
 ROUTE SELXM1 LOCAL ASCII
 </pre>
-In file /usr/local/funetnje/routes.txt:
+In file /usr/local/funetnje/funetnje.route.routes:
 <pre>
 ROUTE MOSHIX2       NODE1 ETHNET   CH
 ROUTE MOSHIX4       NODE1 ETHNET   CH
@@ -65,7 +69,9 @@ ROUTE MOSHIX5       NODE1 ETHNET   CH
 ROUTE MOSHIX        NODE1 ETHNET   CH
 </pre>
 
-
+inside /usr/local/funetnje run:
+<pre>
+./njeroutes funetnje.route.header funetnje.route.routes funetnje.route
 
 Running It
 ----------
