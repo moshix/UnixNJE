@@ -72,7 +72,7 @@ ROUTE MOSHIX        NODE1 ETHNET   CH
 inside /usr/local/funetnje run:
 <pre>
 ./njeroutes funetnje.route.header funetnje.route.routes funetnje.route
-
+</pre>
 Running It
 ----------
 
