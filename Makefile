@@ -369,9 +369,9 @@ makeuuetar: maketar
 	rm huji.tar.Z
 
 install: install-man
-	echo "To install actual control/config files do 'make install1' or 'make install2'"
-	@echo "Must propably be root for this also."
 	-mkdir ${LIBDIR}
+	#Make sure we add the funetnje group if it doesn't exist
+	-groupadd ${NJEGRP}
 	$(INSTALL) -s -m 755 funetnje ${LIBDIR}/funetnje.x
 	mv ${LIBDIR}/funetnje.x ${LIBDIR}/funetnje
 	#$(INSTALL) -s -m 755 ndparse ${BINDIR}  # Obsolete
@@ -394,9 +394,11 @@ install: install-man
 	$(INSTALL) -s -g ${NJEGRP} -m 755 ygone ${BINDIR}
 	$(INSTALL) -s -g ${NJEGRP} -m 755 receive ${BINDIR}
 	$(INSTALL) -s -g ${NJEGRP} -m 750 bmail    ${LIBDIR}
-	mkdir -p /var/spool/bitnet
+	-mkdir -p /var/spool/bitnet
 	chgrp ${NJEGRP} /var/spool/bitnet
-	chmod g+w  /var/spool/bitnet
+	#Ensure that qrdr and other utilities can cd to 
+	#the root of the spool directory
+	chmod g+w,o=x  /var/spool/bitnet
 	chmod g+s ${BINDIR}/sendfile ${BINDIR}/tell ${BINDIR}/ygone \
 		 ${LIBDIR}/bmail
 	$(INSTALL) -s -m 755 transfer ${LIBDIR}/transfer
@@ -404,15 +406,29 @@ install: install-man
 	$(INSTALL) -s -m 755 namesfilter ${LIBDIR}/namesfilter
 	$(INSTALL) -s -g ${NJEGRP} -m 750 mailify ${LIBDIR}/mailify
 	$(INSTALL) -c -g ${NJEGRP} -m 750 sysin.sh ${LIBDIR}/sysin
+	@echo "To install example control/config files do 'sudo make install1'"
+mvs38_send_check: mvs38_send_check.c
+	cc -o mvs38_send_check mvs38_send_check.c
 
-install1:	route
-	@echo "MUST BE ROOT TO DO THIS!"
-	@echo "(this is for NIC.FUNET.FI)"
+install1: mvs38_send_check
 	-mkdir ${LIBDIR}
-	cp finfiles.cf /etc/funetnje.cf
-	cp nje.route* ${LIBDIR}
-	cp file-exit.cf ${LIBDIR}/file-exit.cf
-	cp msg-exit.cf ${LIBDIR}/msg-exit.cf
+	-mkdir /etc/funetnje
+	sudo cp mvs38_send_check ${LIBDIR}
+	sudo cp moshix-config/funetnje.cf /etc/funetnje/funetnje.cf
+	sudo cp moshix-config/funetnje.route* ${LIBDIR}/
+	sudo cp moshix-config/file-exit.cf ${LIBDIR}/file-exit.cf
+	sudo cp moshix-config/msg-exit.cf ${LIBDIR}/msg-exit.cf
+	sudo cp moshix-config/mvs38* ${LIBDIR}
+	@echo "Example configuration has been installed"
+	@echo "Make sure to edit /etc/funetnje/funetnje.cf"
+	@echo "and the various files under" ${LIBDIR}
+	@echo "When you're finished run:"
+	@echo "sudo su"
+	@echo "cd " ${LIBDIR}
+	@echo "./njeroutes funetnje.route.header funetnje.route.routes funetnje.route" 
+	@echo
+	@echo "to build the routes and you should be ready to start funetnje"
+	@echo "look at README.md and the Moshix video for more information"
 
 acctcat:	$(OBJacctcat)
 	$(CC) $(CFLAGS) -o $@ $(OBJacctcat) $(LIBS)

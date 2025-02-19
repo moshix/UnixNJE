@@ -1,0 +1,9 @@
+#!/bin/bash
+#*********************************************************************
+#**
+#** Name: mvs38_recv_submit
+#**
+#** Desc: Start mvs38_recv from FUNET-NJE message exit.
+#**
+#*********************************************************************
+nohup /usr/local/funetnje/mvs38_recv >/dev/null 2>&1&

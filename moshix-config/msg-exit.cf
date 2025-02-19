@@ -1,0 +1,66 @@
+#
+# MSG-EXIT.CF  for FUNET-NJE
+#
+# Some first ideas about patterns, et.al.:
+#
+# Actions:  CMD: BUILTIN, RUN
+#           MSG: BRCAST, DISCARD, RUN, (PIPE)
+# Argument tokens for 'RUN': TOUSER, TONODE, FRUSER, FRNODE, TEXT, ARGS
+# Arguments for 'BUILTIN': "HELP", "HARDCODED", "ERROR"/ERROR msg-string",
+#                          "ALIAS remap-pattern"
+# Patterns work as follows:
+#      TO*KEN -- match (only) any of input words: TO TOK TOKE TOKEN
+#      *      -- match any token, (but not blank)
+#      **     -- match any number of tokens, including nothing.
+# Remap-patterns work as follows:
+#      $nn    -- substitute nn:th text token into this place
+#      ANYSTRING -- copy it verbatim
+#
+#
+
+CmdHelpFile: /usr/local/funetnje/cmd-help.txt
+
+#$TOUSER $TONODE  $FRUSER  $FRNODE  C pattern	 ACTION args
+# Actually TOUSER is not tested on commands, it will be blank anyway..
+.        CZHETH3C *        *        C "HIL*FE"	 BUILTIN HELP English quick document is available via 'HELP' command.
+.        CZHETH3C *        *        C "SOS"	 BUILTIN HELP English quick document is available via 'HELP' command.
+.        CZHETH3C *        *        C "H*ELP"	 BUILTIN HELP
+.        CZHETH3C *        *        C "M * * * **"       BUILTIN HARDCODED
+.        CZHETH3C *        *        C "MSG * * * **"     BUILTIN HARDCODED
+.        CZHETH3C *        *        C "M*SG **"          BUILTIN ERROR Too few arguments for the MSG
+.        CZHETH3C *        *        C "CMD * * **"       BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CMD **"           BUILTIN ERROR Too few arguments for the CMD
+.        CZHETH3C *        *        C "Q*UERY SYS*TEM S" BUILTIN HARDCODED
+.        CZHETH3C *        *        C "Q*UERY SYS*TEM"   BUILTIN HARDCODED
+.        CZHETH3C *        *        C "Q*UERY STAT*S"    BUILTIN HARDCODED
+.        CZHETH3C *        *        C "Q*UERY *"         BUILTIN HARDCODED
+.        CZHETH3C *        *        C "Q*UERY * Q*UEUE"  BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CPQ*UERY N*AMES"  BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CPQ*UERY U*SER *" BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CPQ*UERY U*SER"   BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CPQ*UERY LOG"     BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CPQ*UERY CPU"     BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CPQ*UERY CP*LEVEL" BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CPQ*UERY IND*ICATE" BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CPQ*UERY T*IME"   BUILTIN HARDCODED
+.        CZHETH3C *        *        C "CP*QUERY T*IME"   BUILTIN ALIAS CPQ $2
+.        CZHETH3C *        *        C "EC*HO **" RUN /usr/local/bin/send -s $FRUSER@$FRNODE *CMD was '$TEXT'
+# The default
+.        CZHETH3C *        *        C "**"       BUILTIN ERROR
+
+#$TOUSER $TONODE  $FRUSER  $FRNODE  M ACTION args
+#                 "." == FRUSER is blank, that is from some 'SYSTEM'..
+VMNET    *        *        *        M  DISCARD
+MAILER   *        *        *        M  DISCARD
+MAILSERV CZHETH3C .        *        M  DISCARD
+MAILSERV CZHETH3C *        *        M  RUN  /usr/local/lib/mailserver/nje-msg $FRUSER $FRNODE $TEXT
+LISTSERV CZHETH3C .        *        M  DISCARD
+LISTSERV CZHETH3C *        *        M  RUN /usr/local/bin/send -u MAILSERV $FRUSER@$FRNODE *Sorry, we do not have LISTSERV here, try MAILSERV.
+ECHO     CZHETH3C .        *        M  DISCARD
+ECHO     CZHETH3C *        *        M  RUN  /usr/local/bin/send -u echo $FRUSER@$FRNODE *Got Message: '$TEXT'
+FINGER   CZHETH3C .        *        M  DISCARD
+FINGER   CZHETH3C *        *        M  RUN /usr/local/funetnje/nje-finger $FRUSER $FRNODE $ARGS
+NJESEND  CZHETH3C VM_MVS   CZHETH3C M  RUN /usr/local/funetnje/mvs38_recv_submit
+
+# The default
+*        *        *        *        M  BRCAST

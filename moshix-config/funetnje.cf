@@ -1,0 +1,26 @@
+#
+#	Configuration file for FUNET-NJE program
+#
+
+NAME		CZHETH3C
+IPADDRESS	127.0.0.1
+QUEUE		/var/spool/bitnet
+CMDMAILBOX      U 127.0.0.1 175
+LOG		/var/log/bitnet.log
+# this table is DBM/NDBM/GDBM binary file.
+TABLE		/usr/local/funetnje/funetnje.route
+INFORM		JUERGEN@CHZETH3C
+USEREXITS	/usr/local/funetnje/file-exit.cf
+MSGEXITS	/usr/local/funetnje/msg-exit.cf
+LLEVEL		2
+LLEVELCLIENT	1
+DEFAULT-ROUTE	ZVM1
+
+LINE 0  ZVM1
+ TYPE		UNIX_TCP
+ BUFSIZE	4096
+ TIMEOUT	10
+ IPPORT		1750
+ TCPNAME	129.132.252.105
+ TCP-SIZE	8192
+ MAX-STREAMS 7
