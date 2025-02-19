@@ -16,8 +16,8 @@
 #	  Exit users:  POSTMAST	 (exits start as root anyway.)
 #	  Exited reals: real protections, programs start with setuid() user.
 
-Spool-Dir:	/var/spool/bitspool/
-Postmast-Dir:	/var/spool/bitspool/POSTMAST
+Spool-Dir:	/var/spool/bitnet/
+Postmast-Dir:	/var/spool/bitnet/POSTMAST
 
 # Now list of things to match and then what to do
 # To do keywords:	DISCARD to /dev/null.
