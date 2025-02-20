@@ -78,7 +78,7 @@ Running It
 
 To execute it you need sudo privileges, or need to be root. 
 
-Run the njeroutes command described in the previous section to create /usr/local/funetnje/funetnje.route.route, then start funetnje as a daemon
+Run the njeroutes command described in the previous section to create /usr/local/funetnje/funetnje.route, then start funetnje as a daemon
 
 Enable "mesg yes" for your shell session to receive messages from other nodes. 
 
