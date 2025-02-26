@@ -1,0 +1,16 @@
+#!/bin/bash
+#*********************************************************************
+#**
+#** Name: mvs38_send_submit
+#**
+#** Desc: Place NJE card deck received from FUNET-NJE spool, into
+#**       the Hercules binary card reader listening at port 4505
+#**       and submit job mvs38_send.jcl to the Hercules ascii card
+#**       reader listening at port 3505.
+#**
+#*********************************************************************
+coproc MVS (cat $1 | ncat --send-only 127.0.0.1 4505)
+until (cat $1.jcl | ncat --send-only 127.0.0.1 3505) ; do sleep 1; done
+wait $MVS_PID;
+sleep 3
+rm -f $1 $1.jcl $1.parms
