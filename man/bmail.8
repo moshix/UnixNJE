@@ -41,7 +41,7 @@ with "MAIL FROM:<>" getting the first argument, and "RCPT TO:<>" getting
 the rest (1 to many..)
 This option has two alternate names: "\fB-b\fR", and "\fB-bsmtp\fR".
 .I Line length is limited to 80 chars on this mode!  Wrapping of longer lines
-.I is attempted, but it might not always be successfull.
+.I is attempted, but it might not always be successful.
 .IP "\fB\-nd gateway@host\fR" 1.8i 0
 informing that the feed in mail shall be wrapped into a BSMTP/NETDATA envelope
 with "MAIL FROM:<>" getting the first argument, and "RCPT TO:<>" getting
@@ -100,7 +100,7 @@ by Rayan Zachariassen, interface goes as follows:
 Getting this installed into a BSD
 .BR sendmail (8)
 should not be very difficult, but definitely different..
-Propably `mailer' definitions resemble  `sm.conf'  above.
+Probably `mailer' definitions resemble  `sm.conf'  above.
 .LP
 .SH ENVIRONMENT
 With environment variable
@@ -134,7 +134,7 @@ wrong with input parameters.  Subtle usage bugs might not be detected!
 When BSMTP envelope address overflows to longer than 80-characters,
 and NETDATA is not used, there is no check at it, nor folding...
 (There is a deliberate TRUNCATE at 80 cols, though..)
-With the NETDATA the input can be of arbitary long lines (up to 64000
+With the NETDATA the input can be of arbitrary long lines (up to 64000
 characters each).
 .LP
 .SH AUTHORS
