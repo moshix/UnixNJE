@@ -374,6 +374,7 @@ install:
 	$(INSTALL) -s -m 755 bitsend ${BINDIR}
 	$(INSTALL) -s -m 755 qrdr ${BINDIR}
 	#$(INSTALL) -s -m 755 bitcat ${BINDIR}   # Obsolete
+	-groupadd ${NJEGRP}
 	$(INSTALL) -s -g ${NJEGRP} -m 750 ucp ${ETCDIR}
 	$(INSTALL) -s -g ${NJEGRP} -m 755 sendfile ${BINDIR}
 	rm -f ${BINDIR}/${PRINT} ${BINDIR}/submit ${BINDIR}/punch
