@@ -22,7 +22,7 @@ bitspool \- format of funetnje(8) spool files
 .LP
 Systems running
 .BR funetnje (8)
-sofware.
+software.
 .SH DESCRIPTION
 .IX "bitnet"
 .IX "funetnje"
@@ -123,12 +123,12 @@ Fixed width, left justified 8 characters field of RSCS DIST information.
 Default: 
 .SM "SYSTEM."
 .IP "\fBREC:\fR   nnnn" 1.8i 0
-Highly preferred (almoast mandatory!)
+Highly preferred (almost mandatory!)
 Tells the number of records of data; necessary to get job-header
-right on file transmission, altough not really mandatory for
-successfull file sending.  As the count of records isn't
+right on file transmission, although not really mandatory for
+successful file sending.  As the count of records isn't
 known before all are written (in the usual case), this entry
-is written at first to reserve space for later seek, and rewite
+is written at first to reserve space for later seek, and rewrite
 with correct information.
 .IP "\fBJNM:\fR JOBNAME" 1.8i 0
 Optional.
@@ -254,7 +254,7 @@ IBM printers are fixed 132 characters wide, and on overall those
 systems function on records, and a write in this respect means
 write of whole line.
 On overall the IO-operations on IBM mainframe happen on records, or
-preferrably chains of records on which single start-IO instruction
+preferably chains of records on which single start-IO instruction
 can be used to start the IO-channel.
 .LP
 Carriage-control mechanisms contain two kinds of controls, both
