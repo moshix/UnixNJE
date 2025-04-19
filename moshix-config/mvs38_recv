@@ -1,0 +1,30 @@
+#!/bin/bash
+#*********************************************************************
+#**
+#** Name: mvs38_recv
+#**
+#** Desc: Receive a card deck from an MVS 3.8j system and
+#**       send it via FUNET-NJE to its target destination.
+#**
+#*********************************************************************
+f="$(mktemp /tmp/netdata.XXXXXX)"
+p="/usr/local/funetnje"
+d="$(date)"
+while [ -n "$(pgrep -f mvs38_recv_receive)" ] ; do sleep 3; done
+$p/mvs38_recv_receive $f
+(dd if=$f.parms conv=ascii 2>/dev/null) | awk 'BEGIN {i=0} {while (i++ < NF) print $i}' >$f.parms_ascii
+mv -f $f.parms_ascii $f.parms
+. $f.parms
+awk -v FRUSER=$FRUSER -v FRNODE=$FRNODE -v TOUSER=$TOUSER -v TONODE=$TONODE -v FID=$FID -v DATE="$d" -f $p/mvs38_recv.awk $p/mvs38_recv.jcl >$f.jcl
+LLQ="$(echo $FID | awk -F '.' '{print $(NF-1) "." $NF}')"
+fname="$(echo $FID | awk -F '.' '{print $(NF-1)}')"
+ftype="$(echo $FID | awk -F '.' '{print $NF}')"
+ln -sf $f $LLQ
+if [[ "$SENDAS" == "NETDATA" ]]
+then
+    /usr/local/bin/sendfile $TOUSER@$TONODE -u $FRUSER -fix -bin -lrecl 80 -class B -fn $fname $ftype $LLQ
+else
+    /usr/local/bin/punch $TOUSER@$TONODE -u $FRUSER -rawpun -class B -fn $fname $ftype $LLQ
+fi
+until (cat $f.jcl | ncat --send-only 127.0.0.1 3505) ; do sleep 1; done
+rm -f $f $LLQ $f.jcl $f.parms

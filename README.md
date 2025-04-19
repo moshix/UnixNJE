@@ -21,8 +21,12 @@ get repo to your Linux/BSD/Macos (anything from the last 6-7 years should work)
 
 then type "make" and watch it compile
 
+type sudo make install
+
 Configuration
 -------------
+
+To install an example configuration type sudo make install1
 
 In /etc/funetnje create a file called funetnje.cf like this (just an example):
 <pre>
@@ -33,7 +37,7 @@ IPADDRESS       111.111.111.195  #my IP address
 QUEUE           /var/spool/bitnet # where my work spool is
 CMDMAILBOX      U 127.0.0.1 175   #my port 175
 LOG             /var/log/bitnet.log #log location
-TABLE           /usr/local/funetnje/binroutes  #location of routes information (see below)
+TABLE           /usr/local/funetnje/funetnje.route  #location of routes information (see below)
 INFORM          MAINT@NODE1    # who will be informed of issues
 USEREXITS       /usr/local/funetnje/file-exit.cf  #see my video (link below)
 MSGEXITS        /usr/local/funetnje/msg-exit.cf   # see y video (link below)
@@ -51,11 +55,11 @@ LINE 0          NODE1
  MAX-STREAMS     7
 </pre>
 
-in file /usr/local/funetnje/header.txt:
+in file /usr/local/funetnje/funetnje.route.header:
 <pre>
 ROUTE SELXM1 LOCAL ASCII
 </pre>
-In file /usr/local/funetnje/routes.txt:
+In file /usr/local/funetnje/funetnje.route.routes:
 <pre>
 ROUTE MOSHIX2       NODE1 ETHNET   CH
 ROUTE MOSHIX4       NODE1 ETHNET   CH
@@ -64,14 +68,16 @@ ROUTE MOSHIX5       NODE1 ETHNET   CH
 ROUTE MOSHIX        NODE1 ETHNET   CH
 </pre>
 
-
-
+inside /usr/local/funetnje run:
+<pre>
+./njeroutes funetnje.route.header funetnje.route.routes funetnje.route
+</pre>
 Running It
 ----------
 
 To execute it you need sudo privileges, or need to be root. 
 
-Run the binroutes command to create /usr/local/funetnje/binroutes, then start funetnje as a daemon
+Run the njeroutes command described in the previous section to create /usr/local/funetnje/funetnje.route, then start funetnje as a daemon
 
 Enable "mesg yes" for your shell session to receive messages from other nodes. 
 
