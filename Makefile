@@ -395,7 +395,7 @@ install:
 	chmod g+w  /var/spool/bitnet
 	mkdir -p /usr/spool/bitspool
 	chgrp ${NJEGRP} /usr/spool/bitspool
-	chmod g+r  /var/spool/bitnet
+	chmod g=rx,o-rwx /usr/spool/bitspool
 	chmod g+s ${BINDIR}/sendfile ${BINDIR}/tell ${BINDIR}/ygone \
 		 ${LIBDIR}/bmail
 	$(INSTALL) -s -m 755 transfer ${LIBDIR}/transfer
