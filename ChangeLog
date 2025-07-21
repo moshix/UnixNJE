@@ -1740,7 +1740,7 @@ Tue Oct 12 10:27:08 1993  Matti Aarnio  (mea@nic.funet.fi)
 
 	* Implemented dual spool system: (configurable)
 		/usr/spool/bitnet/LINKNAME/   - for transmission links
-		/usr/spool/bitspool/USERNAME/ - for local users
+		/var/spool/bitspool/USERNAME/ - for local users
 
 	* Wrote UNIX man-pages of the system
 
