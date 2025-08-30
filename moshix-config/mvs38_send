@@ -1,0 +1,22 @@
+#!/bin/bash
+#*********************************************************************
+#**
+#** Name: mvs38_send
+#**
+#** Desc: Receive NJE card deck from FUNET-NJE's spool and transfer
+#**       it to a TK4- MVS 3.8j system's spool.
+#**
+#*********************************************************************
+f="$(mktemp /tmp/netdata.XXXXXX)"
+p="/usr/local/funetnje"
+d="$(date)"
+/usr/local/bin/receive -n -rawpun -o $f $1
+awk -v FRUSER=$2 -v TOUSER=$4 -v FRNODE=$3 -v FID=$5 -v DATE="$d" -f $p/mvs38_send.awk $p/mvs38_send.jcl >$f.jcl
+$p/mvs38_send_check $f >$f.parms
+. $f.parms
+if [[ "$FORMAT" == NETDATA && "$LRECL" == 80 && "$DSORG" == PS && "${RECFM:0:1}" == F ]];then
+   /usr/local/bin/receive -n -b -o $f $1
+fi
+rm -f $1
+while [ -n "$(pgrep -f mvs38_send_submit)" ] ; do sleep 3; done
+exec bash -c "source $p/mvs38_send_submit $f"

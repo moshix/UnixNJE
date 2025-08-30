@@ -1,0 +1,27 @@
+#
+#	Configuration file for FUNET-NJE program
+#
+
+NAME		SELXM1
+IPADDRESS	111.111.111.195  
+QUEUE		/var/spool/bitnet
+CMDMAILBOX      U 127.0.0.1 175 
+LOG		/var/log/bitnet.log 
+# this table is DBM/NDBM/GDBM binary file.
+TABLE		/usr/local/funetnje/funetnje.route
+#Who will be informed of issues
+INFORM		MAINT@NODE1
+USEREXITS	/usr/local/funetnje/file-exit.cf
+MSGEXITS	/usr/local/funetnje/msg-exit.cf
+LLEVEL		5
+#LLEVELCLIENT	1
+DEFAULT-ROUTE	NODE1
+
+LINE 0  NODE1
+ TYPE		UNIX_TCP
+ BUFSIZE	8192
+ TIMEOUT	10
+ IPPORT		1175
+ TCPNAME	222.222.222.30
+ TCP-SIZE	8192
+ MAX-STREAMS 7

@@ -1,0 +1,12 @@
+#!/bin/bash
+#*********************************************************************
+#**
+#** Name: mvs38_recv_receive
+#**
+#** Desc: Receive card deck and NJE parameters from MVS 3.8j system
+#**
+#*********************************************************************
+/usr/bin/ncat -l 127.0.0.1 10075 >$1.parms
+sleep 1
+/usr/bin/ncat -l 127.0.0.1 10075 >$1
+sleep 1
