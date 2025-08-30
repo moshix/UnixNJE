@@ -38,7 +38,7 @@ connection, but that is for output only.)
 Value of
 .I `debugflag'
 is any non-void text or character.
-When argc of program exceeds 2, that fullfills \fI`debugflag'\fR.
+When argc of program exceeds 2, that fulfills \fI`debugflag'\fR.
 .LP
 Location of 
 .B configuration file
@@ -79,7 +79,7 @@ Sample \fBconfiguration file\fR:
 \f4TABLE           /usr/local/lib/huji/nje.routes
 \f4* EBCDIC<->ASCII tables, (optional), see \fBebcdictbl\fR(5)
 \f4*EBCDICTBL      /usr/local/lib/huji/ebcdictbl
-\f4* Send information of wierd happenings to:
+\f4* Send information of weird happenings to:
 \f4INFORM          MEA@FINFILES
 \f4* File containing user exits for files
 \f4FILEEXITS       /usr/local/lib/huji/file-exit.cf
@@ -154,8 +154,8 @@ Sample
 \f4#                 /usr/path/path/ -- append 'touser' as subdir,
 \f4#                                     it is spool dir.
 \f4#                                    Valid for Exits and real users.
-\f4#                 /usr/path/path  -- explicite directory.
-\f4#                 /dev/null       -- explicite file (special case).
+\f4#                 /usr/path/path  -- explicit directory.
+\f4#                 /dev/null       -- explicit file (special case).
 \f4#       When directory isn't present, it is built from upmost present
 \f4#       level down to users bottommost level hmm...
 \f4# Question about ownership of directory/files...
@@ -172,13 +172,13 @@ Sample
 \f4#                                directory, or given spool.
 \f4#                       NOTIFY   KEEP, and send a NJE message
 \f4#                                to somebody.
-\f4#                       RUN      starts arbitary program with
-\f4#                                arbitary arguments telling
+\f4#                       RUN      starts arbitrary program with
+\f4#                                arbitrary arguments telling
 \f4#                                about file location and its
 \f4#                                properties.
 \f4#                                If fails, well..
 \f4#
-\f4# Defining  SpoolDir  must be done with explicite trailing "/":
+\f4# Defining  SpoolDir  must be done with explicit trailing "/":
 \f4#         /usr/spool/bitnet/SYSIN-JOB/
 \f4  
 \f4# Exit table begin keyword:
@@ -344,7 +344,7 @@ has.
 Alternate modes for this are SOCKET ("S"), and
 UDP ("U"), FIFO and SOCKET define path to named
 file, and UDP defines server host address (0.0.0.0, or
-perhaps preferrably 127.0.0.1) and port (174).
+perhaps preferably 127.0.0.1) and port (174).
 .IP "\fB/usr/spool/bitnet/.spoolid\fR" 1.0i 0
 A special file saving last used outbound spoolid in
 binary format.  Transporter internal usage.
