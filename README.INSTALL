@@ -51,7 +51,7 @@ In  detach.c:
 	 inheritance)
 
 	Decide where you put your user spool directories, exaple:
-		/usr/spool/bitspool
+		/var/spool/bitspool
 	However HAVE THEM ON SAME PHYSICAL DEVICE so that rename(2)
 	(or rename(3)) can be used successfully to place files into
 	there.  Directory can have protection 111, or 555.  Nobody

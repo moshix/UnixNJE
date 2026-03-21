@@ -400,6 +400,9 @@ install: install-man
 	#Ensure that qrdr and other utilities can cd to 
 	#the root of the spool directory
 	chmod g+w,o=x  /var/spool/bitnet
+	mkdir -p /var/spool/bitspool
+	chgrp ${NJEGRP} /var/spool/bitspool
+	chmod g=rx,o-rwx /var/spool/bitspool
 	chmod g+s ${BINDIR}/sendfile ${BINDIR}/tell ${BINDIR}/ygone \
 		 ${LIBDIR}/bmail
 	$(INSTALL) -s -m 755 transfer ${LIBDIR}/transfer

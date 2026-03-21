@@ -698,8 +698,8 @@ Such wrapping is not allowed in the real configuration file!
 #         Exited reals: real protections, programs start with setuid()
 #                       user.
 
-Spool-Dir:      /usr/spool/bitspool/
-Postmast-Dir:   /usr/spool/bitspool/POSTMAST
+Spool-Dir:      /var/spool/bitspool/
+Postmast-Dir:   /var/spool/bitspool/POSTMAST
 
 # Now list of things to match and then what to do
 # To do keywords:       DISCARD to /dev/null.
@@ -988,7 +988,7 @@ communication with the BITNET.
 Shows a listing of user's BITNET spool -- the `reader'.
 @example
 @cartouche
-QRDR: Spool dir: `/usr/spool/bitspool/MEA/'
+QRDR: Spool dir: `/var/spool/bitspool/MEA/'
 From:             To:               FName:   FExt:    Type  Form:    SpoolID
 NETSERV@@FINHUT    MEA@@FINFILES      NETSERV  NOTE     PUN A QUFINHUT 0001
 NETSERV@@FINHUT    MEA@@FINFILES      NETSERV  NOTE     PUN A QUFINHUT 0002
@@ -1016,7 +1016,7 @@ consulted with effective uid.
 Spool directory is determined using same mechanism as in @emph{funetnje}
 main program.
 Sample configuration of file procesing exits gives  directory
-@file{/usr/spool/bitspool}  in  which UPPERCASE userids
+@file{/var/spool/bitspool}  in  which UPPERCASE userids
 (or pseudoids - MAILER is one such) are  `user' specific
 subdirectories containing individual spooled files.
 

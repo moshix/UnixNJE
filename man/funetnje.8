@@ -163,8 +163,8 @@ Sample
 \f4#   Exit users:  POSTMAST  (exits start as root anyway.)
 \f4#   Exited reals: real protections, programs start with setuid() user.
 \f4 
-\f4Spool-Dir:      /usr/spool/bitspool/
-\f4Postmast-Dir:   /usr/spool/bitspool/POSTMAST
+\f4Spool-Dir:      /var/spool/bitspool/
+\f4Postmast-Dir:   /var/spool/bitspool/POSTMAST
 \f4 
 \f4# Now list of things to match and then what to do
 \f4# To do keywords:       DISCARD  to /dev/null.
@@ -352,7 +352,7 @@ binary format.  Transporter internal usage.
 Recipient spool directories have also these
 .B .spoolid
 files, and their function is similar; keep status log.
-.IP "\fB/usr/spool/bitspool/\fR" 1.0i 0
+.IP "\fB/var/spool/bitspool/\fR" 1.0i 0
 Configured (via exit files)
 .SM `Spool-Dir:'
 under which local recipients will get their own subdirectories..
