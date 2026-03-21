@@ -31,9 +31,7 @@ static void send_alarm()
   gotalarm = 1;
 }
 
-int  send_cmd_msg(cmdbuf,cmdlen,offlineok)
-const void *cmdbuf;
-const int cmdlen, offlineok;
+int  send_cmd_msg(const void *cmdbuf, const int cmdlen, const int offlineok)
 {
 	u_int32	accesskey;
 	int	oldgid, rc = 0, fd;

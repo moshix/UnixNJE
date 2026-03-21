@@ -16,10 +16,7 @@
 */
 
 int
-Uwrite(outfil, string, size)
-FILE *outfil;
-const void	*string;	/* Line descption */
-const int	size;
+Uwrite(FILE *outfil, const void *string, const int size)
 {
 	unsigned short Size = htons(size);
 

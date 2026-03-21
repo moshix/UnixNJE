@@ -116,7 +116,7 @@ init_command_mailbox()
 	if (*COMMAND_MAILBOX == 'F' ||
 	    *COMMAND_MAILBOX == 'f') {
 
-	  char *s;
+	  char *s = NULL;
 	  int rc;
 
 	  if (*socknam != '/') {
@@ -212,7 +212,7 @@ init_command_mailbox()
 	  sscanf(socknam,"%*s %d", &portnum);
 	  SocketName.sin_port = htons(portnum);
 
-	  if (bind(CommandSocket, &SocketName, sizeof(SocketName)) == -1) {
+	  if (bind(CommandSocket, (const struct sockaddr *)&SocketName, sizeof(SocketName)) == -1) {
 	    logger(1, "UNIX, Can't bind command socket '%s', error: %s\n",
 		   socknam, PRINT_ERRNO);
 	    exit(1);
@@ -269,8 +269,7 @@ close_command_mailbox()
  | Send a message to console and log it in our logfile.
  */
 void
-send_opcom(text)
-const char *text;
+send_opcom(const char *text)
 {
 	int	ftty;
 	char	line[512];
@@ -393,10 +392,7 @@ timer_ast()
  | A constant which decalres the routine to call on timeout is also expected.
  */
 int
-queue_timer(expiration, Index, WhatToDo)
-int		expiration;
-TimerType	WhatToDo;
-int		Index;			/* Index in IoLines array */
+queue_timer(int expiration, int Index, TimerType WhatToDo)
 {
 	int	i;
 	time_t	now;
@@ -424,10 +420,7 @@ int		Index;			/* Index in IoLines array */
 }
 
 void
-queue_timer_reset(expiration, Index, WhatToDo)
-int		expiration;
-TimerType	WhatToDo;
-int		Index;			/* Index in IoLines array */
+queue_timer_reset(int expiration, int Index, TimerType WhatToDo)
 {
 	int	i;
 	time_t	now;
@@ -451,8 +444,7 @@ int		Index;			/* Index in IoLines array */
  | Dequeue a timer element (I/O completed ok, so we don't need this timeout).
  */
 void
-dequeue_timer(TimerIndex)
-int	TimerIndex;		/* Index into our timer queue */
+dequeue_timer(int TimerIndex)
 {
 	if (TimerQueue[TimerIndex].expire == 0) {
 	  /* Dequeueing a non-existent entry... */
@@ -470,8 +462,7 @@ int	TimerIndex;		/* Index into our timer queue */
  | Delete all timer entries associated with a line.
  */
 void
-delete_line_timeouts(Index)
-int	Index;			/* Index in IoLines array */
+delete_line_timeouts(int Index)
 {
 	register int	i;
 
@@ -547,12 +538,20 @@ poll_sockets()
 #else
 #if	defined(FD_SET)
 	fd_set	readfds, writefds;
+#undef _FD_SET
+#undef _FD_CLR
+#undef _FD_ZERO
+#undef _FD_ISSET
 #define _FD_SET(sock,var) FD_SET(sock,&var)
 #define _FD_CLR(sock,var) FD_CLR(sock,&var)
 #define _FD_ZERO(var) FD_ZERO(&var)
 #define _FD_ISSET(i,var) FD_ISSET(i,&var)
 #else /* No AIX, nor FD_SET */
 	long	readfds, writefds;	/* On most other machines */
+#undef _FD_SET
+#undef _FD_CLR
+#undef _FD_ZERO
+#undef _FD_ISSET
 #define _FD_SET(sock,var) var |= (1 << sock)
 #define _FD_CLR(sock,var) var &= ~(1 << sock)
 #define _FD_ZERO(var) var = 0
@@ -823,14 +822,15 @@ poll_sockets()
 	  }
 	/* Loop here for a moment if there is work, however no more
 	   than 20 rounds before going to the main-program. */
+	(void)has_pending_connects;
+	(void)done_only_implicitic_ack;
 	if (++againcount < 20) goto again;
 	/* if (!done_only_implicitic_ack) goto again; */
 }
 
 /* ================================================================ */
 static void
-parse_file_queue(fd)
-const int fd;
+parse_file_queue(const int fd)
 {
 	unsigned char line[LINESIZE];
 	int size;
@@ -845,7 +845,7 @@ const int fd;
 	  if (rc == size) {
 	    FileSize = ((line[1] << 8) + line[2]) * 512;
 logger(1,"parse_file_queuer(): Queue file \"%s\" siz=%d\n",line+3,FileSize);
-	    queue_file(line+3, FileSize, NULL, NULL);
+	    queue_file((char *)line+3, FileSize, NULL, NULL);
 	  } else {
 	    logger(1,"parse_file_queue(): rc != size on nread()\n");
 	  }
@@ -864,8 +864,7 @@ logger(1, "parse_file_queuer() cnt=%d\n", file_queuer_cnt);
  | Read from the socket and parse the command.
  */
 static void
-parse_op_command(CommandSocket)
-int *CommandSocket;
+parse_op_command(int *CommandSocket)
 {
 	char	*p, line[LINESIZE];
 	int	size = 0;
@@ -889,10 +888,11 @@ int *CommandSocket;
 	  bug_check("UNIX: CMDMAILBOX has accepted SOCKET mode without AF_UNIX!\n");
 #else
 
-	  int	NewSock, i;
+	  int	NewSock;
+	  socklen_t	i;
 	  struct  sockaddr_un  cli_addr;
-	  
-	  i = sizeof(cli_addr);	
+
+	  i = sizeof(cli_addr);
 
 	  if ((NewSock = accept(*CommandSocket,
 				(struct sockaddr *)&cli_addr, &i)) < 0) {
@@ -929,7 +929,7 @@ int *CommandSocket;
 
 	/* Parse the command. In most commands, the parameter is
 	   the username to broadcast the reply to. */
-	parse_operator_command(line+4,size-4);
+	parse_operator_command((unsigned char *)line+4,size-4);
 }
 
 
@@ -939,8 +939,7 @@ int *CommandSocket;
 #ifdef BSD_SIGCHLDS
 
 void
-handle_childs(n)  /* signal(SIGCHLD,handle_childs); */
-const int n;
+handle_childs(const int n)
 {
 #ifdef	_POSIX_SOURCE	/* WE DO  waitpid()  */
 	int status;
@@ -1004,8 +1003,7 @@ const int n;
 
 
 void
-handle_sighup(n) /* signal(SIGHUP,handle_sighup); */
-const int n;
+handle_sighup(const int n)
 {
 	/*  Right, we have been HUPed.  Thus we must go and re-read
 	    exit config databases.  Should we also drop connections ? */
@@ -1087,8 +1085,7 @@ log_line_stats()
 
 
 void
-handle_sigterm(n) /* signal(SIGTERM,handle_sigterm); */
-const int n;
+handle_sigterm(const int n)
 {
 	/*  Right, we have been TERMed.
 	    Thus we must go and close everything.  Flush counters... */
@@ -1103,8 +1100,7 @@ const int n;
 }
 
 void
-handle_sigusr1(n) /* signal(SIGUSR1,handle_sigusr1); */
-const int n;
+handle_sigusr1(const int n)
 {
 	/*  Right, we have been USR1ed.
 	    Thus we must go and close everything.  Flush counters... */
@@ -1123,8 +1119,7 @@ const int n;
 int alarm_happened = 0;
 
 void
-handle_sigalrm(n)
-const int n;
+handle_sigalrm(const int n)
 {
 	signal(SIGALRM,handle_sigalrm);
 	alarm_happened = 1;
@@ -1147,10 +1142,7 @@ const int n;
  | Output: find_file() - 0 = No more files;  1 = Matching file found.
  |         FileName - The name of the found file.
  */
-int find_file(FileMask, FileName, context)
-const char *FileMask;
-char	*FileName;
-DIR	**context;
+int find_file(const char *FileMask, char *FileName, DIR **context)
 {
 	DIRENTTYPE	*dirp;
 	static char	Directory[LINESIZE],
@@ -1232,10 +1224,7 @@ DIR	**context;
  | header in normal ASCII mode.
 */
 int
-open_xmit_file(Index, Stream, FileName)
-const int	Index;		/* Index into IoLine structure */
-const int	Stream;
-const char	*FileName;
+open_xmit_file(const int Index, const int Stream, const char *FileName)
 {
 	struct	LINE	*Line;
 	FILE	*fd;
@@ -1269,9 +1258,7 @@ const char	*FileName;
  |  Caller must make sure that the stream number is within range.
 */
 int
-open_recv_file(Index, Stream)
-int	Index,		/* Index into IoLine structure */
-	Stream;	/* In the range 0-7 */
+open_recv_file(int Index, int Stream)
 {
 	FILE	*fd;
 	char	FileName[LINESIZE];
@@ -1317,9 +1304,7 @@ int	Index,		/* Index into IoLine structure */
  |  Write the given string into the file.
 */
 int
-uwrite(Index, Stream, string, size)
-const void	*string;	/* Line descption */
-const int	Index, Stream, size;
+uwrite(const int Index, const int Stream, const void *string, const int size)
 {
 	FILE	*fd;
 
@@ -1348,10 +1333,7 @@ const int	Index, Stream, size;
  | characters read, or -1 if error.
 */
 int
-uread(Index, Stream, string, size)
-/* Read one record from file */
-unsigned char	*string;	/* Line descption */
-const int	Stream, Index, size;
+uread(const int Index, const int Stream, unsigned char *string, const int size)
 {
 	FILE	*fd;
 	unsigned short NewSize;
@@ -1388,8 +1370,7 @@ const int	Stream, Index, size;
  | Close and Delete a file given its index into the Lines database.
  */
 void
-delete_file(Index, direction, Stream)
-int	Index, direction, Stream;
+delete_file(int Index, int direction, int Stream)
 {
 	FILE	*fd;
 	char	*FileName;
@@ -1424,8 +1405,7 @@ int	Index, direction, Stream;
  | The file size is returned.
  */
 int	/* [mea] add 'int' here.. */
-close_file(Index, direction, Stream)
-int	Index, direction, Stream;
+close_file(int Index, int direction, int Stream)
 {
 	FILE	*fd;
 	long	FileSize;
@@ -1470,9 +1450,7 @@ int	Index, direction, Stream;
  |       from the FABS and RABS which start with OUT (VMS output file).
  */
 char *
-rename_file(FileParams, flag, direction)
-struct FILE_PARAMS *FileParams;
-const int flag, direction;
+rename_file(struct FILE_PARAMS *FileParams, const int flag, const int direction)
 {
 	char	InputFile[LINESIZE], ToNode[30], UnderScores[9], *p;
 	static char	line[LINESIZE];/* Will return here the new file name */
@@ -1522,8 +1500,7 @@ const int flag, direction;
 
 
 int
-get_file_size(FileName)
-const char	*FileName;
+get_file_size(const char *FileName)
 {
 	struct	stat	Stat;
 
@@ -1555,8 +1532,7 @@ const char	*FileName;
 
 
 void
-ibm_time(QuadWord)
-u_int32	*QuadWord;
+ibm_time(u_int32 *QuadWord)
 {
 	QuadWord[0] = htonl((u_int32) (((float)time(0) / BIT_32_SEC) +
 				       IBM_TIME_ORIGIN));
@@ -1565,8 +1541,7 @@ u_int32	*QuadWord;
 
 /* Return UNIX time from given IBM time.. [mea] */
 time_t
-ibmtime2unixtime(QuadWord)
-const u_int32 *QuadWord;
+ibmtime2unixtime(const u_int32 *QuadWord)
 {
 	u_int32 t = (u_int32)((float)(ntohl(QuadWord[0])
 				      - (u_int32)IBM_TIME_ORIGIN)
@@ -1583,8 +1558,7 @@ const u_int32 *QuadWord;
  */
 
 int
-make_dirs(pathname)
-	char *pathname;
+make_dirs(char *pathname)
 {
 	char *p;			/* Points into path */
 	int madeone = 0;		/* Did we do anything yet? */
@@ -1621,8 +1595,7 @@ make_dirs(pathname)
 
 
 void
-read_ebcasc_table(filepath)
-char *filepath;
+read_ebcasc_table(char *filepath)
 {
 	int fd;
 	static unsigned char ebuf[8+512+10];

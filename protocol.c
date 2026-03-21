@@ -97,9 +97,7 @@ unsigned char	NullBuffer = 0;
  | since the last seccessfull operation on the line.
  */
 static void
-error_retry(Index, Line)
-const int	Index;
-struct LINE	*Line;
+error_retry(const int Index, struct LINE *Line)
 {
 	Line->TotalErrors++;	/* Count total errors on line */
 	Line->stats.RetriesOut += 1;
@@ -124,16 +122,14 @@ struct LINE	*Line;
  | If there is a file in transit, change its state to waiting.
  */
 void
-restart_channel(Index)
-const int	Index;
+restart_channel(const int Index)
 {
 	struct	LINE	*Line;
 /*	struct	MESSAGE	*MessageEntry; */
 	register long	PreviousState;	/* To know whether to inform
 					   state change */
-	register int	i;	/* Stream index */
 
-	extern void abort_streams_and_requeue();
+	extern void abort_streams_and_requeue(int);
 
 	Line = &(IoLines[Index]);
 	if (Index > MAX_LINES || Line->HostName[0] == 0) {
@@ -212,11 +208,7 @@ const int	Index;
  | Some input has been arrived from some line.
  */
 void
-input_arrived(Index, status, buffer, size)
-const int	Index,		/* Index in IoLines */
-		status;		/* VMS I/O status of read */
-      int	size;
-void		*buffer;
+input_arrived(const int Index, const int status, void *buffer, int size)
 {
 	struct	LINE	*Line;
 	const unsigned char	*q = NULL;
@@ -283,9 +275,7 @@ void		*buffer;
  | Called from Input_arrived() when the input routine returns error.
  */
 static void
-input_read_error(Index, status, Line)
-const int	Index, status;
-struct LINE	*Line;
+input_read_error(const int Index, const int status, struct LINE *Line)
 {
 	logger(1, "PROTOCOL: Read error, on line %s, status=%d\n", 
 	       Line->HostName, status);
@@ -316,8 +306,7 @@ struct LINE	*Line;
  | retransmit the last sent buffer.
  */
 static void
-handle_nak(Index)
-const int	Index;
+handle_nak(const int Index)
 {
 	struct	LINE	*Line;
 
@@ -360,8 +349,7 @@ const int	Index;
  | starting.
  */
 static void
-handle_enq(Index)
-const int	Index;
+handle_enq(const int Index)
 {
 	struct	LINE	*Line;
 
@@ -387,9 +375,7 @@ const int	Index;
  | we got a text block which is an implicit ack (IMPLICIT_ACK).
  */
 void
-handle_ack(Index, flag)
-const int	Index;
-const short	flag;	/* Is this an implicit or explicit ACK? */
+handle_ack(const int Index, const int flag)
 {
 	register struct	LINE	*Line;
 	register int	i, CurStream, Switches = 7;
@@ -698,11 +684,12 @@ const short	flag;	/* Is this an implicit or explicit ACK? */
 		 stages do it.  SLOW-INTERLEAVE might be a bit more
 		 efficient at feeding thru large files on the links.. */
 
-	      if (Line->OutStreamState[CurStream] == S_SENDING_FILE)
+	      if (Line->OutStreamState[CurStream] == S_SENDING_FILE) {
 		if ((Line->flags & F_SLOW_INTERLEAVE) != 0)
 		  goto SendAgain;
 		else
 		  goto SwitchStream;
+	      }
 #else
 	      if (Line->OutStreamState[CurStream] == S_SENDING_FILE)
 		goto SendAgain;
@@ -773,9 +760,7 @@ const short	flag;	/* Is this an implicit or explicit ACK? */
  | blocking as much messages as you can and send them.
  */
 static void
-fill_message_buffer(Index, Line)
-const int	Index;
-struct LINE	*Line;
+fill_message_buffer(const int Index, struct LINE *Line)
 {
 	struct	MESSAGE	*MessageEntry;	/* Messages' queue for the line */
 	unsigned char	buffer[MAX_BUF_SIZE];
@@ -821,9 +806,7 @@ struct LINE	*Line;
  | successfull (the request to init a stream will serve as an implicit ack).
  */
 static int
-request_to_send_file(Index, Line)
-const int	Index;
-struct LINE	*Line;
+request_to_send_file(const int Index, struct LINE *Line)
 {
 	struct	QUEUE	*FileEntry;
 	unsigned char	buffer[4];	/* To send the request block */
@@ -852,7 +835,7 @@ struct LINE	*Line;
 
 	FileEntry->state = 1; /* Mark it for sending */
 	FP->FileEntry = FileEntry;
-	strcpy(FP->SpoolFileName,FileEntry->FileName);	/* Save spool file name */
+	strcpy(FP->SpoolFileName,(const char *)FileEntry->FileName);	/* Save spool file name */
 	if (open_xmit_file(Index, Line->CurrentStream,
 			   FP->SpoolFileName) == 0) {
 	  Line->OutStreamState[Line->CurrentStream] = S_INACTIVE;
@@ -903,10 +886,7 @@ struct LINE	*Line;
  | accordingly.
  */
 static void
-handle_text_block(Index, Buffer, size)
-const int	Index;
-int		size;
-void	*Buffer;
+handle_text_block(const int Index, void *Buffer, int size)
 {
 	int	SendAck;	/* Shall we treat this message as an
 					   implicit ack? */
@@ -1233,10 +1213,7 @@ void	*Buffer;
  | This function is called from Handle_text_block().
  */
 void
-income_signon(Index, Line, buffer)
-const int	Index;
-struct LINE	*Line;
-const unsigned char	*buffer;
+income_signon(const int Index, struct LINE *Line, const unsigned char *buffer)
 {
 	char		Aline[16];
 	register int	i;
@@ -1349,10 +1326,7 @@ const unsigned char	*buffer;
  | Called by Handle_text_block().
  */
 static void
-income_file_request(Index, Line, StreamNumberP)
-const int	Index;
-struct	LINE	*Line;
-const unsigned char	*StreamNumberP;
+income_file_request(const int Index, struct LINE *Line, const unsigned char *StreamNumberP)
 {
 	int	DecimalStreamNumber;	/* the stream number in the range 0-7*/
 
@@ -1442,8 +1416,7 @@ const unsigned char	*StreamNumberP;
  | a response signon.
  */
 static void
-send_signon(Index, flag)
-const int	Index, flag;
+send_signon(const int Index, const int flag)
 {
 	if (flag == INITIAL_SIGNON) {
 	  logger(3, "PROTOCOL: Sending initial signon record.\n");
@@ -1494,8 +1467,7 @@ static char *states[] = {
   "ACTIVE", "LISTEN", "RETRYING", "TCP-SYNC" };
 
 static void
-inform_users_about_line(Index, PreviousState)
-const int	Index, PreviousState;
+inform_users_about_line(const int Index, const int PreviousState)
 {
 	char	From[20], line[LINESIZE];
 	int	size, i;

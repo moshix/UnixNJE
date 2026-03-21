@@ -18,16 +18,13 @@ extern int errno;
 
 char *pname;
 
-int CompareRoute(r1,r2)
-struct ROUTE_DATA *r1, *r2;
+int CompareRoute(struct ROUTE_DATA *r1, struct ROUTE_DATA *r2)
 {
 	return strcmp(r1->DestNode, r2->DestNode);
 }
 
 int
-main(argc,argv)
-     int argc;
-     char *argv[];
+main(int argc, char *argv[])
 {
 	char	*c, line[132],
 		site[21], LineName[21], format[20],
@@ -50,9 +47,9 @@ main(argc,argv)
 	  printf("%s  Args are in order:  Header-Fname, RoutingTbl-Fname, OutputFname\n",pname);
 	  
 
-	  printf("Header file: "); gets(header_file);
-	  printf("Routing table: "); gets(in_file);
-	  printf("Output file: "); gets(out_file);
+	  printf("Header file: "); fgets(header_file, sizeof header_file, stdin);
+	  printf("Routing table: "); fgets(in_file, sizeof in_file, stdin);
+	  printf("Output file: "); fgets(out_file, sizeof out_file, stdin);
 	} else  {
 	  strncpy( header_file,argv[1],sizeof header_file -1);
 	  strncpy( in_file,argv[2],sizeof in_file -1);

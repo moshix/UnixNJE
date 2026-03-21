@@ -53,8 +53,8 @@ struct ndparam {
 	int  ackwanted;
 	char ACKKEY[40];
 	int  ackkeylen;
-	void (*outproc)();
-	void (*closeproc)();
+	void (*outproc)(void const *, const int, struct ndparam *);
+	void (*closeproc)(struct ndparam *);
 	char DSNAM[40];
 	char MEMBR[10];
 	char FTIMES[16];

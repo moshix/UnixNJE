@@ -166,10 +166,7 @@ read_configuration()
 
    ---------------------------------------------------------------- */
 
-static char *ReadNoncommentLine( fil,buf,bufsiz )
-     FILE **fil;
-     char *buf;
-     const int bufsiz;
+static char *ReadNoncommentLine(FILE **fil, char *buf, const int bufsiz)
 {
 	char *s;
 
@@ -188,8 +185,7 @@ static char *ReadNoncommentLine( fil,buf,bufsiz )
 }
 
 int
-read_exit_config( path )
-     const char *path;
+read_exit_config(const char *path)
 {
 	char	line[250]; /* Just something long... */
 	char	key[60]; /* Should be enough */

@@ -48,8 +48,7 @@ EXTERNAL struct JOB_TRAILER	NetworkJobTrailer;
  | static buffer.
  */
 void
-send_file_buffer(Index)
-const int	Index;
+send_file_buffer(const int Index)
 {
 	register int	MaxSize, CurrentSize, i;
 	unsigned char	OutputLine[MAX_BUF_SIZE],
@@ -203,8 +202,7 @@ logger(2,"SEND_FILE: EOF on line %s stream %d\n",Line->HostName,Stream);
 	PAD_BLANKS((USER), i, 8); }
 
 int
-send_njh_dsh_record(Index, flag, SYSIN)
-const int	Index, flag, SYSIN;
+send_njh_dsh_record(const int Index, const int flag, const int SYSIN)
 {
 	struct	LINE	*Line;
 	struct	FILE_PARAMS	*FileParams;
@@ -472,8 +470,7 @@ const int	Index, flag, SYSIN;
  | Send the job trailer. Add the count of lines in the file.
  */
 void
-send_njt(Index, SYSIN)
-const int	Index, SYSIN;
+send_njt(const int Index, const int SYSIN)
 {
 	unsigned char	OutputLine[LINESIZE];
 	int	TempVar, position;

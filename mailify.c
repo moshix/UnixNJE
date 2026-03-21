@@ -48,8 +48,8 @@ int LogLevel = 2;
 FILE *LogFd = NULL;
 
 extern	FILE	*dump_header __(( char const *path, const int debugdump, int *binary ));
-extern	void	debug_headers();
-extern	void	pad_to_size();
+extern	void	debug_headers(unsigned char const *buf, const int buflen);
+extern	void	pad_to_size(unsigned char *line, int cursize, int wantedsize, unsigned char padchar);
 extern	void	dump_punchline __((struct ndparam *ndp, unsigned char *buf, int len, int reclen, const int style));
 extern	void	dump_printmccline __((struct ndparam *ndp, unsigned char *buf, int len, int reclen, const int style));
 extern	void	dump_printasaline __((struct ndparam *ndp, unsigned char SRCB, unsigned char *buf, int len, int reclen, const int style));
@@ -94,8 +94,7 @@ int sendmail_pid = 0;
 
 extern FILE	*sendmail_open __((MailifyParam *mfp));
 FILE	*
-sendmail_open(mfp)
-MailifyParam *mfp;
+sendmail_open(MailifyParam *mfp)
 {
 	int pipes[2];
 	int i;
@@ -150,9 +149,7 @@ MailifyParam *mfp;
 
 extern void	sendmail_abort __((FILE *ofp, MailifyParam *mfp));
 void
-sendmail_abort(ofp,mfp)
-FILE *ofp;
-MailifyParam *mfp;
+sendmail_abort(FILE *ofp, MailifyParam *mfp)
 {
 	int status = 0, hispid;
 	if (sendmail_pid && ofp) {
@@ -169,9 +166,7 @@ MailifyParam *mfp;
 
 extern int	sendmail_close __((FILE *ofp, MailifyParam *mfp));
 int
-sendmail_close(ofp,mfp)
-FILE *ofp;
-MailifyParam *mfp;
+sendmail_close(FILE *ofp, MailifyParam *mfp)
 {
 	int status = 0, hispid;
 	if (ofp) {
@@ -188,14 +183,11 @@ MailifyParam *mfp;
 
 /* ---------------------------------------------------------------- */
 
-void mailify_bsmtp(buffer,size,ndp,mfp)
-void const *buffer;
-int size;
-struct ndparam *ndp;
-MailifyParam *mfp;
+void mailify_bsmtp(void const *buffer, int size, struct ndparam *ndp, MailifyParam *mfp)
 {
 	char	key4[6];
 	char	*bp = (char *)buffer;
+	(void)ndp;
 
 	while (size > 0 && bp[size-1] == ' ') --size;
 	if (mfp->state != data_dot) {
@@ -279,6 +271,7 @@ MailifyParam *mfp;
 	  } else if (strcmp(key4,"DATA")==0) {
 	    /* XX: Open up the  mailout  channel! */
 	    int i;
+	    (void)i;
 	    if (mfp->mailfrom == NULL || mfp->rcptcnt == 0) {
 	      if (mfp->logfile)
 		fprintf(mfp->logfile,"Either MAIL FROM:<>, or RCPT TO:<> addresses are missing!\n");
@@ -387,12 +380,9 @@ MailifyParam *mfp;
 
 /* ---------------------------------------------------------------- */
 
-void mailify_note(buffer,size,ndp,mfp)
-void const *buffer;
-const int size;
-struct ndparam *ndp;
-MailifyParam *mfp;
+void mailify_note(void const *buffer, const int size, struct ndparam *ndp, MailifyParam *mfp)
 {
+	(void)buffer; (void)size; (void)ndp;
 	if (mfp->logfile)
 	  fprintf(mfp->logfile,"** Got PROFS NOTE, NO CODE TO MAILIFY IT!\n");
 	exit(10);
@@ -400,12 +390,9 @@ MailifyParam *mfp;
 
 /* ---------------------------------------------------------------- */
 
-void mailify_defrt1(buffer,size,ndp,mfp)
-void const *buffer;
-const int size;
-struct ndparam *ndp;
-MailifyParam *mfp;
+void mailify_defrt1(void const *buffer, const int size, struct ndparam *ndp, MailifyParam *mfp)
 {
+	(void)buffer; (void)size; (void)ndp;
 	if (mfp->logfile)
 	  fprintf(mfp->logfile,"** Got DEFRT1 MAIL, NO CODE TO MAILIFY IT!\n");
 	exit(10);
@@ -413,10 +400,7 @@ MailifyParam *mfp;
 
 /* ---------------------------------------------------------------- */
 
-void mailify(buffer,size,ndp)
-void const *buffer;
-const int size;
-struct ndparam *ndp;
+void mailify(void const *buffer, const int size, struct ndparam *ndp)
 {
 	MailifyParam *mfp = (MailifyParam*)ndp->outfile;
 	((char*)buffer)[size] = 0;
@@ -446,8 +430,7 @@ struct ndparam *ndp;
 }
 
 
-void mailifyclose(ndp)
-struct ndparam *ndp;
+void mailifyclose(struct ndparam *ndp)
 {
 	MailifyParam *mfp = (MailifyParam*)ndp->outfile;
 
@@ -501,12 +484,7 @@ extern char FileName[], FileExt[];
 int	dump_file __(( char const *path, char const *outpath, int binary, const int dumpstyle, const int debugdump ));
 
 int
-dump_file(path,outpath,binary,dumpstyle,debugdump)
-     char const *path;
-     char const *outpath;
-     int binary;
-     const int dumpstyle;
-     const int debugdump;
+dump_file(char const *path, char const *outpath, int binary, const int dumpstyle, const int debugdump)
 {
 	unsigned char	line[1005];
 	FILE	*fd;
@@ -694,7 +672,7 @@ dump_file(path,outpath,binary,dumpstyle,debugdump)
 	}
 
 	if (debugdump) {
-	  debug_headers("\0\0\0\0\0\0\0\0",8);
+	  debug_headers((const unsigned char *)"\0\0\0\0\0\0\0\0",8);
 	  printf("\n%d records.\n",recs);
 	}
 
@@ -704,9 +682,8 @@ dump_file(path,outpath,binary,dumpstyle,debugdump)
 
 /* ---------------------------------------------------------------- */
 
-volatile void
-bug_check(string)
-char const      *string;
+void
+bug_check(char const *string)
 {
 	fprintf(stderr, "RECEIVE: Bug check: %s\n", string);
         exit(0);
@@ -716,7 +693,7 @@ char const      *string;
 
 extern void usage __((void));
 void
-usage()
+usage(void)
 {
 	fprintf(stderr,"%s:  [-d] [-b | -rawpun] filename\n",pname);
 	fprintf(stderr,"%s:  -a       output converted to ASCII (default).\n",pname);
@@ -733,9 +710,7 @@ usage()
 /* ---------------------------------------------------------------- */
 
 int
-main(argc,argv)
-     int argc;
-     char *argv[];
+main(int argc, char *argv[])
 {
 	int debugdump = 0;
 	int dumpstyle = 1;	/* default style: ASCII output */
@@ -744,7 +719,7 @@ main(argc,argv)
 	int nodelete = 0;
 	int rawpun = 0;
 	int rawin = 0;
-	int bitraw;
+	int bitraw = 0;
 	const	char *path;
 	char	*outpath = NULL;
 	char	HomeDir[256];
@@ -815,6 +790,7 @@ main(argc,argv)
 	    break;
 	  ++argv;
 	}
+	(void)rawpun; (void)bitraw;
 	path = *argv;
 	if (path == NULL && rawin)
 	  path = "-";

@@ -14,11 +14,7 @@
 #include "ndlib.h"
 
 int
-do_netdata(infile, PUNCH, From, To, fname, ftype, lrecl, recfm, binary, askack)
-FILE	*infile;
-struct puncher *PUNCH;
-char	*From, *To, *fname, *ftype, *askack;
-int	lrecl, recfm, binary;
+do_netdata(FILE *infile, struct puncher *PUNCH, char *From, char *To, char *fname, char *ftype, int lrecl, int recfm, int binary, char *askack)
 {
 	char	*linebuf = malloc(lrecl+8);
 	int	inputsize = 0;

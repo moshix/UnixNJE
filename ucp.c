@@ -59,10 +59,10 @@ struct Commands {
 	  { "", 0 }
 	};
 
-extern void process_cmd();
-extern void show_help();
-extern int parse_command();
-extern void command();
+extern void process_cmd(char *line);
+extern void show_help(void);
+extern int parse_command(char *line);
+extern void command(int cmd, int value, char *string, int param);
 
 
 char LOCAL_NAME   [10];
@@ -73,9 +73,7 @@ int LogLevel = 1;
 FILE *LogFd = NULL;
 
 int
-main(cc, vv)
-int	cc;
-char	**vv;
+main(int cc, char **vv)
 {
 	char	line[LINESIZE];
 	int	i;
@@ -101,8 +99,7 @@ char	**vv;
 }
 
 void
-process_cmd(line)
-char	*line;
+process_cmd(char *line)
 {
 	char	*p, KeyWord[80], param1[80], param2[80], param3[80];
 	char	TempStr[160];
@@ -127,10 +124,10 @@ char	*line;
 		break;
 	      }
 	      if (strncasecmp(param1, "LINE", 4) == 0)
-		command(CMD_SHOW_LINES);
+		command(CMD_SHOW_LINES, 0, NULL, 0);
 	      else
 		if (strncasecmp(param1, "QUEUE", 5) == 0)
-		  command(CMD_SHOW_QUEUE);
+		  command(CMD_SHOW_QUEUE, 0, NULL, 0);
 		else
 		  printf("Illegal SHOW command\n");
 	      break;
@@ -141,7 +138,7 @@ char	*line;
 	      }
 	      sscanf(param2, "%d", &i);
 	      if (strncasecmp(param1, "LINE", 4) == 0)
-		command(CMD_START_LINE, i);
+		command(CMD_START_LINE, i, NULL, 0);
 	      else
 		printf("Illegal START command\n");
 	      break;
@@ -160,9 +157,9 @@ char	*line;
 		break;
 	      }
 	      if (cmd == Force)
-		command(CMD_FORCE_LINE, i);
+		command(CMD_FORCE_LINE, i, NULL, 0);
 	      else
-		command(CMD_STOP_LINE, i);
+		command(CMD_STOP_LINE, i, NULL, 0);
 	      break;
 	  case Gone:
 	  case Ungone:
@@ -172,13 +169,13 @@ char	*line;
 		  break;
 		}
 		sprintf(line, "%s %s", param1, param2);
-		command(CMD_GONE_ADD_UCP, 0, line);
+		command(CMD_GONE_ADD_UCP, 0, line, 0);
 	      } else {
 		if (NumParams != 2) {
 		  printf("Illegal GONE command\n");
 		  break;
 		}
-		command(CMD_GONE_DEL_UCP, 0, param1);
+		command(CMD_GONE_DEL_UCP, 0, param1, 0);
 	      }
 	      break;
 	  case Queue:
@@ -195,10 +192,10 @@ char	*line;
 	      break;
 	  case Shut:
 	      if (NumParams == 1)	/* Shutdown normally */
-		command(CMD_SHUTDOWN);
+		command(CMD_SHUTDOWN, 0, NULL, 0);
 	      else
 		if (strncasecmp(param1, "ABORT", 5) == 0)
-		  command(CMD_SHUTDOWN_ABRT);
+		  command(CMD_SHUTDOWN_ABRT, 0, NULL, 0);
 		else
 		  printf("Illegal SHUT command\n");
 	      break;
@@ -208,7 +205,7 @@ char	*line;
 		break;
 	      }
 	      if (strncasecmp(param1, "DUMP", 4) == 0)
-		command(CMD_DEBUG_DUMP);
+		command(CMD_DEBUG_DUMP, 0, NULL, 0);
 	      else
 		if (strncasecmp(param1, "RESCAN", 6) == 0)
 		  command(CMD_DEBUG_RESCAN,0,param2,0);
@@ -224,9 +221,9 @@ char	*line;
 		if (*param2 == 0) *param2 = '+';
 		command(CMD_DEBUG_RESCAN,0,param2,0);
 	      } else if (strcasecmp(param1,"EXITS")==0) {
-		command(CMD_EXIT_RESCAN,0,0,0);
+		command(CMD_EXIT_RESCAN,0,NULL,0);
 	      } else if (strcasecmp(param1,"ROUTE")==0) {
-		command(CMD_ROUTE_RESCAN,0,0,0);
+		command(CMD_ROUTE_RESCAN,0,NULL,0);
 	      } else {
 		printf("  RESCAN EXITS, RESCAN QUEUE, or RESCAN ROUTE ?\n");
 	      }
@@ -237,7 +234,7 @@ char	*line;
 		break;
 	      }
 	      sscanf(param1, "%d", &i);
-	      command(CMD_LOGLEVEL, i);
+	      command(CMD_LOGLEVEL, i, NULL, 0);
 	      break;
 	  case Route:
 	      if (NumParams != 4) {
@@ -258,7 +255,7 @@ char	*line;
 }
 
 void
-show_help()
+show_help(void)
 {
 	printf("   HELP  - Show this message\n");
 	printf("   SHOW LINE/QUEUE - Show lines or queue status\n");
@@ -289,9 +286,7 @@ show_help()
  | VALUE, and a string value (if needed) is in STRING.
  */
 void
-command(cmd, value, string, param)
-int	cmd, value, param;
-char	*string;
+command(int cmd, int value, char *string, int param)
 {
 #ifdef VMS
 	struct	DESC	MailBoxDesc;
@@ -341,8 +336,7 @@ char	*string;
 
 
 int
-parse_command(line)
-char	*line;
+parse_command(char *line)
 {
 	int	i;
 

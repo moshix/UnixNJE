@@ -48,8 +48,7 @@ __hash_init()
 }
 
 static void
-hash_insert(Entry)
-struct QUEUE *Entry;
+hash_insert(struct QUEUE *Entry)
 {
 	int i;
 
@@ -62,8 +61,7 @@ struct QUEUE *Entry;
 }
 
 static void
-hash_delete(Entry)
-struct QUEUE *Entry;
+hash_delete(struct QUEUE *Entry)
 {
 	int i, match = 0;
 	struct QUEUE *hp1, *hp2;
@@ -110,8 +108,7 @@ struct QUEUE *Entry;
 }
 
 static struct QUEUE *
-hash_find(Entry)
-struct QUEUE *Entry;
+hash_find(struct QUEUE *Entry)
 {
 	int i;
 	struct QUEUE *hp2;
@@ -283,10 +280,7 @@ init_files_queue()
 /* ================ submit_file()  ================ */
 
 static void
-submit_file(fd, FileName, FileSize)
-const int fd;
-const char	*FileName;
-int	FileSize;
+submit_file(const int fd, const char *FileName, int FileSize)
 {
 	unsigned char	line[LINESIZE];
 	long	size;
@@ -296,8 +290,8 @@ int	FileSize;
 	/* Send file size */
 	line[1] = (unsigned char)((FileSize & 0xff00) >> 8);
 	line[2] = (unsigned char)(FileSize & 0xff);
-	strcpy(&line[3], FileName);
-	size = strlen(&line[3]) + 4; /* include terminating NULL.. */
+	strcpy((char *)&line[3], FileName);
+	size = strlen((const char *)&line[3]) + 4; /* include terminating NULL.. */
 	line[0] = size-1;
 
 	writen(fd,line,size);
@@ -312,10 +306,7 @@ int	FileSize;
  | that the link exists but inactive, we must loop again and look for it.
 */
 void
-queue_file(FileName, FileSize, ToAddr, Entry)
-const char	*FileName, *ToAddr;
-const int	FileSize;	/* File size in blocks */
-struct QUEUE	*Entry;
+queue_file(const char *FileName, const int FileSize, const char *ToAddr, struct QUEUE *Entry)
 {
 	register char	*p;
 	register int	i;
@@ -450,10 +441,7 @@ struct QUEUE	*Entry;
  */
 
 void
-add_to_file_queue(Line, Index, Entry)
-struct LINE *Line;
-const int Index;
-struct QUEUE *Entry;
+add_to_file_queue(struct LINE *Line, const int Index, struct QUEUE *Entry)
 {
 	struct	QUEUE	*keep, *keep2;
 	int FileSize = Entry->FileSize;
@@ -517,16 +505,13 @@ struct QUEUE *Entry;
 
 
 struct QUEUE *
-build_queue_entry(FileName, LineIndex, FileSize, ToAddr, FileParams)
-const char *FileName, *ToAddr;
-const int LineIndex;
-const int FileSize;
-struct FILE_PARAMS *FileParams;
+build_queue_entry(const char *FileName, const int LineIndex, const int FileSize, const char *ToAddr, struct FILE_PARAMS *FileParams)
 {
 	struct	QUEUE	*Entry;
 	struct	LINE	*Line;
 
 	Line = &(IoLines[LineIndex]);
+	(void)Line;
 	Entry = (struct QUEUE *)malloc(sizeof(struct QUEUE));
 
 	if (Entry == NULL) {
@@ -548,8 +533,8 @@ struct FILE_PARAMS *FileParams;
 	} else
 	  Entry->fstats = FileParams->FileStats;
 
-	strcpy(Entry->FileName, FileName);
-	strcpy(Entry->ToAddr, ToAddr);
+	strcpy((char *)Entry->FileName, FileName);
+	strcpy((char *)Entry->ToAddr, ToAddr);
 #ifdef UNIX
 	Entry->FileSize = Entry->fstats.st_size; /* So we can see it in
 						    SHOW QUEUE */
@@ -578,9 +563,7 @@ struct FILE_PARAMS *FileParams;
  | Show the files queued for each line.
  */
 void
-show_files_queue(UserName,LinkName)
-const char	*UserName;		/* To whom to broadcast the reply */
-char *LinkName;
+show_files_queue(const char *UserName, char *LinkName)
 {
 	int	i, j = 0;
 	struct	QUEUE	*QE;
@@ -655,9 +638,7 @@ char *LinkName;
 
 
 struct QUEUE *
-dequeue_file_entry_ok(Index,Line, freeflg)
-const int Index, freeflg;
-struct LINE	*Line;
+dequeue_file_entry_ok(const int Index, struct LINE *Line, const int freeflg)
 {
 	struct	QUEUE	*FE,*FE2, *QFE = NULL;
 	struct	FILE_PARAMS *FP = & Line->OutFileParams[Line->CurrentStream];
@@ -716,9 +697,7 @@ struct LINE	*Line;
 }
 
 void
-requeue_file_entry(Index,Line)
-const int Index;
-struct LINE	*Line;
+requeue_file_entry(const int Index, struct LINE *Line)
 {
 	int i = Line->CurrentStream;
 	struct QUEUE *Entry;
@@ -733,9 +712,7 @@ struct LINE	*Line;
 
 
 struct QUEUE *
-pick_file_entry(Index,Line)
-const int Index;
-const struct LINE *Line;
+pick_file_entry(const int Index, const struct LINE *Line)
 {
 	struct QUEUE *FileEntry = Line->QueueStart;
 	int i = Line->QueuedFiles+1;
@@ -762,8 +739,7 @@ const struct LINE *Line;
 
 
 int /* Count actives */
-requeue_file_queue(Line)
-struct LINE *Line;
+requeue_file_queue(struct LINE *Line)
 {
 	struct QUEUE	*Entry, *NextEntry;
 	int activecnt = 0;
@@ -790,7 +766,7 @@ struct LINE *Line;
 	    hash_delete(Entry);
 	    Line->QueuedFiles -= 1;
 	    Line->QueuedFilesWaiting -= 1;
-	    queue_file(Entry->FileName,Entry->FileSize,Entry->ToAddr,Entry);
+	    queue_file((const char *)Entry->FileName,Entry->FileSize,(const char *)Entry->ToAddr,Entry);
 	  } else {
 	    ++activecnt;
 	    if (Line->QueueStart == NULL)
@@ -809,8 +785,7 @@ struct LINE *Line;
 
 
 int /* Count actives */
-delete_file_queue(Line)
-struct LINE *Line;
+delete_file_queue(struct LINE *Line)
 {
 	struct QUEUE	*Entry, *NextEntry;
 	int activecnt = 0;

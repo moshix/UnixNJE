@@ -19,9 +19,7 @@
 extern char DefaultSpoolDir[256];
 
 char *
-ExpandHomeDir( PathOrDir,HomeDir,ToUser,path )
-     const char *PathOrDir,*HomeDir,*ToUser;
-     char *path;
+ExpandHomeDir(const char *PathOrDir, const char *HomeDir, const char *ToUser, char *path)
 {
 	struct stat fstats;
 	int plen;

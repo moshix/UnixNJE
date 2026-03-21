@@ -41,9 +41,7 @@ static int Reg_Exits_cnt = 0;
 /* static int Reg_Exits_spc = 0; */
 
 static struct MSG_EXIT *
-exit_alloc(p_exits,p_cnt,p_spc)
-struct MSG_EXIT ***p_exits;
-int *p_cnt, *p_spc;
+exit_alloc(struct MSG_EXIT ***p_exits, int *p_cnt, int *p_spc)
 {
 	/* p_exits points to the exit array variable.. */
 	struct MSG_EXIT *mex = (void*) malloc(sizeof(struct MSG_EXIT));
@@ -70,8 +68,7 @@ int *p_cnt, *p_spc;
 }
 
 int
-read_message_config( path )  /* Config reader... */
-     const char *path;
+read_message_config(const char *path)  /* Config reader... */
 {
 	FILE *cfg = fopen(path,"r");
 	char line[512];
@@ -247,9 +244,7 @@ bad_entry:
 }
 
 static const char *
-find_tok_start(string,number)
-const char *string;
-const int number;
+find_tok_start(const char *string, const int number)
 {
 	int i = 1;
 
@@ -272,10 +267,7 @@ const int number;
 }
 
 static int
-cmd_builtin(Exit,touser,tonode,fruser,frnode,text)
-const struct MSG_EXIT *Exit;
-const char *touser, *tonode, *fruser, *frnode;
-char *text;
+cmd_builtin(const struct MSG_EXIT *Exit, const char *touser, const char *tonode, const char *fruser, const char *frnode, char *text)
 {
 	char line[800];
 	char Faddress[20],Taddress[20];
@@ -352,17 +344,19 @@ logger(1,"UNIX_MSGS: cmd_builtin(`%s') -- unknown builtin on command `%s'!\n",
 
 
 static void
-msg_pipeout(Exit,touser,tonode,fruser,frnode,text)
-const struct MSG_EXIT *Exit;
-const char *touser, *tonode, *fruser, *frnode, *text;
+msg_pipeout(const struct MSG_EXIT *Exit, const char *touser, const char *tonode, const char *fruser, const char *frnode, const char *text)
 {
 	/* XXX: MSG_PIPEOUT() TO BE IMPLEMENTED! */
+	(void)Exit;
+	(void)touser;
+	(void)tonode;
+	(void)fruser;
+	(void)frnode;
+	(void)text;
 }
 
 static void
-msgcmd_run(Exit,touser,tonode,fruser,frnode,text)
-const struct MSG_EXIT *Exit;
-const char *touser, *tonode, *fruser, *frnode, *text;
+msgcmd_run(const struct MSG_EXIT *Exit, const char *touser, const char *tonode, const char *fruser, const char *frnode, const char *text)
 {
 	pid_t pid;
 	char *args, *p;
@@ -508,8 +502,7 @@ const char *touser, *tonode, *fruser, *frnode, *text;
    "TOKEN**" -- Match any token starting with "TOKEN" -string.
  */
 int
-cmd_match(cmdstr,MsgTxt)
-const char *cmdstr, *MsgTxt;
+cmd_match(const char *cmdstr, const char *MsgTxt)
 {
 	const char *cmd = cmdstr;
 	const char *txt = MsgTxt;
@@ -598,12 +591,7 @@ const char *cmdstr, *MsgTxt;
    use either BRCAST, or builtin commands..   Return 1, if
    the thing got handled already.  */
 static int
-msg_exit_proc(Exits,ExitCnt,ToName,ToNode,FromName,FromNode,cmdmsg,MsgTxt)
-const struct MSG_EXIT **Exits;
-const int ExitCnt;
-const char *ToName, *ToNode, *FromName, *FromNode;
-const NMRCODES cmdmsg;
-char *MsgTxt;
+msg_exit_proc(const struct MSG_EXIT **Exits, const int ExitCnt, const char *ToName, const char *ToNode, const char *FromName, const char *FromNode, const NMRCODES cmdmsg, char *MsgTxt)
 {
 	int i;
 
@@ -679,10 +667,7 @@ char *MsgTxt;
 
 
 void
-message_exit(ToName,ToNode,FromName,FromNode,cmdmsg,MsgTxt)
-const char *ToName, *ToNode, *FromName, *FromNode;
-const NMRCODES cmdmsg;
-char *MsgTxt;
+message_exit(const char *ToName, const char *ToNode, const char *FromName, const char *FromNode, const NMRCODES cmdmsg, char *MsgTxt)
 {
 	char	MsgBuf[20+142];
 	int 	i;
@@ -691,11 +676,11 @@ char *MsgTxt;
 	   but are never logged-in... */
 
 	if (Reg_Exits != NULL &&
-	    msg_exit_proc(Reg_Exits,Reg_Exits_cnt,
+	    msg_exit_proc((const struct MSG_EXIT **)Reg_Exits,Reg_Exits_cnt,
 			  ToName,ToNode,FromName,FromNode,cmdmsg,MsgTxt))
 	  return;
 	if (Msg_Exits != NULL &&
-	    msg_exit_proc(Msg_Exits,Msg_Exits_cnt,
+	    msg_exit_proc((const struct MSG_EXIT **)Msg_Exits,Msg_Exits_cnt,
 			  ToName,ToNode,FromName,FromNode,cmdmsg,MsgTxt))
 	  return;
 
@@ -736,17 +721,16 @@ char *MsgTxt;
 
 
 void
-msg_register(ptr,size)
-const void *ptr;
-const int size;
+msg_register(const void *ptr, const int size)
 {
 	/* XXX: msg_register() TO BE IMPLEMENTED! */
+	(void)ptr;
+	(void)size;
 }
 
 
 int
-msg_helper(FrAddr,ToAddr)
-const char *FrAddr, *ToAddr;
+msg_helper(const char *FrAddr, const char *ToAddr)
 {
 	FILE *helpf;
 	char line[200];

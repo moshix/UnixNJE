@@ -22,6 +22,10 @@
 
 #include "consts.h"
 #include "prototypes.h"
+#ifdef __APPLE__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #include <utmp.h>
 #include <time.h>
 
@@ -31,10 +35,7 @@
 
 
 void
-list_users(Faddress, Taddress, cmd, UserName)
-const char	*Faddress, *Taddress;
-      char	*UserName;
-const char	 cmd;
+list_users(const char *Faddress, const char *Taddress, const char cmd, char *UserName)
 {
 	char	line[LINESIZE];
 	int	fd, lines;
@@ -116,8 +117,7 @@ const char	 cmd;
  | Send the  /etc/motd  file to the requestor.
  */
 void
-send_welcome_message(Faddress, Taddress)
-const char	*Faddress, *Taddress;
+send_welcome_message(const char *Faddress, const char *Taddress)
 {
 	char	*p, line[LINESIZE];
 	FILE	*fd;
@@ -140,11 +140,10 @@ const char	*Faddress, *Taddress;
  | Send current time. (local time zone)
  */
 void
-send_cpu_time(Faddress, Taddress)
-const char	*Faddress, *Taddress;
+send_cpu_time(const char *Faddress, const char *Taddress)
 {
 	char	line[LINESIZE];
-	struct	tm	*tm, *localtime();
+	struct	tm	*tm;
 	time_t	clock;
 
 	time(&clock);		/* Get the current time */
@@ -158,3 +157,7 @@ const char	*Faddress, *Taddress;
 
 	send_nmr(Faddress, Taddress, line, strlen(line), ASCII, CMD_MSG);
 }
+
+#ifdef __APPLE__
+#pragma clang diagnostic pop
+#endif

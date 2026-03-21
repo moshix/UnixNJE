@@ -105,8 +105,7 @@ static struct FILE_EXIT_CONFIG DefaultFileExit = {
 static char DefaultSpoolDir[256]        = DEF_SPOOL_DIR_RULE;
 static char DefaultPOSTMASTdir[256]     = DEF_POSTMAST_SPOOL_DIR;
 
-struct passwd *Getpwnam( namestr )
- const char *namestr;
+struct passwd *Getpwnam( const char *namestr )
 {
   char lowername[9];
 
@@ -119,15 +118,14 @@ struct passwd *Getpwnam( namestr )
 
 
 static int
-Check_File_Exit_Validity( ExitPtr,InParser )
-     const struct FILE_EXIT_CONFIG *ExitPtr;
-     const int InParser;
+Check_File_Exit_Validity( const struct FILE_EXIT_CONFIG *ExitPtr, const int InParser )
 {
 	struct passwd *upassp = NULL;
 
 	if (ExitPtr->touser[0] != 0) return -1;
 	if (InParser && (ExitPtr->touser[0] != '*'))
 	  upassp = Getpwnam(ExitPtr->touser);
+	(void)upassp;
 	/* XXX: Check here validity of directories, expand ~/ -notation
 	        (if InParser != 0), validate programs, validate directories.
 		If InParser != 0, create noexistent spool DIRECTORIES,
@@ -141,9 +139,7 @@ static int tracethis = 0;
 
 
 char *
-ExpandHomeDir( PathOrDir,HomeDir,ToUser,path )
-     const char *PathOrDir,*HomeDir,*ToUser;
-     char *path;
+ExpandHomeDir( const char *PathOrDir, const char *HomeDir, const char *ToUser, char *path )
 {
 	struct stat fstats;
 	int plen;
@@ -246,10 +242,7 @@ ExpandHomeDir( PathOrDir,HomeDir,ToUser,path )
    ---------------------------------------------------------------- */
 
 char *
-RenameToUniqueFileid( fp, PathOrDir, ToUser, HomeDir, MaxFiles, RealUID )
-     const char *PathOrDir, *ToUser, *HomeDir;
-     struct FILE_PARAMS *fp;
-     const int MaxFiles, RealUID;
+RenameToUniqueFileid( struct FILE_PARAMS *fp, const char *PathOrDir, const char *ToUser, const char *HomeDir, const int MaxFiles, const int RealUID )
 {
 	struct stat fstat1;
 	
@@ -375,11 +368,7 @@ FileDispositionExit( fp )
 #endif
 
 static struct FILE_EXIT_CONFIG *
-AnalyzeFileExitAction( ex,fp,ExplicitePseudoUser,RealUser,RealUID,ToUser,HomeDir )
-     struct FILE_EXIT_CONFIG *ex;
-     struct FILE_PARAMS *fp;
-     int *ExplicitePseudoUser, *RealUser, *RealUID;
-     char *HomeDir, *ToUser;
+AnalyzeFileExitAction( struct FILE_EXIT_CONFIG *ex, struct FILE_PARAMS *fp, int *ExplicitePseudoUser, int *RealUser, int *RealUID, char *ToUser, char *HomeDir )
 {
 	char FromUser[20],FromNode[20],ToNode[20];
 	char *s;
@@ -465,29 +454,19 @@ AnalyzeFileExitAction( ex,fp,ExplicitePseudoUser,RealUser,RealUID,ToUser,HomeDir
 static void	_inform_filearrival __(( const char *path, struct FILE_PARAMS *FileParams, char *OutLine, const int transitflag ));
 
 void
-inform_filearrival( path, FileParams, OutputLine )
-     const char *path;
-     struct FILE_PARAMS *FileParams;
-     char *OutputLine;
+inform_filearrival( const char *path, struct FILE_PARAMS *FileParams, char *OutputLine )
 {
 	_inform_filearrival (path, FileParams, OutputLine, 0);
 }
 
 void
-transit_trap( path, FileParams, OutputLine )
-     const char *path;
-     struct FILE_PARAMS *FileParams;
-     char *OutputLine;
+transit_trap( const char *path, struct FILE_PARAMS *FileParams, char *OutputLine )
 {
 	_inform_filearrival (path, FileParams, OutputLine, 1);
 }
 
 static void
-_inform_filearrival( path, FileParams, OutputLine, transitflag )
-     const char *path;
-     struct FILE_PARAMS *FileParams;
-     char *OutputLine;
-     const int transitflag;
+_inform_filearrival( const char *path, struct FILE_PARAMS *FileParams, char *OutputLine, const int transitflag )
 {
 	struct FILE_EXIT_CONFIG *Action;
 	int ExplicitePseudoUser,RealUser = 0,RealUID = -1;
@@ -894,11 +873,7 @@ _inform_filearrival( path, FileParams, OutputLine, transitflag )
    ---------------------------------------------------------------- */
 
 char *
-ReadNoncommentLine( fil,buf,bufsiz,linenump )
-     FILE **fil;
-     char *buf;
-     const int bufsiz;
-     int *linenump;
+ReadNoncommentLine( FILE **fil, char *buf, const int bufsiz, int *linenump )
 {
 	char *s;
 
@@ -919,9 +894,7 @@ ReadNoncommentLine( fil,buf,bufsiz,linenump )
 
 /* struct FILE_EXIT_CONFIG * */
 void *
-ReallocTable( oldtbl, eltsize, newsize )
-void *oldtbl;
-int eltsize, newsize; /* recs, not bytes */
+ReallocTable( void *oldtbl, int eltsize, int newsize )
 {
 	void *tmp = oldtbl;
 	char *msg1="##### UNIX_FILES, malloc() for exit config table failed!";
@@ -947,8 +920,7 @@ int eltsize, newsize; /* recs, not bytes */
 }
 
 int
-read_exit_config( path )
-     const char *path;
+read_exit_config( const char *path )
 {
 	int entries = 0, tablesize = 0;
 	struct FILE_EXIT_CONFIG *NewExitTable = NULL, *New;

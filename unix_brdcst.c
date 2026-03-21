@@ -18,6 +18,11 @@
 #include "consts.h"
 #include "prototypes.h"
 
+#ifdef __APPLE__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 #ifndef UTMP_FILE
 #define UTMP_FILE    "/etc/utmp"
 #endif
@@ -32,9 +37,7 @@ extern int alarm_happened;
 * In case of error, errno can be examined.
 */
 int
-send_user(User, msg)
-const char *User;
-char *msg;
+send_user(const char *User, char *msg)
 {
 	int cnt = 0, fdutmp;
 	int ftty;
@@ -101,3 +104,7 @@ char *msg;
 	  cnt = send_gone(user, msg);
 	return(cnt);
 }
+
+#ifdef __APPLE__
+#pragma clang diagnostic pop
+#endif

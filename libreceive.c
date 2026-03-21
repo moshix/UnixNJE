@@ -19,6 +19,7 @@
 #include "clientutils.h"
 #include "ndlib.h"
 #include <utime.h>
+#include <stdarg.h>
 
 /* char LOCAL_NAME   [10];
    char BITNET_QUEUE [80];
@@ -63,45 +64,40 @@ extern FILE *fopen();
 	} \
 }
 
-void eprintf(fmt,a1,a2,a3,a4,a5,a6,a7,a8,a9)
-char *fmt;
-long a1,a2,a3,a4,a5,a6,a7,a8,a9;
+void eprintf(const char *fmt, ...)
 {
-  fprintf(stderr,fmt,a1,a2,a3,a4,a5,a6,a7,a8,a9);
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  va_end(ap);
 }
 
-void etprintf(fmt,index,timep)
-char *fmt;
-int index;
-u_int32 *timep;
+void etprintf(const char *fmt, int index, u_int32 *timep)
 {
-  eprintf(fmt,index);
+  eprintf(fmt, index);
   eprintf("<IBM TIME>\n");
 }
 
 void
-esprintf(prefix,index,buf,len)
-char *prefix, *buf;
-int index,len;
+esprintf(const char *prefix, int index, char *buf, int len)
 {
 	char Aline[200];
 	int i;
 
-	eprintf(prefix,index);
+	eprintf(prefix, index);
 	if (*buf != 0) {
-	  EBCDIC_TO_ASCII(buf,Aline,len);
+	  EBCDIC_TO_ASCII(buf, Aline, len);
 	  Aline[len] = 0;
-	  eprintf("A'%-*.*s'\n",len,len,Aline);
+	  eprintf("A'%-*.*s'\n", len, len, Aline);
 	} else {
 	  eprintf("X'");
 	  for (i = 0; i < len; ++i)
-	    eprintf("%02X",buf[i]);
+	    eprintf("%02X", (unsigned char)buf[i]);
 	  eprintf("'\n");
 	}
 }
 
-static int I(inc)
-int inc;
+static int I(int inc)
 {
 	static int i;
 	int j = i;
@@ -112,9 +108,7 @@ int inc;
 }
 
 void
-debug_jobheader(NJH,len)
-struct JOB_HEADER *NJH;
-int len;
+debug_jobheader(struct JOB_HEADER *NJH, int len)
 {
 	I(-1);
 	eprintf ("NETWORK JOB HEADER:  Len=%d\n",len);
@@ -132,37 +126,35 @@ int len;
 	eprintf (" %3d:1  NJHGORGQ = X'%02X'\n",I(1),NJH->NJHGORGQ);
 	eprintf (" %3d:1  NJHGJCPY = D'%d'\n",  I(1),NJH->NJHGJCPY);
 	eprintf (" %3d:1  NJHGLNCT = D'%d'\n",  I(1),NJH->NJHGLNCT);
-	esprintf(" %3d:8  NJHGACCT = ",		I(8),NJH->NJHGACCT,8);
-	esprintf(" %3d:8  NJHGJNAM = ",		I(8),NJH->NJHGJNAM,8);
-	esprintf(" %3d:8  NJHGUSID = ",		I(8),NJH->NJHGUSID,8);
-	esprintf(" %3d:8  NJHGPASS = ",		I(8),NJH->NJHGPASS,8);
-	esprintf(" %3d:8  NJHGNPAS = ",		I(8),NJH->NJHGNPAS,8);
+	esprintf(" %3d:8  NJHGACCT = ",		I(8),(char *)NJH->NJHGACCT,8);
+	esprintf(" %3d:8  NJHGJNAM = ",		I(8),(char *)NJH->NJHGJNAM,8);
+	esprintf(" %3d:8  NJHGUSID = ",		I(8),(char *)NJH->NJHGUSID,8);
+	esprintf(" %3d:8  NJHGPASS = ",		I(8),(char *)NJH->NJHGPASS,8);
+	esprintf(" %3d:8  NJHGNPAS = ",		I(8),(char *)NJH->NJHGNPAS,8);
 	etprintf(" %3d:8  NJHGETS  = ",		I(8),NJH->NJHGETS); /* Time stamp */
-	esprintf(" %3d:8  NJHGORGN = ",		I(8),NJH->NJHGORGN,8);
-	esprintf(" %3d:8  NJHGORGR = ",		I(8),NJH->NJHGORGR,8);
-	esprintf(" %3d:8  NJHGXEQN = ",		I(8),NJH->NJHGXEQN,8);
-	esprintf(" %3d:8  NJHGXEQU = ",		I(8),NJH->NJHGXEQU,8);
-	esprintf(" %3d:8  NJHGPRTN = ",		I(8),NJH->NJHGPRTN,8);
-	esprintf(" %3d:8  NJHGPRTR = ",		I(8),NJH->NJHGPRTR,8);
-	esprintf(" %3d:8  NJHGPUNN = ",		I(8),NJH->NJHGPUNN,8);
-	esprintf(" %3d:8  NJHGPUNR = ",		I(8),NJH->NJHGPUNR,8);
-	esprintf(" %3d:8  NJHGFORM = ",		I(8),NJH->NJHGFORM,8);
+	esprintf(" %3d:8  NJHGORGN = ",		I(8),(char *)NJH->NJHGORGN,8);
+	esprintf(" %3d:8  NJHGORGR = ",		I(8),(char *)NJH->NJHGORGR,8);
+	esprintf(" %3d:8  NJHGXEQN = ",		I(8),(char *)NJH->NJHGXEQN,8);
+	esprintf(" %3d:8  NJHGXEQU = ",		I(8),(char *)NJH->NJHGXEQU,8);
+	esprintf(" %3d:8  NJHGPRTN = ",		I(8),(char *)NJH->NJHGPRTN,8);
+	esprintf(" %3d:8  NJHGPRTR = ",		I(8),(char *)NJH->NJHGPRTR,8);
+	esprintf(" %3d:8  NJHGPUNN = ",		I(8),(char *)NJH->NJHGPUNN,8);
+	esprintf(" %3d:8  NJHGPUNR = ",		I(8),(char *)NJH->NJHGPUNR,8);
+	esprintf(" %3d:8  NJHGFORM = ",		I(8),(char *)NJH->NJHGFORM,8);
 	eprintf (" %3d:4  NJHGICRD = D'%d'\n",	I(4),ntohl(NJH->NJHGICRD));
 	eprintf (" %3d:4  NJHGETIM = D'%d'\n",	I(4),ntohl(NJH->NJHGETIM));
 	eprintf (" %3d:4  NJHGELIN = D'%d'\n",	I(4),ntohl(NJH->NJHGELIN));
 	eprintf (" %3d:4  NJHGECRD = D'%d'\n",	I(4),ntohl(NJH->NJHGECRD));
-	esprintf(" %3d:20 NJHGPRGN = ",	       I(20),NJH->NJHGPRGN,20);
-	esprintf(" %3d:8  NJHGROOM = ",		I(8),NJH->NJHGROOM,8);
-	esprintf(" %3d:8  NJHGDEPT = ",		I(8),NJH->NJHGDEPT,8);
-	esprintf(" %3d:8  NJHGBLDG = ",		I(8),NJH->NJHGBLDG,8);
+	esprintf(" %3d:20 NJHGPRGN = ",	       I(20),(char *)NJH->NJHGPRGN,20);
+	esprintf(" %3d:8  NJHGROOM = ",		I(8),(char *)NJH->NJHGROOM,8);
+	esprintf(" %3d:8  NJHGDEPT = ",		I(8),(char *)NJH->NJHGDEPT,8);
+	esprintf(" %3d:8  NJHGBLDG = ",		I(8),(char *)NJH->NJHGBLDG,8);
 	eprintf (" %3d:4  NJHGNREC = D'%d'\n",	I(4),ntohl(NJH->NJHGNREC));
 	eprintf (" %3d - End of record\n",I(0));
 }
 
 void
-debug_datasetheader(DSH,len)
-struct DATASET_HEADER *DSH;
-int len;
+debug_datasetheader(struct DATASET_HEADER *DSH, int len)
 {
 	struct DATASET_HEADER_G    *NDH  = &DSH->NDH;
 	struct DATASET_HEADER_RSCS *RSCS;
@@ -185,11 +177,11 @@ int len;
 	  eprintf (" %3d:2  LENGTH_4 = D'%d'\n",  I(2),ntohs(NDH->LENGTH_4));
 	  eprintf (" %3d:1  ID       = X'%02X'\n",I(1),NDH->ID);
 	  eprintf (" %3d:1  MODIFIER = X'%02X'\n",I(1),NDH->MODIFIER);
-	  esprintf(" %3d:8  NDHGNODE = ",         I(8),NDH->NDHGNODE,8);
-	  esprintf(" %3d:8  NDHGRMT  = ",         I(8),NDH->NDHGRMT,8);
-	  esprintf(" %3d:8  NDHGPROC = ",         I(8),NDH->NDHGPROC,8);
-	  esprintf(" %3d:8  NDHGSTEP = ",         I(8),NDH->NDHGSTEP,8);
-	  esprintf(" %3d:8  NDHGDD   = ",         I(8),NDH->NDHGDD,8);
+	  esprintf(" %3d:8  NDHGNODE = ",         I(8),(char *)NDH->NDHGNODE,8);
+	  esprintf(" %3d:8  NDHGRMT  = ",         I(8),(char *)NDH->NDHGRMT,8);
+	  esprintf(" %3d:8  NDHGPROC = ",         I(8),(char *)NDH->NDHGPROC,8);
+	  esprintf(" %3d:8  NDHGSTEP = ",         I(8),(char *)NDH->NDHGSTEP,8);
+	  esprintf(" %3d:8  NDHGDD   = ",         I(8),(char *)NDH->NDHGDD,8);
 	  eprintf (" %3d:2  NDHDSNO  = D'%d'\n",  I(2),ntohs(NDH->NDHDSNO));
 	  eprintf (" %3d:1  NDHGCLAS = A'%c'\n",  I(1),EBCDIC_ASCII[NDH->NDHGCLAS]);
 	  eprintf (" %3d:4  NDHGNREC = D'%d'\n",  I(4),ntohl(NDH->NDHGNREC));
@@ -199,13 +191,13 @@ int len;
 	  eprintf (" %3d:1  NDHGDSCT = D'%d'\n",  I(1),NDH->NDHGDSCT);
 	  eprintf (" %3d:1  NDHGFCBI = D'%d'\n",  I(1),NDH->NDHGFCBI);
 	  eprintf (" %3d:1  NDHGLNCT = D'%d'\n",  I(1),NDH->NDHGLNCT);
-	  esprintf(" %3d:8  NDHGFORM = ",         I(8),NDH->NDHGFORM,8);
-	  esprintf(" %3d:8  NDHGFCB  = ",         I(8),NDH->NDHGFCB,8);
-	  esprintf(" %3d:8  NDHGUCS  = ",         I(8),NDH->NDHGUCS,8);
-	  esprintf(" %3d:8  NDHGXWTR = ",         I(8),NDH->NDHGXWTR,8);
+	  esprintf(" %3d:8  NDHGFORM = ",         I(8),(char *)NDH->NDHGFORM,8);
+	  esprintf(" %3d:8  NDHGFCB  = ",         I(8),(char *)NDH->NDHGFCB,8);
+	  esprintf(" %3d:8  NDHGUCS  = ",         I(8),(char *)NDH->NDHGUCS,8);
+	  esprintf(" %3d:8  NDHGXWTR = ",         I(8),(char *)NDH->NDHGXWTR,8);
 	  eprintf (" %3d:1  NDHGFLG2 = X'%02X'\n",I(1),NDH->NDHGFLG2);
 	  eprintf (" %3d:1  NDHGUCSO = X'%02X'\n",I(1),NDH->NDHGUCSO);
-	  esprintf(" %3d:8  NDHGPMDE = ",         I(8),NDH->NDHGPMDE,8);
+	  esprintf(" %3d:8  NDHGPMDE = ",         I(8),(char *)NDH->NDHGPMDE,8);
 	  break;
 	} /* end if while.. */
 
@@ -227,10 +219,10 @@ int len;
 	    eprintf (" %3d:1  NDHVCLAS = A'%c'\n",  I(1),EBCDIC_ASCII[RSCS->NDHVCLAS]);
 	    eprintf (" %3d:1  NDHVIDEV = X'%02X'\n",I(1),RSCS->NDHVIDEV);
 	    eprintf (" %3d:1  NDHVPGLE = D'%d'\n",  I(1),RSCS->NDHVPGLE);
-	    esprintf(" %3d:8  NDHVDIST = ",         I(8),RSCS->NDHVDIST,8);
-	    esprintf(" %3d:12 NDHVFNAM = ",        I(12),RSCS->NDHVFNAM,12);
+	    esprintf(" %3d:8  NDHVDIST = ",         I(8),(char *)RSCS->NDHVDIST,8);
+	    esprintf(" %3d:12 NDHVFNAM = ",        I(12),(char *)RSCS->NDHVFNAM,12);
 	    if (I(0) >= RSCSlim) break;
-	    esprintf(" %3d:12 NDHVFTYP = ",        I(12),RSCS->NDHVFTYP,12);
+	    esprintf(" %3d:12 NDHVFTYP = ",        I(12),(char *)RSCS->NDHVFTYP,12);
 	    if (I(0) >= RSCSlim) break;
 	    eprintf (" %3d:2  NDHVPRIO = D'%d'\n", I(2),ntohs(RSCS->NDHVPRIO));
 	    if (I(0) >= RSCSlim) break;
@@ -238,15 +230,13 @@ int len;
 	    if (I(0) >= RSCSlim) break;
 	    eprintf (" %3d:1  NDHVRELN = D'%d'\n",  I(1),RSCS->NDHVRELN);
 	    if (I(0) >= RSCSlim) break;
-	    esprintf(" %3d:136 NDHVTAGR= ",       I(136),RSCS->NDHVTAGR,136);
+	    esprintf(" %3d:136 NDHVTAGR= ",       I(136),(char *)RSCS->NDHVTAGR,136);
 	    break;
 	  }
 }
 
 void
-debug_jobtrailer(NJT,len)
-struct JOB_TRAILER *NJT;
-int len;
+debug_jobtrailer(struct JOB_TRAILER *NJT, int len)
 {
 	eprintf ("NETWORK JOB TRAILER:  Len=%d\n",len);
 	eprintf ("   0:2  LENGTH   = D'%d'\n",ntohs(NJT->LENGTH));
@@ -257,8 +247,8 @@ int len;
 	eprintf ("   7:1  MODIFIER = X'%02X'\n",NJT->MODIFIER);
 	eprintf ("   8:1  NJTGFLG1 = X'%02X'\n",NJT->NJTGFLG1);
 	eprintf ("   9:1  NJTGXCLS = A'%c'\n",EBCDIC_ASCII[NJT->NJTGXCLS]);
-	etprintf("  12:8  NJTGSTRT = ",NJT->NJTGSTRT);
-	etprintf("  20:8  NJTGSTOP = ",NJT->NJTGSTOP);
+	eprintf ("  12:8  NJTGSTRT = "); eprintf("<IBM TIME>\n");
+	eprintf ("  20:8  NJTGSTOP = "); eprintf("<IBM TIME>\n");
 	eprintf ("  28:4  NJTGACPU = D'%d'\n",ntohl(NJT->NJTGACPU));
 	eprintf ("  32:4  NJTGALIN = D'%d'\n",ntohl(NJT->NJTGALIN));
 	eprintf ("  36:4  NJTGCARD = D'%d'\n",ntohl(NJT->NJTGCARD));
@@ -274,9 +264,7 @@ static int  headerlen = 0;
 static unsigned char prev_srcb = 0;
 
 void
-debug_headers(buf,buflen)
-unsigned char const *buf;
-const int buflen;
+debug_headers(unsigned char const *buf, const int buflen)
 {
 	int is_header = (*buf == NJH_SRCB ||
 			 *buf == NJT_SRCB ||
@@ -320,9 +308,7 @@ static	int	TypeCode, FileId,Format;
 
 
 static void
-Type2Str(type,str)
-     const int type;
-     char *str;
+Type2Str(const int type, char *str)
 {
 	if (type & F_PRINT)
 	  strcpy(str,"PRT");
@@ -334,10 +320,7 @@ Type2Str(type,str)
 
 
 FILE *
-dump_header(path,debugdump,binary)
-     char const *path;
-     const int debugdump;
-     int *binary;
+dump_header(char const *path, const int debugdump, int *binary)
 {
 	int	rc;
 	char	TypeStr[20];
@@ -345,7 +328,7 @@ dump_header(path,debugdump,binary)
 	char	const *SpoolID = strrchr(path,'/');
 
 	if (SpoolID) ++SpoolID;
-	else	       SpoolID = path; 
+	else	       SpoolID = path;
 
 	if (SpoolID) {
 	  if (!(SpoolID[0] >= '0' && SpoolID[0] <= '9' &&
@@ -360,6 +343,7 @@ dump_header(path,debugdump,binary)
 
 	rc = parse_header(fd, From,To,FileName,FileExt,&TypeCode,&Class,
 			  Form,&Format,Tag,&FileId);
+	(void)rc;
 	Type2Str(TypeCode,TypeStr);
 
 	if (*binary == 0)
@@ -378,9 +362,7 @@ dump_header(path,debugdump,binary)
 }
 
 void
-pad_to_size(line,cursize,wantedsize,padchar)
-     unsigned char *line, padchar;
-     int cursize, wantedsize;
+pad_to_size(unsigned char *line, int cursize, int wantedsize, unsigned char padchar)
 {
 	register unsigned char *p = line + cursize -1;
 	register int cnt = wantedsize - cursize;
@@ -396,11 +378,7 @@ char *Post = NULL; /* Post-write things.. Like Final Newline.. */
 
 
 void
-dump_punchline(ndp, buf, reclen, len, style)
-     struct ndparam *ndp;
-     unsigned char *buf;
-     register int len, reclen;
-     const int style;
+dump_punchline(struct ndparam *ndp, unsigned char *buf, int reclen, int len, const int style)
 {
 	if (style <= 0) {
 	  if (reclen != *buf)
@@ -450,12 +428,8 @@ dump_punchline(ndp, buf, reclen, len, style)
 }
 
 void
-dump_printmccline(ndp, buf, reclen, len, style)
-     struct ndparam *ndp;
-     unsigned char *buf;
-     int len, reclen; /* len = content length w/o len byte, nor cc-byte */
-     const int style;
-{
+dump_printmccline(struct ndparam *ndp, unsigned char *buf, int reclen, int len, const int style)
+{	/* len = content length w/o len byte, nor cc-byte */
 
 	unsigned char cc;
 
@@ -549,12 +523,8 @@ dump_printmccline(ndp, buf, reclen, len, style)
 }
 
 void
-dump_printasaline(ndp, SRCB, buf, reclen, len, style)
-     struct ndparam *ndp;
-     unsigned char SRCB, *buf;
-     int len, reclen; /* len = content length w/o len byte, nor cc-byte */
-     const int style;
-{
+dump_printasaline(struct ndparam *ndp, unsigned char SRCB, unsigned char *buf, int reclen, int len, const int style)
+{	/* len = content length w/o len byte, nor cc-byte */
 	unsigned char cc;
 
 	if (style <= 0) {

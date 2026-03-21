@@ -47,9 +47,7 @@ static char *NDP = "NETDATAPARSE: ";
  | Retrieve one text unit from the passed buffer.
  */
 static int
-get_text_unit(buffer, length, key, value)
-unsigned char	*buffer, *value;
-int	*key, length;
+get_text_unit(unsigned char *buffer, int length, int *key, unsigned char *value)
 {
 	register int	j, i, count, size, position;
 
@@ -149,9 +147,7 @@ struct keynames KeyNames[] = {
 	};
 
 static void
-print_keyname(key,offset,size,keynamep)
-const int key, offset, size;
-char **keynamep;
+print_keyname(const int key, const int offset, const int size, char **keynamep)
 {
 	int lo,hi,mid;
 	static char KeyNameStr[10];
@@ -183,10 +179,7 @@ char **keynamep;
 
 
 static int
-parse_net_data_control_record(buffer, length, ndp, debugdump)
-int	length, debugdump;
-unsigned char	*buffer;
-struct ndparam	*ndp;
+parse_net_data_control_record(unsigned char *buffer, int length, struct ndparam *ndp, int debugdump)
 {
 	register unsigned char	*p;
 	register int	size, rsize, i = 0;
@@ -227,8 +220,8 @@ struct ndparam	*ndp;
 		key = 0;
 		if ((size = get_text_unit(p, length, &key, value)) < 0) {
 		  fprintf(stderr,
-			  "%sget_text_unit() p=%d, key=X'%04X', length=%d, rc=%d\n",
-			  NDP,p-buffer,key,ilen,size);
+			  "%sget_text_unit() p=%ld, key=X'%04X', length=%d, rc=%d\n",
+			  NDP,(long)(p-buffer),key,ilen,size);
 		  trace(buffer,ilen,1);
 		  return size;
 		}
@@ -491,10 +484,7 @@ struct ndparam	*ndp;
 /* Parse the actual record */
 
 static int
-parse_netdata_record(flag,buffer,size,ndp,binary,debugdump)
-int	size, binary, debugdump;
-unsigned char	flag, *buffer;
-struct ndparam	*ndp;
+parse_netdata_record(unsigned char flag, unsigned char *buffer, int size, struct ndparam *ndp, int binary, int debugdump)
 {
 	int	rc = 0;
 	unsigned char	c;
@@ -618,10 +608,7 @@ struct ndparam	*ndp;
 
 /* Combine segments into full ND record */
 static int
-parse_netdata_segment(buffer, size, ndp, binary, debugdump)
-int	size, binary, debugdump;
-unsigned char	*buffer;
-struct ndparam	*ndp;
+parse_netdata_segment(unsigned char *buffer, int size, struct ndparam *ndp, int binary, int debugdump)
 {
 	if ((buffer[1] & 0xC0) == 0xC0)
 	  /* First, AND final segment, just handle it. */
@@ -653,10 +640,7 @@ struct ndparam	*ndp;
  | Parse NetData files punch records.
  */
 int
-parse_netdata(buffer, size, ndparam, binary, debugdump)
-int	size, binary, debugdump;
-unsigned char	*buffer;
-struct ndparam	*ndparam;
+parse_netdata(unsigned char *buffer, int size, struct ndparam *ndparam, int binary, int debugdump)
 {
 	int seglen, rc = 0;
 

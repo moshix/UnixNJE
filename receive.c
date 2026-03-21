@@ -46,8 +46,8 @@ int LogLevel = 2;
 FILE *LogFd = NULL;
 
 extern	FILE	*dump_header __(( char const *path, const int debugdump, int *binary ));
-extern	void	debug_headers();
-extern	void	pad_to_size();
+extern	void	debug_headers(unsigned char const *buf, const int len);
+extern	void	pad_to_size(unsigned char *buf, int cursize, int nomsize, unsigned char fillchar);
 extern	void	dump_punchline __((struct ndparam *ndp, unsigned char *buf, int len, int reclen, const int style));
 extern	void	dump_printmccline __((struct ndparam *ndp, unsigned char *buf, int len, int reclen, const int style));
 extern	void	dump_printasaline __((struct ndparam *ndp, unsigned char SRCB, unsigned char *buf, int len, int reclen, const int style));
@@ -61,9 +61,7 @@ struct ndparam ndparam;	/* For NETDATA parser */
 
 
 int
-main(argc,argv)
-     int argc;
-     char *argv[];
+main(int argc, char *argv[])
 {
 	int debugdump = 0;
 	int dumpstyle = 1;	/* default style: ASCII output */
@@ -72,7 +70,7 @@ main(argc,argv)
 	int nodelete = 0;
 	int rawpun = 0;
 	int rawin = 0;
-	int bitraw;
+	int bitraw = 0;
 	const	char *path;
 	char	*outpath = NULL;
 	char	HomeDir[256];
@@ -131,6 +129,8 @@ main(argc,argv)
 	    break;
 	  ++argv;
 	}
+	(void)rawpun;
+	(void)bitraw;
 	path = *argv;
 	if (path == NULL && rawin)
 	  path = "-";
@@ -201,12 +201,7 @@ extern char FileName[], FileExt[];
 
 
 int
-dump_file(path,outpath,binary,dumpstyle,debugdump)
-     char const *path;
-     char const *outpath;
-     int binary;
-     const int dumpstyle;
-     const int debugdump;
+dump_file(char const *path, char const *outpath, int binary, const int dumpstyle, const int debugdump)
 {
 	unsigned char	line[1005];
 	FILE	*fd;
@@ -392,7 +387,7 @@ dump_file(path,outpath,binary,dumpstyle,debugdump)
 	}
 
 	if (debugdump) {
-	  debug_headers("\0\0\0\0\0\0\0\0",8);
+	  debug_headers((const unsigned char *)"\0\0\0\0\0\0\0\0",8);
 	  printf("\n%d records.\n",recs);
 	}
 
@@ -400,9 +395,8 @@ dump_file(path,outpath,binary,dumpstyle,debugdump)
 
 }
 
-volatile void
-bug_check(string)
-char const      *string;
+void
+bug_check(char const *string)
 {
 	fprintf(stderr, "RECEIVE: Bug check: %s\n", string);
         exit(0);
@@ -410,7 +404,7 @@ char const      *string;
 
 
 void
-usage()
+usage(void)
 {
 	fprintf(stderr,"%s:  [-d] [-b | -rawpun] filename\n",pname);
 	fprintf(stderr,"%s:  -a       output converted to ASCII (default).\n",pname);

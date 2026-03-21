@@ -44,8 +44,7 @@ char *cmdname = "<sendfile>";
 /* ================ usage() ================ */
 
 void
-usage(explain)
-char *explain;
+usage(char *explain)
 {
   fprintf(stderr, "punch/print/sendfile/submit:\n");
   fprintf(stderr, "Usage: %s ToUser@ToNode [-u origuser] [-class SpoolClass]\n",cmdname);
@@ -71,9 +70,7 @@ char *explain;
 /* ================ main() ================ */
 
 int
-main(argc, argv)
-int	argc;
-char	*argv[];
+main(int argc, char *argv[])
 {
 	unsigned char	From[LSIZE], To[LSIZE], 
 			fname[20], ftype[20], Forms[9], Dist[9], FrUser[9];
@@ -136,14 +133,14 @@ char	*argv[];
 
 	if (argc < 2) usage(NULL);
 
-	strcpy( fname,"STANDARD" );
-	strcpy( ftype,"INPUT"    );
+	strcpy( (char *)fname,"STANDARD" );
+	strcpy( (char *)ftype,"INPUT"    );
 
 	/* Read our name and the BITnet queue directory */
 	read_configuration();
 	read_etable();
 
-	strcpy( Forms, DefaultForm);
+	strcpy( (char *)Forms, DefaultForm);
 
 	++argv;
 	--argc;
@@ -191,8 +188,8 @@ char	*argv[];
 	      usage("  -fn is improper option for SUBMIT!");
 	    if (!*argv || !*(argv+1))
 	      usage("  -fn option requires TWO parameters!");
-	    strncpy(fname, *argv,sizeof fname -1);
-	    strncpy(ftype, *++argv,sizeof ftype -1);
+	    strncpy((char *)fname, *argv,sizeof fname -1);
+	    strncpy((char *)ftype, *++argv,sizeof ftype -1);
 	    fnametypeset = 1;
 	    argc -= 2;
 
@@ -203,7 +200,7 @@ char	*argv[];
 	      usage("  -form is improper option for SUBMIT!");
 	    if (!*argv)
 	      usage("  -form  option requires one parameter!");
-	    strncpy(Forms,*argv,sizeof Forms -1);
+	    strncpy((char *)Forms,*argv,sizeof Forms -1);
 	    argc -= 1;
 
 	  } else if (strcmp(*argv, "-dist") == 0) {
@@ -213,7 +210,7 @@ char	*argv[];
 	      usage("  -dist is improper option for SUBMIT!");
 	    if (!*argv)
 	      usage("  -dist  option requires one parameter!");
-	    strncpy(Dist,*argv,sizeof Dist -1);
+	    strncpy((char *)Dist,*argv,sizeof Dist -1);
 	    argc -= 1;
 
 	  } else if (strcmp(*argv,"-tag")==0) {
@@ -232,23 +229,23 @@ char	*argv[];
 	    if (!*++argv)
 	      usage("  -u  option requires one parameter!");
 	    --argc;
-	    strncpy(From,*argv,sizeof(From)-1);
+	    strncpy((char *)From,*argv,sizeof(From)-1);
 	    From[sizeof(From)-1] = 0;
-	    if ((s = strchr(From,'@')) == NULL) {
-	      if (strlen(From) > 8)
+	    if ((s = strchr((char *)From,'@')) == NULL) {
+	      if (strlen((char *)From) > 8)
 	    fromaddrerror:
 		usage("  -u option defined username components must be at most 8 chars long!");
-	      strcat(From,"@");
-	      strcat(From,LOCAL_NAME);
+	      strcat((char *)From,"@");
+	      strcat((char *)From,LOCAL_NAME);
 	    } else {
 	      *s = 0;
-	      if (strlen(From) > 8)
+	      if (strlen((char *)From) > 8)
 		goto fromaddrerror;
 	      *s = '@';
 	      if (strlen(s+1) > 8)
 		goto fromaddrerror;
 	    }
-	    if (strchr(From,'.') != NULL)
+	    if (strchr((char *)From,'.') != NULL)
 	      usage(" -u -defined source address may not contain '.' chars in it");
 	  } else if (strcmp(*argv,"-lrecl")==0) {
 
@@ -273,23 +270,23 @@ char	*argv[];
 
 	  } else if (**argv != '-' && *To == 0) {
 	    char *s;
-	    strncpy(To, *argv, sizeof(To)-1);
-	    if ((s = strchr(To,'@'))==NULL) {
-	      if (strlen(To) > 8) {
+	    strncpy((char *)To, *argv, sizeof(To)-1);
+	    if ((s = strchr((char *)To,'@'))==NULL) {
+	      if (strlen((char *)To) > 8) {
 	    targetaddrerror:
 		usage(" Target address has components of more than 8 chars long");
 	      }
 	      /* To[8] = 0; */
-	      sprintf(To+strlen(To),"@%.8s",LOCAL_NAME);
+	      sprintf((char *)To+strlen((char *)To),"@%.8s",LOCAL_NAME);
 	    } else {
 	      *s = 0;
-	      if (strlen(To) > 8)
+	      if (strlen((char *)To) > 8)
 		goto targetaddrerror;
 	      *s = '@';
 	      if (strlen(s+1) > 8)
 		goto targetaddrerror;
 	    }
-	    if (strchr(To,'.') != NULL)
+	    if (strchr((char *)To,'.') != NULL)
 	      usage(" Target address may not contain '.' in its components");
 	  } else
 	    break;
@@ -344,9 +341,9 @@ fprintf(stderr," figuring source file,  *argv='%s'\n",*argv);
 	    else
 	      s = "";
 	    /* fna points to fname part, s to ftype part */
-	    strncpy(fname, fna, sizeof fname -1);
+	    strncpy((char *)fname, fna, sizeof fname -1);
 	    fname[12] = 0;
-	    strncpy(ftype, s, sizeof ftype -1);
+	    strncpy((char *)ftype, s, sizeof ftype -1);
 	    ftype[12] = 0;
 	  }
 	  ++argv;
@@ -363,27 +360,27 @@ fprintf(stderr," figuring source file,  *argv='%s'\n",*argv);
 	}
 	/* Not yet set, set it ! */
 	if (*From == 0) {
-	  if (mcuserid(From) == NULL) {
+	  if (mcuserid((char *)From) == NULL) {
 	    fprintf(stderr,"Can't determine who you are. Aborting!\n");
 	    exit(2);
 	  }
-	  strncpy(FrUser,From,8);
+	  strncpy((char *)FrUser,(char *)From,8);
 	  FrUser[8] = 0;
-	  strcat(From,"@");
-	  strcat(From,LOCAL_NAME);
+	  strcat((char *)From,"@");
+	  strcat((char *)From,LOCAL_NAME);
 	}
 
 /* Upcase From and To to prevent problems with RSCS */
 
-	upperstr(fname);
-	upperstr(ftype);
-	upperstr(From);
-	upperstr(To);
-	upperstr(FrUser);
+	upperstr((char *)fname);
+	upperstr((char *)ftype);
+	upperstr((char *)From);
+	upperstr((char *)To);
+	upperstr((char *)FrUser);
 
 #define CHOP_BITNET(VarName) \
-	i = strlen((VarName)); \
-	if (i > 8 && strcasecmp((VarName)+i-7,".BITNET") == 0) \
+	i = strlen((const char *)(VarName)); \
+	if (i > 8 && strcasecmp((const char *)(VarName)+i-7,".BITNET") == 0) \
 	  (VarName)[i-7] = 0
 	CHOP_BITNET(From);
 	CHOP_BITNET(To);
@@ -453,8 +450,8 @@ fprintf(stderr," figuring source file,  *argv='%s'\n",*argv);
 	  if (lrecl == 0)
 		lrecl = 132;	/* set default lrecl */	
 
-	  if (!do_netdata(infile,&PUNCH,From,To,
-			  fname,ftype,lrecl,recfm,
+	  if (!do_netdata(infile,&PUNCH,(char *)From,(char *)To,
+			  (char *)fname,(char *)ftype,lrecl,recfm,
 			  binary,AskAck)) {
 	    unlink(tFileName);
 	    fprintf(stderr," write of bitnet spool file failed!\n");
@@ -499,9 +496,9 @@ fprintf(stderr," figuring source file,  *argv='%s'\n",*argv);
 	    }
 	  }
 
-	  while (fgets(line, sizeof line, infile) != NULL) {
+	  while (fgets((char *)line, sizeof line, infile) != NULL) {
 
-	    len = strlen(line);
+	    len = strlen((char *)line);
 
 	    p = line + len;
 	    if(len>0)		/* Zap the \n! */

@@ -14,8 +14,7 @@
 
 /* Always usefull:  upperstr() */
 
-char *lowerstr(str)
-char *str;
+char *lowerstr(char *str)
 {
 	char *s = str;
 	while (s && *s) {

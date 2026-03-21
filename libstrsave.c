@@ -14,8 +14,7 @@
 
 /* Always usefull:  strsave() */
 
-char *strsave(str)
-char *str;
+char *strsave(char *str)
 {
 	int len = strlen(str);
 	char *ss = (char*)malloc(len+1);

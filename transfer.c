@@ -29,10 +29,7 @@ FILE *LogFd  = NULL;
 /* ================================================================ */
 
 void
-transfer( transparency,path,Destin )
-     const int transparency;
-     const char *path; 
-	   char *Destin;
+transfer(const int transparency, const char *path, char *Destin)
 {
   
 	FILE	*TransferF;
@@ -67,19 +64,19 @@ transfer( transparency,path,Destin )
 	  *buf = 0; /* Pre-empt buffer contents */
 	  if (fgets( (void*)buf,sizeof buf,TransferF ) == NULL)
 	    break;  /* File read failed! */
-	  if (strcmp("FMT: EBCDIC\n",buf)==0) {
+	  if (strcmp("FMT: EBCDIC\n",(const char *)buf)==0) {
 	    FmTpos = pos0;
 	    ebcdic = 1;	/* Right, we have NJE headers... */
-	  } else if (!transparency && strncmp("FID: ",buf,5) == 0)
+	  } else if (!transparency && strncmp("FID: ",(const char *)buf,5) == 0)
 	    FiDpos = pos0;
-	  else if (!transparency && strncmp("OID: ",buf,5) == 0)
+	  else if (!transparency && strncmp("OID: ",(const char *)buf,5) == 0)
 	    OiDpos = pos0;
-	  else if (!transparency && strncmp("FRM: ",buf,5)==0)
+	  else if (!transparency && strncmp("FRM: ",(const char *)buf,5)==0)
 	    FrMpos = pos0;
-	  else if (strncmp("TOA: ",buf,5) == 0) {
-	    strcpy( ToA,buf );
+	  else if (strncmp("TOA: ",(const char *)buf,5) == 0) {
+	    strcpy( ToA,(const char *)buf );
 	    ToApos = pos0;
-	  } else if (strcmp("END:\n",buf) == 0)
+	  } else if (strcmp("END:\n",(const char *)buf) == 0)
 	    break; /* last entry on headers */
 	}
 	if (ToApos < 0) {
@@ -135,9 +132,7 @@ transfer( transparency,path,Destin )
 /* ================================================================ */
 
 int
-main(argc,argv)
-     int argc;
-     char *argv[];
+main(int argc, char *argv[])
 {
 	const char *path;
 	char *Destin;
@@ -187,9 +182,8 @@ Args:  [-t] Destin@Address absolute-filepath\n\
 /*
  | Log the string, and then abort.
  */
-volatile void
-bug_check(string)
-const char	*string;
+void
+bug_check(const char *string)
 {
 	logger(1, "Bug check: %s\n", string);
 	exit(100);

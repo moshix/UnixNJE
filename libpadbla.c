@@ -13,9 +13,7 @@
 #include "ebcdic.h"
 
 void
-PAD_BLANKS(STRING, ORIG_SIZE, FINAL_SIZE)
-void *STRING;
-const int ORIG_SIZE, FINAL_SIZE;
+PAD_BLANKS(void *STRING, const int ORIG_SIZE, const int FINAL_SIZE)
 {
 	int TempVar;
 	unsigned char *s = (unsigned char *)STRING;

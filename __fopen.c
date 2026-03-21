@@ -3,28 +3,22 @@
 
 #ifndef	DEBUG_FOPEN
 
-FILE *_nje_fopen(filename, type)
-     char *filename, *type;
+FILE *_nje_fopen(char *filename, char *type)
 {
 	return fopen(filename, type);
 }
 
-FILE *_nje_freopen(filename,type,stream)
-     char *filename, *type;
-     FILE *stream;
+FILE *_nje_freopen(char *filename, char *type, FILE *stream)
 {
 	return freopen(filename,type,stream);
 }
 
-FILE *_nje_fdopen(fd,type)
-     int fd;
-     char *type;
+FILE *_nje_fdopen(int fd, char *type)
 {
 	return fdopen(fd,type);
 }
 
-int _nje_fclose(stream)
-     FILE *stream;
+int _nje_fclose(FILE *stream)
 {
 	return fclose(stream);
 }
@@ -50,9 +44,7 @@ static void fopen_init()
   initialized = 1;
 }
 
-static void fopenerr(name,msg,dumpfps,oerrno)
-char *name, *msg;
-int dumpfps, oerrno;
+static void fopenerr(char *name, char *msg, int dumpfps, int oerrno)
 {
 	extern char *sys_errlist[];
 
@@ -74,8 +66,7 @@ int dumpfps, oerrno;
 }
 
 
-FILE *_nje_fopen(filename, type)
-     char *filename, *type;
+FILE *_nje_fopen(char *filename, char *type)
 {
 	FILE *fp = fopen(filename, type);
 	int i;
@@ -101,9 +92,7 @@ FILE *_nje_fopen(filename, type)
 	return fp;
 }
 
-FILE *_nje_freopen(filename,type,stream)
-     char *filename, *type;
-     FILE *stream;
+FILE *_nje_freopen(char *filename, char *type, FILE *stream)
 {
 	FILE *fp = freopen(filename, type, stream);
 	int i;
@@ -129,9 +118,7 @@ FILE *_nje_freopen(filename,type,stream)
 	return fp;
 }
 
-FILE *_nje_fdopen(fd,type)
-     int fd;
-     char *type;
+FILE *_nje_fdopen(int fd, char *type)
 {
 	FILE *fp = fdopen(fd,type);
 	int i;
@@ -157,8 +144,7 @@ FILE *_nje_fdopen(fd,type)
 	return fp;
 }
 
-int _nje_fclose(stream)
-     FILE *stream;
+int _nje_fclose(FILE *stream)
 {
 	int i;
 

@@ -2,8 +2,7 @@
 #include "clientutils.h"
 
 char *
-mcuserid(from)
-char *from;
+mcuserid(char *from)
 {
 	char *USER = getenv("USER");
 	char *LOGNAME = getenv("LOGNAME");

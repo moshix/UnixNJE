@@ -99,8 +99,7 @@
  | Return the code relative to the given keyword from the file's envelope.
  */
 int
-crack_header(line)
-const char	*line;
+crack_header(const char *line)
 {
 	char	temp[6];
 	struct hdrnames { int class; char name[8]; };
@@ -142,10 +141,7 @@ const char	*line;
 }
 
 int
-parse_envelope(infile,FileParams,assign_oid)
-FILE *infile;
-struct FILE_PARAMS *FileParams;
-const int assign_oid;
+parse_envelope(FILE *infile, struct FILE_PARAMS *FileParams, const int assign_oid)
 {
 	int	i;
 	register char	*p, *s;
@@ -374,10 +370,7 @@ const int assign_oid;
  | Add SCB's to the given string.
  */
 int
-compress_scb(InString, OutString, InSize)
-const void	*InString;
-void		*OutString;
-int	InSize;
+compress_scb(const void *InString, void *OutString, int InSize)
 {
 	register int	i, OutSize;
 	const unsigned char	*p;
@@ -411,13 +404,7 @@ int	InSize;
  | string. Return the resulting string size.
  */
 int
-uncompress_scb(InString, OutString, InSize, OutSize, SizeConsumed)
-const void	*InString;
-void		*OutString;
-int		InSize;
-const int	OutSize;	/* Size of preallocated space for out string */
-int		*SizeConsumed;	/* How many characters we consumed from the
-				   input string */
+uncompress_scb(const void *InString, void *OutString, int InSize, const int OutSize, int *SizeConsumed)
 {
 	register unsigned char	*q, SCB;
 	const unsigned char	*p;
@@ -490,10 +477,7 @@ int		*SizeConsumed;	/* How many characters we consumed from the
 }
 
 void
-ASCII_TO_EBCDIC(INSTRING, OUTSTRING, LENGTH)
-const void *INSTRING;
-void *OUTSTRING;
-const int LENGTH;
+ASCII_TO_EBCDIC(const void *INSTRING, void *OUTSTRING, const int LENGTH)
 {
 	int TempVar;
 	unsigned char *op = OUTSTRING;
@@ -503,10 +487,7 @@ const int LENGTH;
 }
 
 void
-EBCDIC_TO_ASCII(INSTRING, OUTSTRING, LENGTH)
-const void *INSTRING;
-void *OUTSTRING;
-const int LENGTH;
+EBCDIC_TO_ASCII(const void *INSTRING, void *OUTSTRING, const int LENGTH)
 {
 	int TempVar;
 	unsigned char *op = OUTSTRING;
@@ -516,9 +497,7 @@ const int LENGTH;
 }
 
 void
-PAD_BLANKS(STRING, ORIG_SIZE, FINAL_SIZE)
-void *STRING;
-const int ORIG_SIZE, FINAL_SIZE;
+PAD_BLANKS(void *STRING, const int ORIG_SIZE, const int FINAL_SIZE)
 {
 	int TempVar;
 	unsigned char *s = (unsigned char *)STRING;
@@ -550,9 +529,7 @@ const void *a, *b;
 #endif
 
 int
-despace(str,len)
-char *str;
-int len;
+despace(char *str, int len)
 {
 	if (*str == 0) return 0;
 	while (len > 0 && str[len-1] == ' ')
@@ -563,8 +540,7 @@ int len;
 
 
 int32
-timevalsub(result,a,b)
-struct timeval *result,*a,*b;
+timevalsub(struct timeval *result, struct timeval *a, struct timeval *b)
 {
 	result->tv_sec  = a->tv_sec  - b->tv_sec;
 	if ((result->tv_usec = a->tv_usec - b->tv_usec) < 0) {
@@ -575,8 +551,7 @@ struct timeval *result,*a,*b;
 }
 
 int32
-timevaladd(result,a,b)
-struct timeval *result,*a,*b;
+timevaladd(struct timeval *result, struct timeval *a, struct timeval *b)
 {
 	result->tv_sec  = a->tv_sec  + b->tv_sec;
 	if ((result->tv_usec = a->tv_usec - b->tv_usec) >= 1000000L) {
@@ -600,8 +575,7 @@ struct spoolids {
 };
 
 static int
-spoolid_compare(s1,s2)
-struct spoolids *s1, *s2;
+spoolid_compare(struct spoolids *s1, struct spoolids *s2)
 {
 	return strcmp(s1->name,s2->name);
 }
@@ -657,8 +631,7 @@ get_send_fileid()
 
 
 int
-get_user_fileid(uname)
-const char *uname;
+get_user_fileid(const char *uname)
 {
 	struct spoolids key;
 	struct spoolids *datp;
@@ -693,9 +666,7 @@ const char *uname;
 /* Store the user-spoolid back, in case we had to pick another..
    this is for local spool storing */
 void
-set_user_fileid(uname,spoolid)
-const char *uname;
-const int spoolid;
+set_user_fileid(const char *uname, const int spoolid)
 {
 	struct spoolids key;
 	struct spoolids *datp;
@@ -722,8 +693,7 @@ const int spoolid;
 
 /* Report age -- in milliseconds  - as a STRING */
 char *
-MsecAgeStr(timeptr, ageptr)
-TIMETYPE *timeptr, *ageptr;
+MsecAgeStr(TIMETYPE *timeptr, TIMETYPE *ageptr)
 {
 	static char buf[20];
 	TIMETYPE age;
@@ -741,7 +711,7 @@ TIMETYPE *timeptr, *ageptr;
 	  ageptr->tv_sec -= 1;
 	  ageptr->tv_usec += 1000000;
 	}
-	sprintf(buf,"%d.%03d",ageptr->tv_sec, (ageptr->tv_usec + 500)/1000);
+	sprintf(buf,"%ld.%03d",ageptr->tv_sec, (int)((ageptr->tv_usec + 500)/1000));
 #else
 	/* Using one second resolution. */
 	if (*ageptr == 0)
@@ -753,9 +723,7 @@ TIMETYPE *timeptr, *ageptr;
 }
 
 char *
-BytesPerSecStr(bytecount,deltatimep)
-	long bytecount;
-	TIMETYPE  *deltatimep;
+BytesPerSecStr(long bytecount, TIMETYPE *deltatimep)
 {
 	static char buf[20];
 #ifndef NO_GETTIMEOFDAY

@@ -21,12 +21,7 @@ extern char LOCAL_NAME[];
 
 /* 0 == ok, !0 == error somewhere */
 int
-parse_header( fd,Frm,Toa,Fnm,Ext,Typ,Cls,For,Fmt,Tag,Fid )
-     FILE *fd;	/* 'fopen()'ed file for reading.  In begin of file
-		   When returning, fd points to begin of file data.  */
-     /* Rest are for returning values */
-     char *Frm, *Toa, *Fnm, *Ext, *Cls, *For, *Tag;
-     int  *Typ, *Fid, *Fmt;
+parse_header(FILE *fd, char *Frm, char *Toa, char *Fnm, char *Ext, int *Typ, char *Cls, char *For, int *Fmt, char *Tag, int *Fid)
 {
 	char buf[1024];	/* Total ASCII header space reservation.. */
 	register char *p,*q;

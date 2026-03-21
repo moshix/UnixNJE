@@ -22,10 +22,7 @@
 
 /* Return 0 for failure, 1 for ok. */
 int
-punch_buffered(PUNCH,TempLine,size,flushflg)
-struct puncher *PUNCH;
-void *TempLine;
-int size,flushflg;
+punch_buffered(struct puncher *PUNCH, void *TempLine, int size, int flushflg)
 {
 	unsigned char *inbuf = TempLine;
 
@@ -88,10 +85,8 @@ int size,flushflg;
  |     InputType = Do we have to use InputParam or InputString?
  */
 static int
-insert_text_unit(InputKey, InputParameter, InputString, InputSize, InputType,
-	OutputLine)
-int	InputKey, InputType, InputParameter, InputSize;
-unsigned char	*InputString, *OutputLine;
+insert_text_unit(int InputKey, int InputParameter, unsigned char *InputString,
+	int InputSize, int InputType, unsigned char *OutputLine)
 {
 	int	size, i, j;
 	unsigned char	TextUnits[3][80];
@@ -156,12 +151,8 @@ unsigned char	*InputString, *OutputLine;
  | Start of a Netdata file. Fill the first 3 INMR's into the buffer.
  */
 int
-fill_inmr01(PUNCH,infile,From,To,fname,ftype,lrecl,recfm,askack)
-struct puncher *PUNCH;
-FILE	*infile;
-char	*From, *To, *fname, *ftype, *askack;
-int	recfm;
-int	lrecl;
+fill_inmr01(struct puncher *PUNCH, FILE *infile, char *From, char *To,
+	char *fname, char *ftype, int lrecl, int recfm, char *askack)
 {
 	char	TempLine[800], *p;
 	char	line[40];
@@ -182,20 +173,20 @@ int	lrecl;
 	*p++ = 0;		/* Separate username from nodename */
 	i = strlen(line); 	/* Username */
 	ASCII_TO_EBCDIC(line, line, i);
-	size += insert_text_unit(INMFUID,  0, line, i, 1, TempLine+size);
+	size += insert_text_unit(INMFUID,  0, (unsigned char *)line, i, 1, (unsigned char *)TempLine+size);
 	i = strlen(p);		/* Node name */
 	ASCII_TO_EBCDIC(p, p, i);
-	size += insert_text_unit(INMFNODE, 0,    p, i, 1, TempLine+size);
+	size += insert_text_unit(INMFNODE, 0,    (unsigned char *)p, i, 1, (unsigned char *)TempLine+size);
 
 	strcpy(line, To);
 	if ((p = strchr(line, '@')) == NULL) p = line;
 	*p++ = 0;		/* Separate username from nodename */
 	i = strlen(line); 	/* Username */
 	ASCII_TO_EBCDIC(line, line, i);
-	size += insert_text_unit(INMTUID,  0, line, i, 1, TempLine+size);
+	size += insert_text_unit(INMTUID,  0, (unsigned char *)line, i, 1, (unsigned char *)TempLine+size);
 	i = strlen(p);		/* Node name */
 	ASCII_TO_EBCDIC(p, p, i);
-	size += insert_text_unit(INMTNODE, 0,    p, i, 1, TempLine+size);
+	size += insert_text_unit(INMTNODE, 0,    (unsigned char *)p, i, 1, (unsigned char *)TempLine+size);
 
 	/* Create a time stamp(s) */
 	fstat(fileno(infile),&stats);
@@ -210,16 +201,16 @@ int	lrecl;
 	tms = gmtime(&tim);
 	i = strftime(line,sizeof line,"%Y%m%d%H%M%S",tms);
 	ASCII_TO_EBCDIC(line, line, i);
-	size += insert_text_unit(INMFTIME,  0, line, i, 1, TempLine+size);
+	size += insert_text_unit(INMFTIME,  0, (unsigned char *)line, i, 1, (unsigned char *)TempLine+size);
 
 	/* On INMR01 the LRECL is fixed 80 */
-	size += insert_text_unit(INMLRECL, 80,    0, 0, 0, TempLine+size);
-	size += insert_text_unit(INMNUMF,   1,    0, 0, 0, TempLine+size);
+	size += insert_text_unit(INMLRECL, 80,    0, 0, 0, (unsigned char *)TempLine+size);
+	size += insert_text_unit(INMNUMF,   1,    0, 0, 0, (unsigned char *)TempLine+size);
 
 	if (askack) {
 	  i = strlen(askack);
 	  ASCII_TO_EBCDIC(askack, line, i);
-	  size += insert_text_unit(INMFACK, 0, line, i, 1, TempLine+size);
+	  size += insert_text_unit(INMFACK, 0, (unsigned char *)line, i, 1, (unsigned char *)TempLine+size);
 	}
 
 	TempLine[0] = size;
@@ -234,11 +225,11 @@ int	lrecl;
 	size += 4;
 
 	ASCII_TO_EBCDIC("INMCOPY", line, 7);
-	size += insert_text_unit(INMUTILN,       0, line, 7, 1, TempLine+size);
-	size += insert_text_unit(INMDSORG,   PHYSICAL, 0, 0, 0, TempLine+size);
-	size += insert_text_unit(INMLRECL,      lrecl, 0, 0, 0, TempLine+size);
-	size += insert_text_unit(INMRECFM,      recfm, 0, 0, 0, TempLine+size);
-	size += insert_text_unit(INMSIZE,stats.st_size,0, 0, 0, TempLine+size);
+	size += insert_text_unit(INMUTILN,       0, (unsigned char *)line, 7, 1, (unsigned char *)TempLine+size);
+	size += insert_text_unit(INMDSORG,   PHYSICAL, 0, 0, 0, (unsigned char *)TempLine+size);
+	size += insert_text_unit(INMLRECL,      lrecl, 0, 0, 0, (unsigned char *)TempLine+size);
+	size += insert_text_unit(INMRECFM,      recfm, 0, 0, 0, (unsigned char *)TempLine+size);
+	size += insert_text_unit(INMSIZE,stats.st_size,0, 0, 0, (unsigned char *)TempLine+size);
 
 	/* Create the file name as "A File-name File-Ext".
 	   The A is for IBM and must be the first */
@@ -251,14 +242,14 @@ int	lrecl;
 	upperstr(line);
 	i = strlen(line);
 	ASCII_TO_EBCDIC(line, line, i);
-	size += insert_text_unit(INMDSNAM, 0, line, i, 1, TempLine+size);
+	size += insert_text_unit(INMDSNAM, 0, (unsigned char *)line, i, 1, (unsigned char *)TempLine+size);
 
-	if (ctime != 0) {
+	if (ctim != 0) {
 	  /* File creation time */
 	  tms = gmtime(&ctim);
 	  i = strftime(line,sizeof line,"%Y%m%d%H%M%S",tms);
 	  ASCII_TO_EBCDIC(line, line, i);
-	  size += insert_text_unit(INMCREAT,  0, line, i, 1, TempLine+size);
+	  size += insert_text_unit(INMCREAT,  0, (unsigned char *)line, i, 1, (unsigned char *)TempLine+size);
 	}
 
 	TempLine[0] = size;
@@ -272,18 +263,17 @@ int	lrecl;
 	ASCII_TO_EBCDIC("INMR03", TempLine+size, 6);
 	size += 6;
 	/* INMR03 has RECFM, and LRECL constant, INMR02 has the real ones */
-	size += insert_text_unit(INMRECFM, 0x0001,     0, 0, 0, TempLine+size);
-	size += insert_text_unit(INMLRECL,     80,     0, 0, 0, TempLine+size);
-	size += insert_text_unit(INMDSORG, 0x4000,     0, 0, 0, TempLine+size);
-	size += insert_text_unit(INMSIZE, stats.st_size, 0,0,0, TempLine+size);
+	size += insert_text_unit(INMRECFM, 0x0001,     0, 0, 0, (unsigned char *)TempLine+size);
+	size += insert_text_unit(INMLRECL,     80,     0, 0, 0, (unsigned char *)TempLine+size);
+	size += insert_text_unit(INMDSORG, 0x4000,     0, 0, 0, (unsigned char *)TempLine+size);
+	size += insert_text_unit(INMSIZE, stats.st_size, 0,0,0, (unsigned char *)TempLine+size);
 
 	TempLine[0] = size;
 	return punch_buffered(PUNCH,TempLine,size,0);
 }
 
 int
-fill_inmr06(PUNCH)
-struct puncher *PUNCH;
+fill_inmr06(struct puncher *PUNCH)
 {
 	char	inmr06[10]; /* INMR06 - EOF flag */
 
@@ -294,10 +284,7 @@ struct puncher *PUNCH;
 }
 
 int
-punch_nddata(PUNCH,Linebuf,linesize)
-struct puncher *PUNCH;
-void *Linebuf;
-int linesize;
+punch_nddata(struct puncher *PUNCH, void *Linebuf, int linesize)
 {
 	unsigned char *linebuf = Linebuf;
 	char *p = (char*)linebuf;
@@ -315,15 +302,15 @@ int linesize;
 	  /* Separate the block into smaller segments,
 	     put out the first record */
 
-	  p[0] = 253+2;		/* NETDATA segment size */
-	  p[1] = 0x80;		/* NETDATA segment flag */
+	  p[0] = (char)(253+2);	/* NETDATA segment size */
+	  p[1] = (char)0x80;	/* NETDATA segment flag */
 	  if (!punch_buffered(PUNCH,p,253+2,0)) return 0;
 	  linesize -= 253;
 	  p += 253;		/* 253 bytes forwards.. */
 
 	  /* Middle segments */
 	  while (linesize > 253) {
-	    p[0] = 253+2;	/* NETDATA segment size */
+	    p[0] = (char)(253+2);	/* NETDATA segment size */
 	    p[1] = 0x00;	/* NETDATA segment flag */
 	    if (!punch_buffered(PUNCH,p,253+2,0)) return 0;
 	    linesize -= 253;

@@ -44,7 +44,7 @@ int		PassiveSocketChannel = -1,	/* On which we listen */
 		PassiveReadChannel = -1;   /* On which we wait for an initial
 					      VMnet control record */
 
-static u_int32	get_host_ip_address();
+static u_int32	get_host_ip_address(const int Index, const char *HostName);
 
 extern int	errno;
 #ifdef __DARWIN_UNIX03
@@ -57,8 +57,7 @@ extern int	sys_nerr;	/* Maximum error number recognised */
 /*  Systems have differing ways to define NON-blocking IO..
     Basically again the  SysV vs. BSD.. */
 int
-setsockblocking(sock,on)
-int sock, on;
+setsockblocking(int sock, int on)
 {
 #if defined(O_NONBLOCK)	/* This means POSIX.1 ?? */
 	int flags = fcntl(sock, F_GETFL, 0);
@@ -90,8 +89,7 @@ int sock, on;
  | close the channel, and re-queue a retry for 5 minutes later.
  */
 void
-init_active_tcp_connection(Index,finalize)
-const int	Index, finalize;
+init_active_tcp_connection(const int Index, const int finalize)
 {
 	struct	sockaddr_in	*SocketName;
 	int	Socket;		/* The I/O channel */
@@ -106,9 +104,9 @@ const int	Index, finalize;
 				   the control block */
 	/* Get the IP address */
 	if (*Line->device != '\0')
-	  strcpy(HostName, Line->device);
+	  strcpy((char *)HostName, (char *)Line->device);
 	else
-	  strcpy(HostName, Line->HostName);
+	  strcpy((char *)HostName, (char *)Line->HostName);
 
 #if	defined(NBCONNECT)||defined(NBSTREAM)
 	if (!finalize) {
@@ -156,7 +154,7 @@ const int	Index, finalize;
 	  SocketName->sin_port = htons(Line->IpPort);
 
 	  if ((int32)(SocketName->sin_addr.s_addr
-		    = get_host_ip_address(Index, HostName)) == -1) { /*Error!*/
+		    = get_host_ip_address(Index, (const char *)HostName)) == -1) { /*Error!*/
 	    logger(1,"Resolving hostname %s failed! (Link %s)\n",HostName,
 		   Line->HostName);
 	    Line->state = RETRYING;
@@ -217,7 +215,7 @@ const int	Index, finalize;
 	ASCII_TO_EBCDIC(Line->HostName, ControlBlock.Ohost, i);
 	PAD_BLANKS(ControlBlock.Ohost, i, 8);
 	ControlBlock.Rip = get_host_ip_address(Index, IP_ADDRESS);
-	ControlBlock.Oip = get_host_ip_address(Index, HostName);
+	ControlBlock.Oip = get_host_ip_address(Index, (const char *)HostName);
 	ControlBlock.R = 0;
 
 #ifdef DEBUG
@@ -251,7 +249,8 @@ const int	Index, finalize;
 #endif
 
 	  int ssize = SOCKBUFSIZE, rsize = SOCKBUFSIZE;
-	  int setval, setvalsz;
+	  int setval;
+	  socklen_t setvalsz;
 
 	  Socket = Line->socket;
 
@@ -297,8 +296,7 @@ const int	Index, finalize;
  | Create a local socket. Bind a name to it if we must be the secondary side.
  */
 void
-init_passive_tcp_connection(TcpType)
-const int TcpType;
+init_passive_tcp_connection(const int TcpType)
 {
 	int on = 1;
 
@@ -352,7 +350,7 @@ const int TcpType;
 void
 accept_tcp_connection()
 {
-	int	size;
+	socklen_t	size;
 
 	size = sizeof(struct sockaddr_in);
 	if ((PassiveReadChannel = accept(PassiveSocketChannel,
@@ -367,7 +365,8 @@ accept_tcp_connection()
 	{
 	  int ssize = SOCKBUFSIZE, rsize = SOCKBUFSIZE;
 	  int Socket = PassiveReadChannel;
-	  int setval, setvalsz;
+	  int setval;
+	  socklen_t setvalsz;
 
 	  while (ssize > 1024) {
 	    int rc = setsockopt(Socket,SOL_SOCKET,SO_SNDBUF,
@@ -576,9 +575,7 @@ RetryConnection:
  | routine that handles the input data.
  */
 void
-unix_tcp_receive(Index, line)
-int	Index;
-struct	LINE *line;
+unix_tcp_receive(int Index, struct LINE *line)
 {
 	struct LINE *Line = line;
 	int	i, size = 0, rsize = 0;
@@ -848,9 +845,7 @@ struct	LINE *line;
 
 #ifdef	NBSTREAM
 void
-tcp_partial_write(Index,flg)
-const int Index;
-const int flg;
+tcp_partial_write(const int Index, const int flg)
 {
 	struct	LINE	*Line = &IoLines[Index];
 	int rc;
@@ -900,8 +895,7 @@ const int flg;
 
 #ifdef USE_XMIT_QUEUE
 int
-dequeue_xmit_queue(Index)
-const int Index;
+dequeue_xmit_queue(const int Index)
 {
 	struct LINE	*Line = &IoLines[Index];
 
@@ -919,7 +913,7 @@ const int Index;
 		Line->flags |= F_WAIT_V_A_BIT;
 		size = (Line->XmitQueueSize)[Line->FirstXmitEntry];
 		Line->XmitSize = size;
-		p = Line->XmitBuffer;
+		p = (char *)Line->XmitBuffer;
 		q = (Line->XmitQueue)[Line->FirstXmitEntry];
 		memcpy(p, q, size);
 		free(q);	/* Free the memory allocated for it */
@@ -939,9 +933,7 @@ const int Index;
  | Write a block to TCP.
  */
 void
-send_unix_tcp(Index, line, size)
-const int	Index, size;
-const void	*line;
+send_unix_tcp(const int Index, const void *line, const int size)
 {
 	struct	LINE	*Line = &IoLines[Index];
 
@@ -949,7 +941,7 @@ const void	*line;
 	if (Line->WritePending != NULL) {
 	  bug_check("Line  WritePending  pointer non-zero at  send_unix_tcp()!\n");
 	}
-	Line->WritePending = line;
+	Line->WritePending = (void *)line;
 	tcp_partial_write(Index,1);
 #else			/* ++++++++++++ NBSTREAM ++++++++++++++ */
 
@@ -1141,8 +1133,7 @@ const void	*line;
  | the correct line will be located by the accept routine.
  */
 void
-close_unix_tcp_channel(Index)
-int	Index;
+close_unix_tcp_channel(int Index)
 {
 	close(IoLines[Index].socket);
 	IoLines[Index].socket = -1;
@@ -1157,13 +1148,10 @@ int	Index;
  | Get the other host's IP address using name-server routines.
  */
 static u_int32	/* RETURNED IN NETWORK ORDER! */
-get_host_ip_address(Index, HostName)
-const int Index;
-const char *HostName;	/* Name or 4 dotted numbers */
+get_host_ip_address(const int Index, const char *HostName)
 {
 	u_int32	address;
 	struct hostent *hent;
-	extern struct	hostent *gethostbyname();
 
 	if ((address = inet_addr(HostName)) != 0xFFFFFFFFUL)
 	  return address;
@@ -1185,9 +1173,7 @@ const char *HostName;	/* Name or 4 dotted numbers */
  *	       errno = EINTR for various reasons.  If so, retry..
  */
 int
-writen(fd,buf,len)
-const int fd, len;
-const void *buf;
+writen(const int fd, const void *buf, const int len)
 {
 	const unsigned char *cbuf = (unsigned char *)buf;
 	int rc = 0;
@@ -1235,9 +1221,7 @@ const void *buf;
  *	      errno = EINTR for various reasons.  If so, retry..
  */
 int
-readn(fd,buf,len)
-const int fd, len;
-void *buf;
+readn(const int fd, void *buf, const int len)
 {
 	unsigned char *cbuf = (unsigned char *)buf;
 	int rc = 0;

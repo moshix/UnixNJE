@@ -31,8 +31,7 @@
 #define CMD_CMD 1
 
 void
-usage(explanation)
-char *explanation;
+usage(char *explanation)
 {
 	if (!explanation) {
 	  fprintf(stderr,"Usage: send [-u fromuser|-s] [-c{ommand}] [@]node [command string]\n");
@@ -52,12 +51,10 @@ int silent_wordwrap = 0;
 int LogLevel = 1;
 FILE *LogFd = NULL;
 
-extern int send_nje();
+extern int send_nje(int type, char *from, char *address, char *text);
 
 int
-main(cc, vv)
-char	**vv;
-int	cc;
+main(int cc, char **vv)
 {
 	char	text[LINESIZE];
 	char	address[32];
@@ -254,9 +251,7 @@ int	cc;
 
 
 int
-send_nje(type, from, address, text)
-int	type;
-char	*from, *address, *text;
+send_nje(int type, char *from, char *address, char *text)
 {
 	char	line[140], *p;
 	int	size;

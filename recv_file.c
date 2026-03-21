@@ -39,9 +39,7 @@ EXTERNAL struct	EOF_BLOCK	EOFblock;
  | All localized into this module
  */
 int
-recv_file_open(Index, Stream)
-const int Index;
-const int Stream;
+recv_file_open(const int Index, const int Stream)
 {
 	int rc;
 	FILE *fd;
@@ -72,9 +70,7 @@ const int Stream;
  | returned when we received something which should be acked normally.
  */
 int
-receive_file(Index, Buffer, BufferSize)
-const int	Index, BufferSize;
-const void	*Buffer;
+receive_file(const int Index, const void *Buffer, const int BufferSize)
 {
 	/* The state of the stream we handle now */
 	StreamStates	*StreamState;
@@ -237,10 +233,7 @@ const void	*Buffer;
  */
 
 static void
-save_header(SRCB, buffer, BufferSize, Index, Stream)
-const int SRCB;
-const void *buffer;
-const int BufferSize, Index, Stream;
+save_header(const int SRCB, const void *buffer, const int BufferSize, const int Index, const int Stream)
 {
 	struct LINE	*Line = &IoLines[Index];
 	char	*bufp = NULL;
@@ -331,11 +324,9 @@ const int BufferSize, Index, Stream;
  | Called from Receive_file().
  */
 static int
-finish_file(Index, Stream, StreamState, SYSIN)
-int		Index, Stream, SYSIN;
-StreamStates	*StreamState;	/* The state of the stream we handle now */
+finish_file(const int Index, const int Stream, StreamStates *StreamState, const int SYSIN)
 {
-	unsigned char	OutputLine[LINESIZE], MessageSender[20];
+	char		OutputLine[LINESIZE], MessageSender[20];
 	char		*FileName;
 	char		*p;
 	TIMETYPE	dt;
@@ -476,11 +467,10 @@ StreamStates	*StreamState;	/* The state of the stream we handle now */
  | and the function returns -1. In a normal case it returns zero.
  */
 static int
-parse_headers(Index, Stream, WriteIt)
-const int	Index, Stream, WriteIt;
+parse_headers(const int Index, const int Stream, const int WriteIt)
 {
 	int	i, size;
-	unsigned char	*p,
+	char		*p,
 			Afield[20];	/* Used when translating
 					   fields to ASCII */
 	struct	JOB_HEADER	*NJHp;
@@ -500,6 +490,7 @@ const int	Index, Stream, WriteIt;
 	NJHp = (struct JOB_HEADER *)    Line->SavedJobHeader[Stream];
 	DSHp = (struct DATASET_HEADER *)Line->SavedDatasetHeader[Stream];
 	DSHcp = (unsigned char *)       Line->SavedDatasetHeader[Stream];
+	(void)DSHcp;
 	DSHGp = &DSHp->NDH;  /* NOTE: These CAN be of different size, */
 	DSHVp = &DSHp->RSCS; /*       than the expected defaults!     */
 	FileParams = &(Line->InFileParams[Stream]);
@@ -793,14 +784,14 @@ const int	Index, Stream, WriteIt;
 	if (FileParams->tag[0] == 0 /* No tag present.. */) {
 	  strcpy(Afield,FileParams->From);
 	  /* Pick the userid and node separate.. */
-	  if ((p = (unsigned char *)strchr(Afield,'@')) != NULL) *p++ = 0;
+	  if ((p = strchr(Afield,'@')) != NULL) *p++ = 0;
 	  else p = Afield;
 	  sprintf(FileParams->tag,"FILE (%04ld) ORIGIN %-8s %-8s",
 		  FileParams->FileId, p, Afield);
 /*XX:??*/
 	  if (FileParams->NJHtime != 0) {
 	    struct tm *tm_var = localtime(&FileParams->NJHtime);
-	    p = (unsigned char *)(FileParams->tag + strlen(FileParams->tag));
+	    p = FileParams->tag + strlen(FileParams->tag);
 	    strftime(p,sizeof(FileParams->tag)-1-strlen(FileParams->tag),
 		     "  %D %T %Z",tm_var);
 	  }
@@ -831,8 +822,7 @@ const int	Index, Stream, WriteIt;
  | reset the stream's state.
  */
 static void
-file_sender_abort(Index, Stream, SYSIN)
-int	Index, Stream, SYSIN;
+file_sender_abort(const int Index, const int Stream, const int SYSIN)
 {
 
 	/* Send EOF block to confirm this abort */
@@ -860,8 +850,7 @@ int	Index, Stream, SYSIN;
  | reset the stream's state.
  */
 static void
-abort_file(Index, Stream, SYSIN)
-int	Index, Stream, SYSIN;
+abort_file(const int Index, const int Stream, const int SYSIN)
 {
 
 	/* Send Reject-file to abort file */

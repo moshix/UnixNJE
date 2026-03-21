@@ -181,7 +181,7 @@ CDEFS=-DUSG -DNBCONNECT -DNBSTREAM -DUSE_XMIT_QUEUE -DUNIX\
 	-DPID_FILE='"/run/funetnje.pid"'
 CC=gcc
 CPP=gcc -E
-CFLAGS= -g -O2 -Wpacked -Wpadded $(CDEFS)
+CFLAGS= -g -O2 -Wall -Wno-comment $(CDEFS)
 #NETW=
 # Have MAILIFY compiled by uncommenting following ones:
 #MAILIFY=mailify

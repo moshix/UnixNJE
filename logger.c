@@ -69,7 +69,7 @@ char *
 local_time()
 {
 	static	char	TimeBuff[80];
-	struct	tm	*tm, *localtime();
+	struct	tm	*tm;
 	time_t	clock;
 
 	time(&clock);		/* Get the current time */
@@ -103,9 +103,7 @@ local_time()
 }
 
 void
-trace(p, n, lvl)
-const void *p;
-const int	n, lvl;
+trace(const void *p, const int n, const int lvl)
 {
 	register int	count, i;
 	char	line[LINESIZE];

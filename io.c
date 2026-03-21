@@ -45,8 +45,7 @@ EXTERNAL int	LogLevel;
 
 /*============================ SHOW-LINES ==============================*/
 
-char *StreamStateStr(state)
-StreamStates state;
+char *StreamStateStr(StreamStates state)
 {
 	switch (state) {
 	  case S_INACTIVE:
@@ -80,8 +79,7 @@ StreamStates state;
 }
 
 
-static char *linestate2string(state,sockpend)
-int state, sockpend;
+static char *linestate2string(int state, int sockpend)
 {
 	static char bugbuf[10];
 	switch (state) {
@@ -111,9 +109,7 @@ int state, sockpend;
 	  }
 }
 
-static char *linetypedev2string(type,device)
-int type;
-char *device;
+static char *linetypedev2string(int type, char *device)
 {
 	static char line[60];
 	switch (type) {
@@ -150,9 +146,7 @@ char *device;
 /*
  | Send the lines status to the user.
  */
-void show_lines_status(to,infoprint)
-const char	*to;	/* User@Node */
-int infoprint;
+void show_lines_status(const char *to, int infoprint)
 {
 	int	i, j;
 	char	line[LINESIZE],
@@ -334,8 +328,7 @@ int infoprint;
  | Send the lines statistics to the user.
  */
 void
-show_lines_stats(to)
-const char	*to;	/* User@Node */
+show_lines_stats(const char *to)
 {
 	int	i;
 	char	line[LINESIZE],
@@ -432,6 +425,7 @@ init_communication_lines()
 	  }
 	}
 
+	(void)InitDECnetPassive;
 /* Check whether we have to queue a passive accept for TCP & DECnet lines */
 	if(InitTcpPassive != 0)
 	  init_passive_tcp_connection(TcpType);
@@ -443,8 +437,7 @@ init_communication_lines()
 
 
 void
-abort_streams_and_requeue(Index)
-int Index;
+abort_streams_and_requeue(int Index)
 {
 	int i;
 	struct	LINE	*Line = &IoLines[Index];
@@ -491,8 +484,7 @@ int Index;
  | get closed, queue states get reset, etc..
  */
 void
-init_link_state(Index)
-const int Index;
+init_link_state(const int Index)
 {
 	struct	LINE	*Line;
 	register int	i;	/* Stream index */
@@ -560,8 +552,7 @@ const int Index;
  | Restart a line that is not active.
  */
 void
-restart_line(Index)
-const int Index;
+restart_line(const int Index)
 {
 	struct LINE *Line = &IoLines[Index];
 
@@ -647,8 +638,7 @@ const int Index;
  | timer, not the VMS one).
  */
 void
-queue_receive(Index)
-const int	Index;
+queue_receive(const int Index)
 {
 	struct	LINE	*Line;
 
@@ -756,9 +746,7 @@ const int	Index;
  | it. The write AST routine will send it.
  */
 void
-send_data(Index, buffer, size, AddEnvelope)
-const int	Index, size, AddEnvelope;	/* Add the BCB+...? */
-const void	*buffer;
+send_data(const int Index, const void *buffer, const int size, const int AddEnvelope)
 {
 	struct	LINE	*Line;
 	int	NewSize;
@@ -1005,11 +993,7 @@ bug_check("IO: Overflowed XMIT_QUEUE");
  | it.
  */
 static int
-add_VMnet_block(Line, flag, buffer, size, NewLine, BCBcount)
-const int	flag, size, BCBcount;
-struct LINE	*Line;
-const void	*buffer;
-void		*NewLine;
+add_VMnet_block(struct LINE *Line, const int flag, const void *buffer, const int size, void *NewLine, const int BCBcount)
 {
 	struct	TTR	Ttr;
 	char		*ttr;
@@ -1052,8 +1036,7 @@ void		*NewLine;
  | Close the communication channel.
  */
 void
-close_line(Index)
-const int	Index;
+close_line(const int Index)
 {
 	IoLines[Index].flags &= ~F_SHUT_PENDING;	/* Clear the flag */
 
@@ -1185,8 +1168,7 @@ vmnet_monitor()
  | non-zero, dump it.
  */
 static void
-debug_dump_buffers(UserName)
-const char	*UserName;
+debug_dump_buffers(const char *UserName)
 {
 	register int	i;
 	register struct LINE	*Line;
@@ -1219,8 +1201,7 @@ const char	*UserName;
  | are manually renamed to be queued to another link. [VMS explanation]
  */
 /*static*/ void
-debug_rescan_queue(UserName,opt)
-const char	*UserName, opt;
+debug_rescan_queue(const char *UserName, const char opt)
 {
 	register int	i;
 	register struct LINE	*Line;
@@ -1237,6 +1218,7 @@ const char	*UserName, opt;
 	  /* Line->QueuedFiles = activecnt;
 	     Line->QueuedFilesWaiting = 0; */
 	}
+	(void)activecnt;
 
 	if (opt != '-') {
 	  logger(1, "** IO: Starting queue scan\n");
@@ -1262,9 +1244,7 @@ const char	*UserName, opt;
  | Parse the command line received via the command mailbox/socket.
  */
 void
-parse_operator_command(line,length)
-unsigned char	*line;
-const int length;
+parse_operator_command(unsigned char *line, const int length)
 {
 	unsigned char	Faddress[SHORTLINE],	/* Sender for NMR messages */
 			Taddress[SHORTLINE];	/* Receiver for NMR */
@@ -1289,7 +1269,7 @@ const int length;
 #endif
 	      break;
 	  case CMD_SHUTDOWN:	/* Normal shudown */
-	      logger(1, "Normal shutdown requested by %s\n", &line[1]);
+	      logger(1, "Normal shutdown requested by %s\n", (const char *)&line[1]);
 	      MustShutDown = -1;	/* Signal it */
 	      if (PassiveSocketChannel >= 0)
 		close(PassiveSocketChannel);
@@ -1305,35 +1285,35 @@ const int length;
 	      /* LINE contains username only.
 		 The routine we call expect full address, so
 		 add our local node name */
-	      strcat(&line[1], "@");
-	      strcat(&line[1], LOCAL_NAME);
-	      show_lines_status(&line[1],0);
+	      strcat((char *)&line[1], "@");
+	      strcat((char *)&line[1], LOCAL_NAME);
+	      show_lines_status((const char *)&line[1],0);
 	      break;
 	  case CMD_SHOW_QUEUE:
 	      /* LINE contains username only.
 		 The routine we call expect full address, so
 		 add our local node name */
-	      strcat(&line[1], "@");
-	      strcat(&line[1], LOCAL_NAME);
-	      show_files_queue(&line[1],"");
+	      strcat((char *)&line[1], "@");
+	      strcat((char *)&line[1], LOCAL_NAME);
+	      show_files_queue((const char *)&line[1],"");
 	      break;
 	  case CMD_QUEUE_FILE: 
 	      /* Compute the file's size in bytes: */
 	      i = ((line[1] << 8) + (line[2])) * 512;
-	      queue_file(&line[3], i, NULL, NULL);
+	      queue_file((char *)&line[3], i, NULL, NULL);
 	      break;
 	  case CMD_SEND_MESSAGE:	/* Get the parameters */
 	  case CMD_SEND_COMMAND:
-	      if (sscanf(&line[2], "%s %s", Faddress, Taddress) != 2) {
-		logger(1, "Illegal SEND_MESSAGE line: '%s'\n", &line[2]);
+	      if (sscanf((const char *)&line[2], "%s %s", Faddress, Taddress) != 2) {
+		logger(1, "Illegal SEND_MESSAGE line: '%s'\n", (const char *)&line[2]);
 		break;	/* Illegal line */
 	      }
 	      /* The sender includes only the username.
 		 Add @LOCAL-NAME to it. */
-	      if (strchr(Faddress,'@') == NULL) {
-		i = strlen(Faddress);
+	      if (strchr((char *)Faddress,'@') == NULL) {
+		i = strlen((char *)Faddress);
 		Faddress[i++] = '@';
-		strcpy(&Faddress[i], LOCAL_NAME);
+		strcpy((char *)&Faddress[i], LOCAL_NAME);
 	      }
 	      if (*line == CMD_SEND_MESSAGE) {
 
@@ -1341,18 +1321,18 @@ const int length;
 		   then append our local nodename, so it'll
 		   be sent to a local user */
 
-		if (strchr(Taddress, '@') == NULL) {
-		  i = strlen(Taddress);
+		if (strchr((char *)Taddress, '@') == NULL) {
+		  i = strlen((char *)Taddress);
 		  Taddress[i++] = '@';
-		  strcpy(&Taddress[i], LOCAL_NAME);
+		  strcpy((char *)&Taddress[i], LOCAL_NAME);
 		}
-		send_nmr(Faddress, Taddress,
-			 &line[line[1]], strlen(&line[line[1]]),
+		send_nmr((char *)Faddress, (char *)Taddress,
+			 (char *)&line[line[1]], strlen((char *)&line[line[1]]),
 			 ASCII, CMD_MSG);
 	      }
 	      else
-		send_nmr(Faddress, Taddress,
-			 &line[line[1]], strlen(&line[line[1]]),
+		send_nmr((char *)Faddress, (char *)Taddress,
+			 (char *)&line[line[1]], strlen((char *)&line[line[1]]),
 			 ASCII, CMD_CMD);
 	      break;
 	  case CMD_START_LINE:
@@ -1389,10 +1369,10 @@ const int length;
 		logger(1, "IO: Illegal line numbr(%d) for FORCE LINE\n", i);
 	      break;
 	  case CMD_DEBUG_DUMP:	/* Dump lines buffers */
-	      debug_dump_buffers(&line[1]); /* Pass the username */
+	      debug_dump_buffers((const char *)&line[1]); /* Pass the username */
 	      break;
 	  case CMD_DEBUG_RESCAN:	/* Rescan queue */
-	      debug_rescan_queue(&line[1],line[11]);
+	      debug_rescan_queue((const char *)&line[1],line[11]);
 	      break;
 	  case CMD_EXIT_RESCAN:
 	      handle_sighup(0); /* Do it with the SIGHUP code.. */
@@ -1410,21 +1390,21 @@ const int length;
 	      LogLevel = line[1] & 0xff;
 	      break;
 	  case CMD_CHANGE_ROUTE:	/* Change the route in our database */
-	      sscanf(&line[1], "%s %s", Faddress, Taddress);
+	      sscanf((const char *)&line[1], "%s %s", Faddress, Taddress);
 	      logger(1, "IO: Route %s changed to %s by operator\n",
-		     Faddress, Taddress);
-	      change_route(Faddress, Taddress);
+		     (const char *)Faddress, (const char *)Taddress);
+	      change_route((char *)Faddress, (char *)Taddress);
 	      break;
 	  case CMD_GONE_ADD_UCP:
 	  case CMD_GONE_ADD:
-	      add_gone_user(&line[1]);
+	      add_gone_user((char *)&line[1]);
 	      break;
 	  case CMD_GONE_DEL_UCP:
 	  case CMD_GONE_DEL:
-	      del_gone_user(&line[1]);
+	      del_gone_user((char *)&line[1]);
 	      break;
 	  case CMD_MSG_REGISTER:
-	      msg_register(line+1,length-1);
+	      msg_register((char *)line+1,length-1);
 	      break;
 	  default:
 	      logger(1, "IO: Illegal command = %d\n", *line);

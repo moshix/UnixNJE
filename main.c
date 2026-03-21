@@ -48,10 +48,10 @@ FILE	*AddressFd;	/* Temporary - for DMF routine address */
 
 static void  init_lines_data_base __(( void ));
 static void  init_variables __(( void ));
-static void  handle_sigsegv();
+static void  handle_sigsegv(int n);
 #ifdef SIGBUS /* Not everybody has strict alignments -- RISC processors
 		 usually do, and raise a SIGBUS at such conditions. */
-static void  handle_sigbus();
+static void  handle_sigbus(int n);
 #endif
 
 INTERNAL int	LogLevel;	/* Referenced in READ_CONFIG.C also	*/
@@ -69,9 +69,7 @@ EXTERNAL struct	DATASET_HEADER	NetworkDatasetHeader;
  | All the work will be done in AST level.
  */
 int
-main(cc, vv)
-char	*vv[];
-int cc;
+main(int cc, char *vv[])
 {
 	char	line[512];		/* Long buffer for OPCOM messages */
 	long	LOAD_DMF();		/* The loading routine of DMF framing
@@ -322,7 +320,7 @@ can_shut_down()
  | Clear the line database. Init the initial values.
  */
 static void
-init_lines_data_base()
+init_lines_data_base(void)
 {
 	int	i, j;
 
@@ -395,9 +393,8 @@ init_lines_data_base()
 /*
  | Log the string, and then abort.
  */
-volatile void
-bug_check(string)
-const char	*string;
+void
+bug_check(const char *string)
 {
 	int i;
 	char line[80];
@@ -429,7 +426,7 @@ const char	*string;
  | Init some commonly used variables.
  */
 static void
-init_variables()
+init_variables(void)
 {
 
 	/* Create our name in EBCDIC */
@@ -463,9 +460,8 @@ init_variables()
 /* ---------------------------------------------------------------- */
 /*   SIGSEGV, and SIGBUS are LOGGED with these.. */
 
-static void
-handle_sigsegv(n)
-int n;
+static void __attribute__((unused))
+handle_sigsegv(int n)
 {
 	signal(SIGSEGV,SIG_DFL);
 	logger(1,"Got SIGSEGV!\n");
@@ -473,9 +469,8 @@ int n;
 }
 
 #ifdef SIGBUS
-static void
-handle_sigbus(n)
-int n;
+static void __attribute__((unused))
+handle_sigbus(int n)
 {
 	signal(SIGBUS,SIG_DFL);
 	logger(1,"Got SIGBUS!\n");

@@ -14,8 +14,7 @@
 
 /* Always usefull:  upperstr() */
 
-char *upperstr(str)
-char *str;
+char *upperstr(char *str)
 {
 	register char *s = str;
 	while (s && *s) {

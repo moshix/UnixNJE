@@ -52,15 +52,15 @@ struct namedate {
 	time_t	mtime;
 };
 
-static int cmpnamedate(p1,p2)
-const struct namedate *p1, *p2;
+static int cmpnamedate(const void *v1, const void *v2)
 {
+  const struct namedate *p1 = (const struct namedate *)v1;
+  const struct namedate *p2 = (const struct namedate *)v2;
   return (p1->mtime) - (p2->mtime);
 }
 
 static int
-study_dir(dirpath)
-char *dirpath;
+study_dir(char *dirpath)
 {
 	DIR	*dirfile;
 	DIRENTTYPE *dirp;
@@ -134,9 +134,7 @@ char *dirpath;
 
 
 int
-main(argc,argv)
-     int argc;
-     char *argv[];
+main(int argc, char *argv[])
 {
 	struct passwd *passwdent;
 	char *p;
@@ -280,9 +278,7 @@ main(argc,argv)
 }
 
 void
-Type2Str(type,str)
-     const int type;
-     char *str;
+Type2Str(const int type, char *str)
 {
 	if (type & F_PRINT)
 	  strcpy(str,"PRT");
@@ -299,10 +295,7 @@ static  unsigned char VMSDUMP[12] =
 	{ 0xFF,0x0D,0x00,'V','M','S','D','U','M','P',' ','V' };
 
 int
-dump_header(path,dirpath,mtime)
-     char const *path;
-     char const *dirpath;
-     const time_t mtime;
+dump_header(char const *path, char const *dirpath, const time_t mtime)
 {
 	int	rc;
 	char	FileName[20], FileExt[20], From[20], To[20], Class;
@@ -416,9 +409,8 @@ dump_header(path,dirpath,mtime)
 	return 0;
 }
 
-volatile void
-bug_check(str)
-     char const *str;
+void
+bug_check(char const *str)
 {
 	logger(1,"QRDR: BUG_CHECK: %s",str);
 	exit(100);

@@ -15,10 +15,7 @@
 extern int EtblAltered;
 
 void
-EBCDIC_TO_ASCII(INSTRING, OUTSTRING, LENGTH)
-const void *INSTRING;
-void *OUTSTRING;
-const int LENGTH;
+EBCDIC_TO_ASCII(const void *INSTRING, void *OUTSTRING, const int LENGTH)
 {
 	int TempVar;
 	unsigned char *op = OUTSTRING;

@@ -32,9 +32,7 @@ int LogLevel = 1;
 FILE *LogFd = NULL;
 
 int
-main(argc,argv)
-	int argc;
-	char **argv;
+main(int argc, char **argv)
 {
 	FILE	*bitctrl;
 	char	**pieces = NULL;
@@ -136,7 +134,9 @@ main(argc,argv)
 
 	strcpy( bitctrlname,TEMPDIR );
 	strcpy( bitpieces,TEMPPIECES );
-	mktemp(bitpieces);
+	{	int tmpfd = mkstemp(bitpieces);
+		if (tmpfd != -1) close(tmpfd);
+	}
 	if ((i = mkstemp(bitctrlname)) == -1) {
 	  fprintf(stderr,"Couldn't open BITCTRL (temporary) file.\n");
 	  exit(3);
@@ -184,7 +184,7 @@ main(argc,argv)
 	  seqid = (seqid | ((now / 86400) % (2<<7)) << 24) % 100000000;
 
 	  while (*pp) {
-	    sprintf(pftype,"%08d",seqid++);
+	    sprintf(pftype,"%08lu",seqid++);
 	    sprintf(cmdstr,"%s %s -fn %s %s -frm %s ",
 		    SENDFILECMD,To,fname,pftype,Forms);
 	    if (*Tag) {
@@ -221,16 +221,13 @@ main(argc,argv)
 }
 
 static int
-splitsrc( infile,pieces,piecebase,piecesize )
-     FILE *infile;
-     char **pieces[];
-     char *piecebase;
-     int piecesize;
+splitsrc(FILE *infile, char **pieces[], char *piecebase, int piecesize)
 {
 	char	piecename[256];
 	char	buf[1024];
 	long	bytes = 0;
 	long	piecebytes = 0;
+	(void)bytes;
 	char	*pp;
 	int	len;
 	FILE	*piece = NULL;

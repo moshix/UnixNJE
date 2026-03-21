@@ -60,7 +60,7 @@ struct Bintree {
 	int   heapsize;		/* Allocated size of the system		*/
 	int   eltsize;		/* Single element size			*/
 	int   need_rebalance;	/* Flag a need for rebalance		*/
-	int (*eltcompare)();	/* Routine doing the compare		*/
+	int (*eltcompare)(const void *, const void *);	/* Routine doing the compare		*/
 	void *datastore;	/* Arbitary size data storage		*/
 	void *tmpstore;		/* Single entry store for swaps		*/
 };
@@ -111,16 +111,13 @@ struct BTheader {
  */
 
 struct Bintree *
-bintree_open(filename,eltsize,eltcompare)
-const char *filename;
-const short eltsize;
-int (*eltcompare)();
+bintree_open(const char *filename, const short eltsize, int (*eltcompare)(const void *, const void *))
 {
 	struct Bintree *BT = NULL;
 	struct BTheader BTH;
 	struct stat statbuf;
 	int fd = open(filename,O_RDWR|O_CREAT,0644);
-	char *db_basename = strrchr(filename,'/');
+	const char *db_basename = strrchr(filename,'/');
 
 	if (db_basename == NULL)
 	  db_basename = filename;
@@ -197,8 +194,7 @@ int (*eltcompare)();
 
 
 int
-bintree_close(BT)
-struct Bintree *BT;
+bintree_close(struct Bintree *BT)
 {
 	int rc;
 
@@ -212,10 +208,7 @@ struct Bintree *BT;
 
 /* Find an index to the data */
 static int
-__bintree_find(BT, datum, nearby)
-struct Bintree *BT;
-void *datum;
-const int nearby;	/* Accept any result, we need to find pivot point */
+__bintree_find(struct Bintree *BT, void *datum, const int nearby)
 {
 	int lo, hi, mid, rc = 0;
 
@@ -237,19 +230,18 @@ const int nearby;	/* Accept any result, we need to find pivot point */
 	  else
 	    lo = mid+1;
 	}
-	if (nearby)
+	if (nearby) {
 	  if (rc > 0)
 	    return mid+1;
 	  else
 	    return mid;
+	}
 	return -1; /* Not found */
 }
 
 /* Feed in the new entry */
 int
-bintree_insert(BT, datum)
-struct Bintree *BT;
-void *datum;
+bintree_insert(struct Bintree *BT, void *datum)
 {
 	int rc = 0;
 	struct BTheader BTH;
@@ -303,9 +295,7 @@ void *datum;
 
 /* Find an entry, and delete it */
 int
-bintree_delete(BT, datum)
-struct Bintree *BT;
-void *datum;
+bintree_delete(struct Bintree *BT, void *datum)
 {
 	int index, count;
 	char *ptr;
@@ -344,9 +334,7 @@ void *datum;
 
 /* Find an entry, and return pointer to it */
 void *
-bintree_find(BT, datum)
-struct Bintree *BT;
-void *datum;
+bintree_find(struct Bintree *BT, void *datum)
 {
 	int index = __bintree_find(BT,datum,0);
 
@@ -358,9 +346,7 @@ void *datum;
 /*  With found pointer, had the data updated, and now
     tell the system to update it also on the disk */
 int
-bintree_update(BT, datumptr)
-struct Bintree *BT;
-void *datumptr;
+bintree_update(struct Bintree *BT, void *datumptr)
 {
 	long offset = sizeof(struct BTheader) + ((char*)datumptr - (char*)(BT->datastore));
 	int rc = 0;

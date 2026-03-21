@@ -58,7 +58,7 @@ void add_gone()
 {
 	char	*LoginDirectory;
 	char	UserName[128], CommandLine[128];
-	struct	passwd	*UserEntry, *getpwnam();
+	struct	passwd	*UserEntry;
 
 	mcuserid(UserName);
 	if ((UserEntry = getpwnam(UserName)) == NULL) {
@@ -103,7 +103,7 @@ void display_file()
 	int	counter;
 	char	line[256];
 	char	FileName[128], UserName[128], *LoginDirectory;
-	struct	passwd	*UserEntry, *getpwnam();
+	struct	passwd	*UserEntry;
 	FILE	*fd;
 
 	mcuserid(UserName);
@@ -165,9 +165,7 @@ YGONE: Inform NJE transporter about your intention to disappear\n\
  | named /CONTINUE - only trap terminal messages and do not logout; this is
  | general and have no special connection to the NJE emulator.
  */
-void main(cc, vv)
-char	**vv;
-int	cc;
+int main(int cc, char **vv)
 {
 	read_configuration();
 	if(cc == 1) {	/* No parameters */

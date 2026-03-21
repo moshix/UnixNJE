@@ -19,8 +19,7 @@ int	GoneUsersNum = 0;
  | search).
  */
 void
-add_gone_user(line)
-const char	*line;
+add_gone_user(const char *line)
 {
 	char	UserName[128], LoginDirectory[128];
 	int	i, j;
@@ -65,8 +64,7 @@ const char	*line;
  | Delete a user from the database if he exists there.
  */
 void
-del_gone_user(UserName)
-const char	*UserName;
+del_gone_user(const char *UserName)
 {
 	int	i = 0, j = 0;
 	char	*LoginDirectory;	/* Need it to call Get_gone_user */
@@ -91,14 +89,12 @@ const char	*UserName;
  */
 #ifdef UNIX
 int
-send_gone(UserName, string)
-const char	*UserName;
-char  *string;
+send_gone(const char *UserName, char *string)
 {
 	char	*LoginDirectory, *p, FileName[512];
 	FILE	*fd;
 	int	oldumask;
-	struct passwd *pwd, *getpwnam();
+	struct passwd *pwd;
 
 /* Get login directory and open the file */
 	if (get_gone_user(UserName, &LoginDirectory) < 0)
@@ -132,9 +128,7 @@ char  *string;
 }
 #else	/* !UNIX */
 int
-send_gone(UserName, string)
-const char	*UserName;
-char  *string;
+send_gone(const char *UserName, char *string)
 {
 	char	*LoginDirectory, *p, FileName[128];
 	FILE	*fd;
@@ -181,9 +175,7 @@ shut_gone_users __((void))
  | If not found, return -1;
  */
 int
-get_gone_user(UserName, LoginDirectory)
-const char	*UserName;
-char	**LoginDirectory;
+get_gone_user(const char *UserName, char **LoginDirectory)
 {
 	int		First, Last, Middle,	/* For binary search */
 			CompareResult;

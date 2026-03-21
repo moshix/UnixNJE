@@ -27,8 +27,7 @@ extern int	sys_nerr;	/* Maximum error number recognised */
 struct Bintree *routedb = NULL;
 
 /* Database needs this comparison routine.. */
-int CompareRoute(r1,r2)
-struct ROUTE_DATA *r1, *r2;
+int CompareRoute(struct ROUTE_DATA *r1, struct ROUTE_DATA *r2)
 {
 	return strcmp(r1->DestNode, r2->DestNode);
 }
@@ -69,10 +68,7 @@ close_route_file()
  | 'defaultroute'.    Flag 'defaultroute' by returning -1.
  */
 int
-get_route_record(key, line, LineSize)
-const char	*key;
-char		*line;
-const int	LineSize;
+get_route_record(const char *key, char *line, const int LineSize)
 {
 	struct ROUTE_DATA Key, *Route;
 
@@ -110,9 +106,7 @@ const int	LineSize;
  | If the node is not local, the format used is EBCDIC.
  */
 void
-change_route(Node, Route)
-const char	*Node;
-char		*Route;
+change_route(const char *Node, char *Route)
 {
 	char	line[LINESIZE];
 	struct ROUTE_DATA Key, *Routep;

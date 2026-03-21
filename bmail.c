@@ -45,8 +45,7 @@ FILE *LogFd = NULL;
 unsigned char linehdr[2] = { 0x80, 80 };
 
 void
-usage(str)
-char *str;
+usage(char *str)
 {
   fprintf(stderr, "Usage: bmail [-u origuser] [-v] [-tag RSCS-TAG] [-M mailername]\n             [-nd Gateway-address | -b(smtp) Gateway-address]\n             FromUser@FromNode ToUser@ToNode [ToUser@ToNode...]\n");
   fprintf(stderr, "  File is taken from the standard input\n");
@@ -56,9 +55,7 @@ char *str;
 }
 
 int
-main(argc, argv)
-int	argc;
-char	*argv[];
+main(int argc, char *argv[])
 {
 	char	ebcdicline[LSIZE]; /* 80 needed, more available.. */
 	char	outbuf[85];
@@ -181,7 +178,7 @@ char	*argv[];
 	  sprintf(NjeFrom, "%.8s@%.8s", origuser, LOCAL_NAME);
 	else
 	  strncpy(NjeFrom, From, 19);
-	NjeFrom[20] = 0;
+	NjeFrom[19] = 0;
 	fprintf(fd, "FRM: %-17.17s\n", NjeFrom);
 	fprintf(fd, "FMT: BINARY\nTYP: MAIL\nEXT: MAIL\nCLS: M\nFOR: QUMAIL\n");
 	if (Bsmtp || ForcedMailer)

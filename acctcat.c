@@ -12,16 +12,14 @@ char LOCAL_NAME[80];
 char BITNET_QUEUE[80];
 
 void
-usage()
+usage(void)
 {
 	fprintf(stderr,"Usage:  acctcat /path/to/rscs/acct-file\n");
 	exit(2);
 }
 
 int
-main(argc,argv)
-const int argc;
-const char *argv[];
+main(int argc, const char *argv[])
 {
 	struct RSCSLOG RL,RLa;
 	FILE *logfil = NULL;
@@ -54,7 +52,7 @@ const char *argv[];
 		 ntohs(RL.ACNTOID),
 		 RLa.ACNTTOVM, RLa.ACNTDEST,
 		 (RL.ACNTINDV & 0xF0) == 0x80 ? "PUN" : "PRT", RLa.ACNTCLAS,
-		 ntohl(RL.ACNTRECS));
+		 (long)ntohl(RL.ACNTRECS));
 	}
 	fclose(logfil);
 	return 0;

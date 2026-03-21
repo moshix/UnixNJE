@@ -13,10 +13,7 @@
 
 /* Uread() -- for a couple of external routines of HUJI-NJE */
 int
-Uread( buf,size,fd)
-     void *buf;
-     const int size;
-     FILE *fd;
+Uread(void *buf, const int size, FILE *fd)
 {
 	short NewSize;
 	long filepos = ftell(fd);

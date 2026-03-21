@@ -57,9 +57,7 @@ char	HelpText[][80] = {
  | Here.
  */
 void
-handle_NMR(NmrRecord, size)
-struct	NMR_MESSAGE	*NmrRecord;
-const int	size;
+handle_NMR(struct NMR_MESSAGE *NmrRecord, const int size)
 {
 	char	ToName[20], ToNode[20], MessageText[132+8+2],
 		OriginNode[20], OriginName[20], line[LINESIZE];
@@ -179,12 +177,7 @@ const int	size;
  | to the correct line.
  */
 void
-send_nmr(Faddress, Taddress, Text, size, format, Cflag)
-const	MSGCODES format;	/* ASCII or EBCDIC	*/
-const	int	Cflag;		/* Command or Message	*/
-	int	size;
-const	char	*Faddress, *Taddress;
-void		*Text;
+send_nmr(const char *Faddress, const char *Taddress, void *Text, int size, const MSGCODES format, const int Cflag)
 {
 	char	*text = (char *)Text;
 	char	*p, line[LINESIZE], FromName[20], NodeKey[20];
@@ -405,8 +398,7 @@ void		*Text;
 	nmr_queue_msg(&Msg);
 }
 
-void nmr_queue_msg(Msg)
-struct MESSAGE *Msg;
+void nmr_queue_msg(struct MESSAGE *Msg)
 {
 	char	TempLine[LINESIZE], LineName[20], line[LINESIZE];
 	char	CharacterSet[16];	/* Not needed but returned
@@ -502,11 +494,7 @@ struct MESSAGE *Msg;
  |   The character set for directly connected line is forced to be EBCDIC.
  */
 int
-find_line_index(NodeName, LineName, CharacterSet, PrimLinep, AltLinep)
-	char	*NodeName;	/* The nodename we are looking for */
-	char	*LineName;	/* The actual line to route to */
-	char	*CharacterSet;	/* ASCII or EBCDIC. */
-int	*PrimLinep, *AltLinep;	/* Store link indexes */
+find_line_index(char *NodeName, char *LineName, char *CharacterSet, int *PrimLinep, int *AltLinep)
 {
 	int	i;
 	char	NodeKey[16], LineName2[16], TempLine[LINESIZE];
@@ -597,7 +585,7 @@ int	*PrimLinep, *AltLinep;	/* Store link indexes */
 
 	/* If no alternate route given, then retire... */
 
-	if (*PrimLinep >= 0) /* Found a link earlier, but explicte route
+	if (*PrimLinep >= 0) { /* Found a link earlier, but explicte route
 				possibly didn't yield a valid link ! */
 	  if (IoLines[*PrimLinep].state == ACTIVE) {
 	    logger(1,"NMR: find_line_index('%s') looked into the database and got bad route entry: `%s'\n",
@@ -605,6 +593,7 @@ int	*PrimLinep, *AltLinep;	/* Store link indexes */
 	    return *PrimLinep;
 	  } else
 	    return LINK_INACTIVE;
+	}
 
 	return NO_SUCH_NODE;
 }
@@ -615,8 +604,7 @@ int	*PrimLinep, *AltLinep;	/* Store link indexes */
  | the originator.
  */
 void
-handle_local_command(OriginNode, UserName, MessageText)
-const char	*OriginNode, *UserName, *MessageText;
+handle_local_command(const char *OriginNode, const char *UserName, const char *MessageText)
 {
 	char	Faddress[20], Taddress[20], line[LINESIZE];
 	char	KeyWord[SHORTLINE], param1[SHORTLINE], param2[SHORTLINE];
@@ -777,9 +765,7 @@ logger(1,"NMR: Local cmd MSG, Taddress='%s', msg='%s'\n",Taddress,MessageText);
  | the active route (if we have alternate route active).
  */
 static void
-query_route(Faddress, Taddress, NodeName)
-const	char	*Faddress, *Taddress;
-	char	*NodeName;
+query_route(const char *Faddress, const char *Taddress, char *NodeName)
 {
 	char	line[LINESIZE], ActiveRoute[16],
 		CharacterSet[16];

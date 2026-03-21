@@ -13,13 +13,12 @@
 #include <string.h>
 #include "sysexits.h"
 
-extern char **namesparse(/*FILE *namesfile, char **picktags, char *selector*/);
+extern char **namesparse(FILE *namesfile, char **picktags, char *selector);
 
 char *progname = "<namesfilter>";
 
 void
-usage(msg)
-	char *msg;
+usage(char *msg)
 {
 	if (msg) {
 	  fprintf(stderr,"%s: %s\n",progname,msg);
@@ -43,8 +42,7 @@ extern int strncmp(); */
 #define FMT_SMAIL    3
 #define FMT_NETSOFT  4
 
-void strlower(s)
-	char *s;
+void strlower(char *s)
 {
 	while (*s != 0) {
 	  if (*s >= 'A' && *s <= 'Z')
@@ -54,9 +52,7 @@ void strlower(s)
 }
 
 int
-main(argc,argv)
-	int argc;
-	char *argv[];
+main(int argc, char *argv[])
 {
 	char **np;
 	static char *picklist[] = { "node.","internet.",
@@ -71,7 +67,7 @@ main(argc,argv)
 	char *internet;
 	char *netsoft;
 	int i;
-	int outfmt;
+	int outfmt = 0;
 	char *smailtail = "";
 
 	node = (char*)strrchr(argv[0],'/');
@@ -133,6 +129,7 @@ main(argc,argv)
 	    } else if (strncmp(np[i],":netsoft.",9)==0)
 	      netsoft = np[i]+9;
 	  }
+	  (void)internet;
 	  strlower(node);
 	  printf("%s\t",node);
 	  if (strlen(node)<8)
@@ -164,6 +161,7 @@ main(argc,argv)
 	      while (*mailer != 0 && *mailer != ',') ++mailer;
 	      if (*mailer == ',') *mailer++ = 0;
 	      m3 = mailer;	/* Class, ignored */
+	      (void)m3;
 	      while (*mailer != 0 && *mailer != ',') ++mailer;
 	      if (*mailer == ',') *mailer++ = 0;
 	      m4 = mailer;	/* BSMTP, BSMTP RFC822, default: BSMTP */

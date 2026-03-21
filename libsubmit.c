@@ -12,9 +12,7 @@
 #include "clientutils.h"
 
 int
-submit_file(FileName, FileSize)
-const char	*FileName;
-int	FileSize;
+submit_file(const char *FileName, int FileSize)
 {
 	unsigned char	line[512];
 	long	size;
@@ -25,8 +23,8 @@ int	FileSize;
 	/* Send file size */
 	line[1] = (unsigned char)((FileSize & 0xff00) >> 8);
 	line[2] = (unsigned char)(FileSize & 0xff);
-	strcpy(&line[3], FileName);
-	size = strlen(&line[3]) + 4; /* Include terminating NULL */
+	strcpy((char *)&line[3], FileName);
+	size = strlen((const char *)&line[3]) + 4; /* Include terminating NULL */
 
 	return send_cmd_msg(line, size, 1); /* Offline is ok */
 }

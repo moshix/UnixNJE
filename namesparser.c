@@ -27,10 +27,7 @@ char *MEMFAIL[] = { ":failure.MALLOC FAILED",NULL };
 
 
 char **
-namesparse(namesfile,picktags,selector)
-FILE *namesfile;
-char *picktags[];
-char *selector;
+namesparse(FILE *namesfile, char *picktags[], char *selector)
 {
 	int   linesize = 256;	/* Our advanced knowledge.. */
 	char *linebuf = NULL;
@@ -44,7 +41,6 @@ char *selector;
 	int   select_len = 0;
 	int   select_taglen = 0;
 	int   selector_matched = (selector == NULL); /* No selector == match */
-	int   pick_len;
 	int   begin_found = 0; /* Found a line starting with ':' */
 
 	linebuf = malloc(linesize);
@@ -177,9 +173,7 @@ char *selector;
 
 #ifdef	TEST
 int
-main(argc,argv)
-int argc;
-char *argv[];
+main(int argc, char *argv[])
 {
 	char *picklist[] =  {
 	  "node.","internet.","servers1.","servers2.",NULL

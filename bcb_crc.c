@@ -116,9 +116,7 @@ unsigned char cones[256] =
  | transparency) and reduce the buffer size by one.
  */
 int
-check_crc(buffer, size)
-void	*buffer;
-int	*size;
+check_crc(void *buffer, int *size)
 {
 	unsigned char	c;
 	unsigned char *p, *q;
@@ -178,9 +176,7 @@ int	*size;
  | transparency) and reduce the buffer size by one.
  */
 int
-remove_dles(buffer, size)
-void	*buffer;
-int	*size;
+remove_dles(void *buffer, int *size)
 {
 	unsigned char	c, *p, *q;
 	register int	DleFound, AccumulatedSize;
@@ -223,10 +219,7 @@ int	*size;
  | buffer.
  */
 int
-add_bcb_crc(Index, buffer, size, NewLine, BCBcount)
-const void	*buffer;
-      void	*NewLine;
-const int	Index, size, BCBcount;
+add_bcb_crc(const int Index, const void *buffer, const int size, void *NewLine, const int BCBcount)
 {
 	unsigned char	*p, c;
 	const unsigned char *q;
@@ -293,10 +286,7 @@ const int	Index, size, BCBcount;
  | buffer.
  */
 int
-add_bcb(Index, buffer, size, NewLine, BCBcount)
-const void	*buffer;
-      void	*NewLine;
-const int	Index, size, BCBcount;
+add_bcb(const int Index, const void *buffer, const int size, void *NewLine, const int BCBcount)
 {
 	unsigned char	*p, c;
 	const unsigned char *q;

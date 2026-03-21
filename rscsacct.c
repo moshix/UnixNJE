@@ -20,8 +20,7 @@ static int rscslog = -1;
 static struct RSCSLOG RL;
 
 void
-rscsacct_open(logfilename)
-const char *logfilename;
+rscsacct_open(const char *logfilename)
 {
 	if (rscslog >= 0) close(rscslog);
 
@@ -39,7 +38,7 @@ const char *logfilename;
 
 
 void
-rscsacct_close()
+rscsacct_close(void)
 {
 	if (rscslog >= 0) close(rscslog);
 	rscslog = -1;
@@ -48,9 +47,7 @@ rscsacct_close()
 
 
 void
-rscsacct_log(FileParams,xmit_or_recv)
-const struct FILE_PARAMS *FileParams;
-const int xmit_or_recv;
+rscsacct_log(const struct FILE_PARAMS *FileParams, const int xmit_or_recv)
 {
 	time_t now;
 	struct tm *tm_var;
