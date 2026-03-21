@@ -79,7 +79,7 @@ To execute it you need sudo privileges, or need to be root.
 
 Run the njeroutes command described in the previous section to create /usr/local/funetnje/funetnje.route, then start funetnje as a daemon
 
-Enable "mesg yes" for your shell session to receive messages from other nodes. 
+**Enable "mesg yes" for your shell session to receive messages from other nodes.**
 
 Commands available send to sendfiles or messages or commands. "qrdr" to see the file queue. See my video (link below)
 
@@ -89,4 +89,4 @@ Watch this video to see how to get this to works: https://youtu.be/1iHrNNH7plY
 Enjoy
 
 moshix  
-Moscow, January 2025  
+Vermont, March 2026  
