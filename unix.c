@@ -126,7 +126,7 @@ init_command_mailbox()
 	    *s = 0;
 	    if (rc==0 && stat(socknam,&dstat) == 0) {
 	      *s = '/';
-	      (void)chown(socknam,0,dstat.st_gid);
+	      IGNORE_RESULT(chown(socknam,0,dstat.st_gid));
 	      chmod(socknam,0660);
 	    } else {
 	      logger(1,"UNIX: Can't mkfifo() COMMAND_MAILBOX, or no directory!  Error: %s\n",PRINT_ERRNO);
@@ -246,10 +246,10 @@ init_command_mailbox()
 	if (socket_access_key == 0)		/* Can't be 0 twice! */
 	  socket_access_key = random() ^ (dstat.st_ino ^ dstat.st_mtime);
 #endif
-	(void)write(fd,(void*)&socket_access_key,4);
+	IGNORE_RESULT(write(fd,(void*)&socket_access_key,4));
 	close(fd);
 	if (stat(BITNET_QUEUE,&dstat) == 0) {
-	  (void)chown(path,-1,dstat.st_gid);
+	  IGNORE_RESULT(chown(path,-1,dstat.st_gid));
 	  chmod(path,0440);
 	}
 	/* That's all. Select will poll for it */
@@ -286,7 +286,7 @@ send_opcom(const char *text)
 	if ((ftty = open("/dev/console", O_WRONLY|O_NOCTTY, 0644)) < 0)
 	  return;
 
-	(void)write(ftty, line, strlen(line));
+	IGNORE_RESULT(write(ftty, line, strlen(line)));
 	close(ftty);
 }
 

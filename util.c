@@ -128,7 +128,7 @@ crack_header(const char *line)
 	struct hdrnames *hp = Headers;
 	u_int32	tt;
 
-	strncpy(temp, line, 5);
+	memcpy(temp, line, 5);
 	temp[5] = '\0';
 	tt = *(u_int32*)temp;
 

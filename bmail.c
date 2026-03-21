@@ -148,7 +148,7 @@ main(int argc, char *argv[])
 	CHOP_BITNET(To);
 
 	/* A SGID program.. */
-	(void)setgid(getegid());
+	IGNORE_RESULT(setgid(getegid()));
 
 	sprintf(tFileName, "%s/.MaiL%05d", BITNET_QUEUE,getpid());
 	if (*tFileName == '\0') {

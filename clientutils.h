@@ -17,6 +17,10 @@
 # endif
 #endif
 
+#ifndef IGNORE_RESULT
+#define IGNORE_RESULT(x) do { if (x) {} } while (0)
+#endif
+
 #ifndef CMD_SHUTDOWN_ABRT	/* Copied from  consts.h */
 /* The command mailbox messages' codes */
 

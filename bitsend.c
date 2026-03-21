@@ -41,7 +41,7 @@ main(int argc, char **argv)
 	char	bitpieces[LSIZE];
 	char	cmdstr[LSIZE];
 	char	From[LSIZE], To[LSIZE], fname[20], ftype[20], pftype[20],
-		datestr[26], Forms[9], Tag[137];
+		datestr[32], Forms[9], Tag[137];
 	int	i;
 	int	fnametypeset = 0;
 	int	rc;

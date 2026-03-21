@@ -387,7 +387,7 @@ fprintf(stderr," figuring source file,  *argv='%s'\n",*argv);
 
 
 	/* Ok, SGID program to send files... */
-	(void)setgid(getegid());
+	IGNORE_RESULT(setgid(getegid()));
 
 
 	sprintf(tFileName, "%s/.BIT_%05d", BITNET_QUEUE, getpid());

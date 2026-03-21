@@ -85,6 +85,11 @@ extern int	errno;
 
 #endif	/* unix */
 
+/* Portable macro to suppress warn_unused_result warnings.
+   GCC ignores (void) casts on warn_unused_result functions,
+   so we use an if() trick instead. */
+#define IGNORE_RESULT(x) do { if (x) {} } while (0)
+
 /* ************************* SYSTEM FEATURE SELECTION ********************* */
 
 #if !defined(NO_NBSTREAM) && !defined(NBCONNECT) && !defined(NBSTREAM)

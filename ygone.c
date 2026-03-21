@@ -132,7 +132,7 @@ void display_file()
 	    counter += (strlen(line) / 80); /* Add for lines longer than 80 */
 	    if(counter++ > 20) {
 	      printf("<CR> to continue, Anything else to abort: ");
-	      (void)fgets(line, sizeof line, stdin);
+	      IGNORE_RESULT(fgets(line, sizeof line, stdin));
 	      if((*line != '\n') && (*line != '\0')) break;
 	      counter = 0;
 	      printf("\033[2J\033[H"); /* Clear screen */

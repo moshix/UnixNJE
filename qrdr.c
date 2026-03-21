@@ -72,7 +72,7 @@ study_dir(char *dirpath)
 	int rc;
 
 #if	defined(USG)
-	(void)getcwd(curdir,sizeof(curdir));
+	IGNORE_RESULT(getcwd(curdir,sizeof(curdir)));
 #else
 	getwd(curdir);
 #endif
@@ -87,7 +87,7 @@ study_dir(char *dirpath)
 	  return 0;
 	}
 	rc = 0;
-	(void)chdir(dirpath);
+	IGNORE_RESULT(chdir(dirpath));
 	for (dirp = readdir(dirfile);
 	     dirp != NULL;
 	     dirp = readdir(dirfile)) {
@@ -122,7 +122,7 @@ study_dir(char *dirpath)
 	  free(namedates);
 	}
 	closedir(dirfile);
-	(void)chdir(curdir);
+	IGNORE_RESULT(chdir(curdir));
 	if (BeQuiet2 & FilesFound) {
 	  printf("You have BITNET files waiting! Use  qrdr -l  to check them!\n");
 	  exit(1);	/* Signal founding files... */
@@ -394,7 +394,7 @@ dump_header(char const *path, char const *dirpath, const time_t mtime)
 	  char last = len ? dirpath[len-1] : 0;
 	  char cdatestr[24];
 	  struct tm *tp = gmtime(&mtime);
-	  sprintf(cdatestr,"%04d%02d%02d%02d%02d%02d",
+	  snprintf(cdatestr,sizeof(cdatestr),"%04d%02d%02d%02d%02d%02d",
 		  tp->tm_year+1900,tp->tm_mon+1,tp->tm_mday,
 		  tp->tm_hour,tp->tm_min,tp->tm_sec);
 	  printf("%s%s%s\t%s\t%s\t%s\t%s\t%s\t%s\t%c\t%s\t%s\t%s\n",

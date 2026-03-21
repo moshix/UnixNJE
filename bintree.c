@@ -48,6 +48,10 @@
 #define void char
 #endif
 
+#ifndef IGNORE_RESULT
+#define IGNORE_RESULT(x) do { if (x) {} } while (0)
+#endif
+
 /* extern void *malloc();
 extern void *realloc();
 extern void free();
@@ -164,7 +168,7 @@ bintree_open(const char *filename, const short eltsize, int (*eltcompare)(const 
 	  fflush(BT->treefile);
 
 	} else {
-	  (void)fread(&BTH,sizeof(BTH),1,BT->treefile);
+	  IGNORE_RESULT(fread(&BTH,sizeof(BTH),1,BT->treefile));
 	  BT->last     = BTH.last;
 	  BT->heapsize = BTH.heapsize;
 	  BT->eltsize  = BTH.eltsize;
@@ -185,7 +189,7 @@ bintree_open(const char *filename, const short eltsize, int (*eltcompare)(const 
 	    free(BT);
 	    return NULL;
 	  }
-	  (void)fread(BT->datastore, BT->heapsize * BT->eltsize, 1, BT->treefile);
+	  IGNORE_RESULT(fread(BT->datastore, BT->heapsize * BT->eltsize, 1, BT->treefile));
 	}
 	BT->eltcompare = eltcompare; /* Comparison routine */
 	BT->tmpstore = malloc(BT->eltsize);
@@ -276,7 +280,7 @@ bintree_insert(struct Bintree *BT, void *datum)
 	fwrite(BT_ENTRY(inspt), BT->eltsize, BT->last-1-inspt+1, BT->treefile);
 
 	fseek(BT->treefile,0,0);
-	(void)fread(&BTH,sizeof(BTH),1,BT->treefile);
+	IGNORE_RESULT(fread(&BTH,sizeof(BTH),1,BT->treefile));
 
 	BTH.last           = BT->last;
 	BTH.heapsize       = BT->heapsize;
@@ -315,7 +319,7 @@ bintree_delete(struct Bintree *BT, void *datum)
 	BT->last -= 1;
 
 	fseek(BT->treefile,0,0);
-	(void)fread(&BTH,sizeof(BTH),1,BT->treefile);
+	IGNORE_RESULT(fread(&BTH,sizeof(BTH),1,BT->treefile));
 
 	BTH.last           = BT->last;
 	BTH.heapsize       = BT->heapsize;

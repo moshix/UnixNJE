@@ -102,7 +102,7 @@ main(int cc, char *vv[])
 	  FILE *PidFil = fopen(PID_FILE,"r");
 	  int pid = 0;
 	  if (PidFil != NULL) {
-	    (void)fscanf(PidFil,"%d",&pid);
+	    IGNORE_RESULT(fscanf(PidFil,"%d",&pid));
 	    fclose(PidFil);
 	  }
 	  if (pid > 2  && kill(pid,0) == 0) {

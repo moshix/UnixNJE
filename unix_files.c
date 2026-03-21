@@ -276,7 +276,7 @@ RenameToUniqueFileid( struct FILE_PARAMS *fp, const char *PathOrDir, const char 
 
 	  if (RealUID > 0 && fstat1.st_uid != RealUID) {
 	    /* If the directory ownership is not right, chown.. */
-	    (void)chown(path,RealUID,-1);
+	    IGNORE_RESULT(chown(path,RealUID,-1));
 	    fstat1.st_uid = RealUID;
 	  }
 
@@ -576,7 +576,7 @@ _inform_filearrival( const char *path, struct FILE_PARAMS *FileParams, char *Out
 	chmod( FileParams->SpoolFileName,0600 );
 	if ( RealUser ) {
 	  /* User is real, let's set his file with his UID .. */
-	  (void)chown(FileParams->SpoolFileName,RealUID,-1);
+	  IGNORE_RESULT(chown(FileParams->SpoolFileName,RealUID,-1));
 	  strcpy(Argv,FileParams->SpoolFileName);
 	  p = strrchr(Argv,'/');
 	  if (p) { /* Can't fail actually! -- 'famous last words..' */
@@ -584,7 +584,7 @@ _inform_filearrival( const char *path, struct FILE_PARAMS *FileParams, char *Out
 	    *p = 0;
 	    stat(Argv,&stats);
 	    if (stats.st_uid != RealUID && RealUID > 0) {
-	      (void)chown(Argv,RealUID,-1); /* Make sure user owns this directory
+	      IGNORE_RESULT(chown(Argv,RealUID,-1)); /* Make sure user owns this directory
 					 and thus can access files  */
 	      chmod(Argv,(stats.st_mode & 0755));
 	    }
@@ -600,7 +600,7 @@ _inform_filearrival( const char *path, struct FILE_PARAMS *FileParams, char *Out
 	    stats.st_uid = 0; /* Init it to be root, if nothing else */
 	    stat(Argv,&stats);
 	    *p = '/';
-	    (void)chown(Argv,stats.st_uid,stats.st_gid);
+	    IGNORE_RESULT(chown(Argv,stats.st_uid,stats.st_gid));
 	  }
 	  logger(2,"UNIX_FILES: pseudo-user, directory UID=%d\n",stats.st_uid);
 	}
