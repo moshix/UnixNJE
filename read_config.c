@@ -242,9 +242,8 @@ read_configuration()
 	      printf("Misplaced subcommand '%s'\n", KeyWord);
 	      return 0;
 	    }
-	    strncpy(IoLines[LineNumber].device, param1,
-		    sizeof IoLines[0].device - 1);
-	    IoLines[LineNumber].device[sizeof(IoLines[0].device) - 1] = '\0';
+	    snprintf(IoLines[LineNumber].device, sizeof IoLines[0].device,
+		     "%s", param1);
 	  } else if (strcasecmp(KeyWord, "IPPORT") == 0) {
 	    if (LineNumber == -1) {
 	      printf("Misplaced subcommand '%s'\n", KeyWord);
