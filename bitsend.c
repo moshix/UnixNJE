@@ -149,7 +149,7 @@ main(int argc, char **argv)
 #define RECFM "V"
 
 	timestruct = gmtime( &filestat.st_mtime );
-	sprintf(datestr,"%.2d/%02d/%02d %.2d:%02d:%02d",
+	snprintf(datestr,sizeof(datestr),"%.2d/%02d/%02d %.2d:%02d:%02d",
 		timestruct->tm_mon+1,timestruct->tm_mday,timestruct->tm_year,
 		timestruct->tm_hour,timestruct->tm_min,timestruct->tm_sec);
 

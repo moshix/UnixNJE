@@ -47,9 +47,9 @@ main(int argc, char *argv[])
 	  printf("%s  Args are in order:  Header-Fname, RoutingTbl-Fname, OutputFname\n",pname);
 	  
 
-	  printf("Header file: "); fgets(header_file, sizeof header_file, stdin);
-	  printf("Routing table: "); fgets(in_file, sizeof in_file, stdin);
-	  printf("Output file: "); fgets(out_file, sizeof out_file, stdin);
+	  printf("Header file: "); (void)fgets(header_file, sizeof header_file, stdin);
+	  printf("Routing table: "); (void)fgets(in_file, sizeof in_file, stdin);
+	  printf("Output file: "); (void)fgets(out_file, sizeof out_file, stdin);
 	} else  {
 	  strncpy( header_file,argv[1],sizeof header_file -1);
 	  strncpy( in_file,argv[2],sizeof in_file -1);

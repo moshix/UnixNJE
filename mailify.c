@@ -34,6 +34,7 @@
 #include "ebcdic.h"
 #include "ndlib.h"
 #include <utime.h>
+#include <time.h>
 #ifdef	USE_ZMAILER
 #include <zmailer.h> /* Often in /usr/local/include/.. Use cc's -I accordingly */
 #endif

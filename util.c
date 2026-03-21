@@ -129,6 +129,7 @@ crack_header(const char *line)
 	u_int32	tt;
 
 	strncpy(temp, line, 5);
+	temp[5] = '\0';
 	tt = *(u_int32*)temp;
 
 	while (hp->class != ILGL) {
@@ -206,10 +207,12 @@ parse_envelope(FILE *infile, struct FILE_PARAMS *FileParams, const int assign_oi
 		else
 		  strcpy(FileParams->From, p);
 		strncpy(FromUser,p,8);
+		FromUser[8] = '\0';
 		if ((s = strchr(FromUser,'@'))) *s = 0;
 		if ((s = strchr(p,'@'))) {
 		  ++s;
 		  strncpy(FromNode,s,8);
+		  FromNode[8] = '\0';
 		}
 		break;
 	    case TYPE:
@@ -296,10 +299,12 @@ parse_envelope(FILE *infile, struct FILE_PARAMS *FileParams, const int assign_oi
 		/* Else - leave the POSTMAST@Local_node */
 
 		strncpy(ToUser,FileParams->To,8);
+		ToUser[8] = '\0';
 		if ((s = strchr(ToUser,'@'))) *s = 0;
 		if ((s = strchr(FileParams->To,'@'))) {
 		  ++s;
 		  strncpy(ToNode,s,8);
+		  ToNode[8] = '\0';
 		}
 		break;
 	    case FILEID:

@@ -917,7 +917,7 @@ dequeue_xmit_queue(const int Index)
 		q = (Line->XmitQueue)[Line->FirstXmitEntry];
 		memcpy(p, q, size);
 		free(q);	/* Free the memory allocated for it */
-		Line->FirstXmitEntry = ++(Line->FirstXmitEntry) % MAX_XMIT_QUEUE;
+		Line->FirstXmitEntry = (Line->FirstXmitEntry + 1) % MAX_XMIT_QUEUE;
 
 /* logger(2,"UNIX_TCP: Dequeued XMIT buffer of size %d on line %s\n",
    size,Line->HostName); */

@@ -72,7 +72,7 @@ study_dir(char *dirpath)
 	int rc;
 
 #if	defined(USG)
-	getcwd(curdir,sizeof(curdir));
+	(void)getcwd(curdir,sizeof(curdir));
 #else
 	getwd(curdir);
 #endif
@@ -87,7 +87,7 @@ study_dir(char *dirpath)
 	  return 0;
 	}
 	rc = 0;
-	chdir(dirpath);
+	(void)chdir(dirpath);
 	for (dirp = readdir(dirfile);
 	     dirp != NULL;
 	     dirp = readdir(dirfile)) {
@@ -122,7 +122,7 @@ study_dir(char *dirpath)
 	  free(namedates);
 	}
 	closedir(dirfile);
-	chdir(curdir);
+	(void)chdir(curdir);
 	if (BeQuiet2 & FilesFound) {
 	  printf("You have BITNET files waiting! Use  qrdr -l  to check them!\n");
 	  exit(1);	/* Signal founding files... */
@@ -392,7 +392,7 @@ dump_header(char const *path, char const *dirpath, const time_t mtime)
 	if (LongList) {
 	  int len = strlen(dirpath);
 	  char last = len ? dirpath[len-1] : 0;
-	  char cdatestr[20];
+	  char cdatestr[24];
 	  struct tm *tp = gmtime(&mtime);
 	  sprintf(cdatestr,"%04d%02d%02d%02d%02d%02d",
 		  tp->tm_year+1900,tp->tm_mon+1,tp->tm_mday,

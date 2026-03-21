@@ -111,7 +111,7 @@ send_gone(const char *UserName, char *string)
 	  umask(oldumask);
 	  return 0;
 	}
-	chown(FileName,pwd->pw_uid,pwd->pw_gid);
+	(void)chown(FileName,pwd->pw_uid,pwd->pw_gid);
 	umask(oldumask);
 
 	/* Remove all control characters from the line and

@@ -97,6 +97,6 @@ rscsacct_log(const struct FILE_PARAMS *FileParams, const int xmit_or_recv)
 
 	RL.ACNTRECS = htonl(FileParams->RecordsCount);
 
-	write(rscslog,(void*)&RL,80);
+	(void)write(rscslog,(void*)&RL,80);
 }
 

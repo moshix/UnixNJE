@@ -154,6 +154,7 @@ bintree_open(const char *filename, const short eltsize, int (*eltcompare)(const 
 	  BTH.need_rebalance = BT->need_rebalance;
 	  BTH.bytesex_signature = BTHSIGN;
 	  strncpy(BTH.dbname,db_basename,sizeof(BTH.dbname));
+	  BTH.dbname[sizeof(BTH.dbname) - 1] = '\0';
 
 	  fseek(BT->treefile,0,0);
 	  fwrite(&BTH,sizeof(BTH),1,BT->treefile);
@@ -163,7 +164,7 @@ bintree_open(const char *filename, const short eltsize, int (*eltcompare)(const 
 	  fflush(BT->treefile);
 
 	} else {
-	  fread(&BTH,sizeof(BTH),1,BT->treefile);
+	  (void)fread(&BTH,sizeof(BTH),1,BT->treefile);
 	  BT->last     = BTH.last;
 	  BT->heapsize = BTH.heapsize;
 	  BT->eltsize  = BTH.eltsize;
@@ -184,7 +185,7 @@ bintree_open(const char *filename, const short eltsize, int (*eltcompare)(const 
 	    free(BT);
 	    return NULL;
 	  }
-	  fread(BT->datastore, BT->heapsize * BT->eltsize, 1, BT->treefile);
+	  (void)fread(BT->datastore, BT->heapsize * BT->eltsize, 1, BT->treefile);
 	}
 	BT->eltcompare = eltcompare; /* Comparison routine */
 	BT->tmpstore = malloc(BT->eltsize);
@@ -275,7 +276,7 @@ bintree_insert(struct Bintree *BT, void *datum)
 	fwrite(BT_ENTRY(inspt), BT->eltsize, BT->last-1-inspt+1, BT->treefile);
 
 	fseek(BT->treefile,0,0);
-	fread(&BTH,sizeof(BTH),1,BT->treefile);
+	(void)fread(&BTH,sizeof(BTH),1,BT->treefile);
 
 	BTH.last           = BT->last;
 	BTH.heapsize       = BT->heapsize;
@@ -314,7 +315,7 @@ bintree_delete(struct Bintree *BT, void *datum)
 	BT->last -= 1;
 
 	fseek(BT->treefile,0,0);
-	fread(&BTH,sizeof(BTH),1,BT->treefile);
+	(void)fread(&BTH,sizeof(BTH),1,BT->treefile);
 
 	BTH.last           = BT->last;
 	BTH.heapsize       = BT->heapsize;

@@ -51,10 +51,10 @@ int  send_cmd_msg(const void *cmdbuf, const int cmdlen, const int offlineok)
 	gotalarm = 0;
 
 	oldgid = getgid();
-	setgid(getegid());
+	(void)setgid(getegid());
 
 	if ((pidfile = fopen(PID_FILE,"r"))) {
-	  fscanf(pidfile,"%d",&hujipid);
+	  (void)fscanf(pidfile,"%d",&hujipid);
 	  fclose(pidfile);
 	}
 
@@ -70,7 +70,7 @@ int  send_cmd_msg(const void *cmdbuf, const int cmdlen, const int offlineok)
 	sprintf(buf,"%s/.socket.key",BITNET_QUEUE);
 	accesskey = 0;
 	if ((fd = open(buf,O_RDONLY,0)) >= 0) {
-	  read(fd,(void*)&accesskey,4);
+	  (void)read(fd,(void*)&accesskey,4);
 	  close(fd);
 	} else {
 	  logger(1,"NJECLIENTLIB: Can't read access key, errno=%s\n",PRINT_ERRNO);
@@ -103,7 +103,7 @@ int  send_cmd_msg(const void *cmdbuf, const int cmdlen, const int offlineok)
 	    }
 	  }
 
-	  write(fd, buf, buflen);
+	  (void)write(fd, buf, buflen);
 	  close(fd);
 
 	} else if (*COMMAND_MAILBOX == 'S') /* SOCKET */ {
@@ -183,11 +183,11 @@ int  send_cmd_msg(const void *cmdbuf, const int cmdlen, const int offlineok)
 
 	} else {
 	  logger(1,"NJECLIENTLIB: The CMDMAILBOX is not configured properly, known interface-types are (Socket, Fifo, UDP)!\n");
-	  setgid(oldgid);
+	  (void)setgid(oldgid);
 	  return EX_SOFTWARE;;
 	}
 
 	alarm(0);
-	setgid(oldgid);
+	(void)setgid(oldgid);
 	return rc;
 }

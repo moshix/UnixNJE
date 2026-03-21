@@ -115,18 +115,22 @@ read_message_config(const char *path)  /* Config reader... */
 	    char *s = strtok(line,tokseps);
 	    if (s != NULL) {
 	      strncpy(touser,s,9);
+	      touser[8] = '\0';
 	      despace(touser,8);
 	    }
 	    if (s && (s = strtok(NULL,tokseps))) {
 	      strncpy(tonode,s,9);
+	      tonode[8] = '\0';
 	      despace(tonode,8);
 	    }
 	    if (s && (s = strtok(NULL,tokseps))) {
 	      strncpy(fruser,s,9);
+	      fruser[8] = '\0';
 	      despace(fruser,8);
 	    }
 	    if (s && (s = strtok(NULL,tokseps))) {
 	      strncpy(frnode,s,9);
+	      frnode[8] = '\0';
 	      despace(frnode,8);
 	    }
 	    cmdmsg = 0;
@@ -702,7 +706,7 @@ message_exit(const char *ToName, const char *ToNode, const char *FromName, const
 	     since these are usually GONE messages */
 
 	  if ((*FromName != '\0') && (*MsgTxt != '*')) {
-	    char DestinationNode[20],OriginNode[10],line[256];
+	    char DestinationNode[20],OriginNode[16],line[256];
 
 	    if (i == 0)	/* Not logged in */
 	      sprintf(line, "* %s not logged in", ToName);

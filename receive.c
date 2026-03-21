@@ -35,6 +35,7 @@
 #include "clientutils.h"
 #include "ndlib.h"
 #include <utime.h>
+#include <time.h>
 
 char LOCAL_NAME   [10];
 char BITNET_QUEUE [80];

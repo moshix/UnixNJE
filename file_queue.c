@@ -311,7 +311,7 @@ queue_file(const char *FileName, const int FileSize, const char *ToAddr, struct 
 	register char	*p;
 	register int	i;
 	int	rc, primline = -1, altline = -1;
-	char	MessageSender[10];
+	char	MessageSender[16];
 	struct	FILE_PARAMS FileParams;
 	FILE	*InFile;
 	char	auxline[LINESIZE];

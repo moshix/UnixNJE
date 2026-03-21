@@ -43,8 +43,8 @@ list_users(const char *Faddress, const char *Taddress, const char cmd, char *Use
 	struct passwd	*pwd;
 	struct stat     stats;
 	time_t	now;
-	char	tty[16];
-	char	idle[8];
+	char	tty[48];
+	char	idle[16];
 	int	idles;
 	char	*s;
 	int	users = 0;

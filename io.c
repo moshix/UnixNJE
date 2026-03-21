@@ -26,6 +26,7 @@
  |           STATS:        Write statistics.
  |           COMMAND-PARSER Parses the opareator's commands.
  */
+#include <time.h>
 #include "consts.h"
 #include "headers.h"
 #include "prototypes.h"

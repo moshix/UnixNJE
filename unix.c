@@ -26,6 +26,7 @@
 #endif
 #include <fcntl.h>
 #include <strings.h>
+#include <time.h>
 
 #include "consts.h"
 #include "headers.h"
@@ -125,7 +126,7 @@ init_command_mailbox()
 	    *s = 0;
 	    if (rc==0 && stat(socknam,&dstat) == 0) {
 	      *s = '/';
-	      chown(socknam,0,dstat.st_gid);
+	      (void)chown(socknam,0,dstat.st_gid);
 	      chmod(socknam,0660);
 	    } else {
 	      logger(1,"UNIX: Can't mkfifo() COMMAND_MAILBOX, or no directory!  Error: %s\n",PRINT_ERRNO);
@@ -245,10 +246,10 @@ init_command_mailbox()
 	if (socket_access_key == 0)		/* Can't be 0 twice! */
 	  socket_access_key = random() ^ (dstat.st_ino ^ dstat.st_mtime);
 #endif
-	write(fd,(void*)&socket_access_key,4);
+	(void)write(fd,(void*)&socket_access_key,4);
 	close(fd);
 	if (stat(BITNET_QUEUE,&dstat) == 0) {
-	  chown(path,-1,dstat.st_gid);
+	  (void)chown(path,-1,dstat.st_gid);
 	  chmod(path,0440);
 	}
 	/* That's all. Select will poll for it */
@@ -285,7 +286,7 @@ send_opcom(const char *text)
 	if ((ftty = open("/dev/console", O_WRONLY|O_NOCTTY, 0644)) < 0)
 	  return;
 
-	write(ftty, line, strlen(line));
+	(void)write(ftty, line, strlen(line));
 	close(ftty);
 }
 

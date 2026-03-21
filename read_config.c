@@ -161,6 +161,7 @@ read_configuration()
 	    strncpy(ADDRESS_FILE, param1, sizeof ADDRESS_FILE);
 	  } else if (strcasecmp(KeyWord, "DEFAULT-ROUTE") == 0) {
 	    strncpy(DefaultRoute, param1, sizeof DefaultRoute);
+	    DefaultRoute[sizeof(DefaultRoute) - 1] = '\0';
 	  } else if (strcasecmp(KeyWord, "LLEVEL") == 0) {
 	    switch(*param1) {
 	      case '1': LogLevel = 1; break;
@@ -189,6 +190,7 @@ read_configuration()
 	    add_gone_user(line);
 	  } else if (strcasecmp(KeyWord, "CLUSTER") == 0) {
 	    strncpy(ClusterNode, param1, sizeof ClusterNode);
+	    ClusterNode[sizeof(ClusterNode) - 1] = '\0';
 	  } else if (strcasecmp(KeyWord, "LINE") == 0) {
 	    if (NumParams < 3) {
 	      printf("Too few parameters in '%s'\n", line);
@@ -242,6 +244,7 @@ read_configuration()
 	    }
 	    strncpy(IoLines[LineNumber].device, param1,
 		    sizeof IoLines[0].device);
+	    IoLines[LineNumber].device[sizeof(IoLines[0].device) - 1] = '\0';
 	  } else if (strcasecmp(KeyWord, "IPPORT") == 0) {
 	    if (LineNumber == -1) {
 	      printf("Misplaced subcommand '%s'\n", KeyWord);
